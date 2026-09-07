@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.0
+
+A sixth check, honest dates, and a calmer way to say it.
+
+- Notification access joins the checkup, with smartwatches and mirroring
+  named as legitimate before anything is flagged.
+- Every flagged entry says when it was installed and where it came from,
+  newest first. Match cards say what else the app holds and what to do
+  about admin access before uninstalling.
+- The indicator list shows its age. Sweep checks itself on every scan and
+  would report its own INTERNET permission if one ever appeared.
+- A verdict banner, a staged reveal that never delays screen readers, and
+  zero-item checks that recede without failing contrast.
+
 ## 0.2.0
 
 The iOS round.

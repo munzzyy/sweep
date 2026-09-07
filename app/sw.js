@@ -1,7 +1,7 @@
 // Sweep service worker: offline shell only. Checkup results never exist
 // anywhere a cache could see.
 
-const VERSION = "sweep-v0.2.0";
+const VERSION = "sweep-v0.3.0";
 
 // Relative to this script's own URL, which sits at the app root wherever
 // that root is served from (a domain, or a subpath like a GitHub Pages

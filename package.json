@@ -1,6 +1,6 @@
 {
   "name": "sweep",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A plain-language phone checkup for the things stalkerware abuses. On-device, nothing stored, nothing sent.",
   "type": "module",
   "private": true,
