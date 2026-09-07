@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.0
+
+The iOS round.
+
+- An iOS wrapper in `ios/` on the permanent `sweep://localhost` origin. The
+  checkup cannot run on iOS, no app can see what other apps are installed
+  there, and the wrapper explains that instead of pretending; docs/IOS.md
+  has its own section saying so.
+- Leave fast works everywhere now: on iOS it resets the page and hands the
+  screen to Safari on a neutral site, with a loud failure if the bridge is
+  missing, and Escape leaves fast on the web too.
+- An all-clear scan looks calm instead of warning-colored, screens move
+  focus and announce, disclosures got real names and 44px targets, type is
+  rem, and the copy explains sideloading to someone who has never heard
+  the word.
+
 ## 0.1.0
 
 First release, beta.
