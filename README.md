@@ -1,5 +1,7 @@
 # Sweep
 
+[![release](https://img.shields.io/github/v/release/munzzyy/sweep)](https://github.com/munzzyy/sweep/releases/latest) [![ci](https://github.com/munzzyy/sweep/actions/workflows/ci.yml/badge.svg)](https://github.com/munzzyy/sweep/actions/workflows/ci.yml) [![license: MIT](https://img.shields.io/badge/license-MIT-7a5817)](LICENSE)
+
 A plain-language phone checkup. Beta.
 
 Somebody wondering whether their phone is watching them has two options
@@ -22,6 +24,18 @@ warning that matters: removing stalkerware or confronting the person who
 installed it can escalate a dangerous situation, talk to an advocate
 first, and the hotline numbers are right there. Results are never stored,
 and a Leave fast button sits on every screen.
+
+<p align="center">
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="31%" alt="Results with a stalkerware match: a calm alarm card leading with do-not-confront guidance">
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="31%" alt="Results on a clean scan: found-nothing language with the honest hedge">
+</p>
+
+## Get it
+
+Android only, by design: install [sweep.apk](https://github.com/munzzyy/sweep/releases/latest/download/sweep.apk)
+(the link always points at the current release, so Obtainium can track
+it). The web page explains the checks but cannot run them, because a
+web page cannot and should not see your installed apps.
 
 ## Trust math
 
