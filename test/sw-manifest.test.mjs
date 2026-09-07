@@ -26,16 +26,21 @@ test("cache version tracks the app version, so releases bust the cache", () => {
 
 test("every listed file exists", () => {
   for (const entry of precache) {
-    if (entry === "/") continue;
     assert.ok(existsSync(path.join(ROOT, "app", entry)), `${entry} listed but missing`);
   }
 });
 
 test("every shipped script and stylesheet is listed", () => {
   for (const file of readdirSync(path.join(ROOT, "app", "js"))) {
-    assert.ok(precache.includes(`/js/${file}`), `/js/${file} not precached`);
+    assert.ok(precache.includes(`js/${file}`), `js/${file} not precached`);
   }
   for (const file of readdirSync(path.join(ROOT, "app", "css"))) {
-    assert.ok(precache.includes(`/css/${file}`), `/css/${file} not precached`);
+    assert.ok(precache.includes(`css/${file}`), `css/${file} not precached`);
+  }
+});
+
+test("precache paths are relative, so a subpath deployment still installs", () => {
+  for (const entry of precache) {
+    assert.ok(!entry.startsWith("/"), `${entry} is root-absolute, breaks under a subpath host`);
   }
 });

@@ -36,12 +36,16 @@ test("positive control: a known stalkerware package is matched", () => {
 });
 
 test("wildcard families match by prefix", () => {
-  const family = INDICATORS.apps.find((a) => a.packages.some((p) => p.endsWith("*")));
-  if (!family) return;
-  const prefix = family.packages.find((p) => p.endsWith("*")).slice(0, -1);
-  const matches = matchKnown([app(prefix + "xq7random")], INDICATORS);
+  // A synthetic fixture, not the live dataset: a future refresh that ships
+  // zero wildcard entries must not make this test silently stop exercising
+  // the prefix-matching code path README.md advertises.
+  const SYNTHETIC = {
+    apps: [{ name: "Synthetic Wildcard Family", packages: ["com.synthetic.wild.*"], certificates: [] }],
+  };
+  const matches = matchKnown([app("com.synthetic.wild.xq7random")], SYNTHETIC);
   assert.equal(matches.length, 1);
-  assert.equal(matches[0].family, family.name);
+  assert.equal(matches[0].family, "Synthetic Wildcard Family");
+  assert.equal(matches[0].via, "package");
 });
 
 test("certificate matches catch rebrands under new package names", () => {

@@ -33,12 +33,23 @@ and a Leave fast button sits on every screen.
 ## Get it
 
 Android only, by design: install [sweep.apk](https://github.com/munzzyy/sweep/releases/latest/download/sweep.apk)
-on Android 10 or newer; the link always points at the current release,
-so Obtainium can track it. The same UI opened in a plain browser
+on Android 10 or newer. Sweep is not in the Play Store, so Android will
+warn you before it installs: something like "For your security, your
+phone is not allowed to install unknown apps from this source." That
+warning exists for apps in general, not for Sweep specifically; tap
+Settings in that prompt, allow installs from your browser or file
+manager, then install the file again. [Obtainium](https://github.com/ImranR98/Obtainium)
+is a free app that watches a GitHub release link like this one and
+offers you updates automatically, so you do not have to come back and
+redownload by hand; it is optional. The same UI opened in a plain browser
 (`app/index.html`) explains the checks but cannot run them, because a
 web page cannot and should not see your installed apps.
 
 ## Trust math
+
+Two sentences before the detail: Sweep can see your app list, and it
+cannot reach the internet, so nothing it sees can leave your phone. The
+rest of this section is how that promise gets checked.
 
 One permission that grants anything: QUERY_ALL_PACKAGES, which IS the
 checkup (androidx's inert self-scoped marker rides along, as it does in
@@ -56,6 +67,19 @@ negative controls. `npm run e2e` drives the page with stubbed scans: a
 planted stalkerware package must surface with the family named, and a
 clean scan must produce the hedged found-nothing language, never a
 verdict.
+
+## iOS
+
+There is a native iOS wrapper in `ios/`, and it cannot run the checkup.
+`QUERY_ALL_PACKAGES`, device admins, and accessibility services are all
+Android concepts with no iOS equivalent, so the wrapper shows the same
+explainer-only mode a plain browser sees and points at the Android APK for
+the actual checks. Today that means an iPhone has no working checkup to
+install: not from the App Store (Sweep is not on it), and not as a
+website either, because `app/` is not hosted anywhere public yet.
+[docs/IOS.md](docs/IOS.md) has the honest version of why, and what
+building the wrapper yourself from source looks like if you want to read
+the explainer as a real app in the meantime.
 
 ## Bugs, verification, contributions
 

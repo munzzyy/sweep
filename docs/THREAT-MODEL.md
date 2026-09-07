@@ -50,6 +50,14 @@ itself a risk, borrow a trusted person's phone to read about your options
 first (techsafety.org), and consider whether installing anything is the
 right move.
 
+The same residue applies to the iOS wrapper and to the Add-to-Home-Screen
+copy of the web app, and one more thing on top: iOS gives no app a way to
+close itself, so Leave fast backgrounds Sweep into Safari instead of ending
+it, and Sweep still shows up in the app switcher afterward. docs/IOS.md's
+"What is different from Android, honestly" section covers this and the
+platform's weaker network guarantee in full; read it before trusting the
+iOS build the way you would trust the Android one.
+
 ## If the phone is already hostile
 
 A device with stalkerware on it may be showing its controller your

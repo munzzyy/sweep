@@ -4,8 +4,8 @@
 export const es = {
   "Skip to content": "Saltar al contenido",
   "A plain-language phone checkup.": "Una revisión del teléfono en lenguaje claro.",
-  "Beta. Sweep is being offered to domain organizations for review; until that lands, treat it as one tool, not an authority.":
-    "Beta. Sweep se está ofreciendo a organizaciones especializadas para su revisión; hasta que eso llegue, trátalo como una herramienta más, no como una autoridad.",
+  "Beta. Experts in domestic-violence tech safety have not reviewed Sweep yet, so treat it as one tool, not an authority.":
+    "Beta. Expertos en seguridad tecnológica contra la violencia doméstica todavía no han revisado Sweep, así que trátalo como una herramienta más, no como una autoridad.",
   '"Is something on my phone watching me" is a normal question with a hard answer. Sweep checks the specific places surveillance apps live: the list of installed apps against publicly identified stalkerware, device admin powers, accessibility services that can read your screen, apps with no icon, and installs that came from outside any store. Then it explains every finding in words, not scores.':
     '"¿Hay algo en mi teléfono vigilándome?" es una pregunta normal con una respuesta difícil. Sweep revisa los lugares concretos donde vive el software de vigilancia: la lista de apps instaladas contra stalkerware identificado públicamente, los poderes de administrador del dispositivo, los servicios de accesibilidad que pueden leer tu pantalla, las apps sin icono y las instalaciones que llegaron de fuera de cualquier tienda. Y explica cada hallazgo con palabras, no con puntuaciones.',
   "Run the checkup": "Ejecutar la revisión",
@@ -16,6 +16,8 @@ export const es = {
   "Sweep for Android asks for one permission: the ability to list installed apps, which is the whole point. It has no internet permission, so what it sees cannot leave your phone, and it keeps no history of results.":
     "Sweep para Android pide un solo permiso: poder listar las apps instaladas, que es justamente el punto. No tiene permiso de internet, así que lo que ve no puede salir de tu teléfono, y no guarda historial de resultados.",
   "Download the APK": "Descargar el APK",
+  "On an iPhone? That button will not help you: this checkup needs an Android-only permission that does not exist on iOS. The explanation on this page still applies to your phone; there is no working checkup to install yet.":
+    "¿Tienes un iPhone? Ese botón no te va a servir: esta revisión necesita un permiso exclusivo de Android que no existe en iOS. La explicación de esta página se aplica igual a tu teléfono; todavía no hay una revisión que funcione para instalar.",
   "What it checks": "Lo que revisa",
   "Known stalkerware": "Stalkerware conocido",
   "Installed apps are compared against a public, maintained list of surveillance products, by package name and by signing certificate, so renamed copies still match.":
@@ -35,13 +37,16 @@ export const es = {
   "If you are in danger": "Si estás en peligro",
   "If someone in your life may have put software on your phone, be careful with this checkup: removing an app or confronting the person can escalate things, and some spyware reports its own removal. Advocates who handle this every day can help you plan first. In the US: the National Domestic Violence Hotline, 1-800-799-7233, thehotline.org. Tech safety guides: techsafety.org. Worldwide: stopstalkerware.org lists local organizations.":
     "Si alguien de tu vida puede haber puesto software en tu teléfono, ten cuidado con esta revisión: eliminar una app o confrontar a la persona puede escalar la situación, y algunos spyware avisan de su propia eliminación. Quienes atienden estos casos a diario pueden ayudarte a planificar primero. En EE. UU.: la Línea Nacional contra la Violencia Doméstica, 1-800-799-7233, thehotline.org (tiene atención en español). Guías de seguridad tecnológica: techsafety.org. En el resto del mundo: stopstalkerware.org lista organizaciones locales.",
+  "The \"Leave fast\" button in the corner works from every screen. It instantly switches this page to an ordinary weather site and clears whatever the checkup found, in case someone walks in.":
+    "El botón \"Salir rápido\" de la esquina funciona desde cualquier pantalla. Cambia esta página al instante a un sitio normal del clima y borra lo que haya encontrado la revisión, por si alguien entra.",
   "Data sources": "Fuentes de datos",
   "The stalkerware list comes from the stalkerware-indicators dataset maintained by Echap (github.com/AssoEchap/stalkerware-indicators), licensed CC-BY 4.0, bundled with the app and refreshed each release. Echap does not endorse Sweep. Nothing is fetched at runtime, because the app cannot reach the network at all.":
     "La lista de stalkerware proviene del conjunto de datos stalkerware-indicators mantenido por Echap (github.com/AssoEchap/stalkerware-indicators), con licencia CC-BY 4.0, incluido en la app y actualizado en cada versión. Echap no respalda a Sweep. Nada se descarga en tiempo de ejecución, porque la app no puede acceder a la red en absoluto.",
   "Privacy": "Privacidad",
   "Language": "Idioma",
   "Leave fast": "Salir rápido",
-  "Leave this app fast": "Salir de esta app rápido",
+  "Leave fast could not run in this build. Close the app by hand right now: swipe up from the bottom of the screen and swipe this app away.":
+    "Salir rápido no pudo funcionar en esta versión. Cierra la app a mano ahora mismo: desliza hacia arriba desde abajo de la pantalla y quita esta app.",
 
   "Checkup results": "Resultados de la revisión",
   "Back": "Atrás",
@@ -63,25 +68,31 @@ export const es = {
   "Device admin apps": "Apps administradoras del dispositivo",
   "Apps with administrator power can lock the phone, wipe it, and resist removal. Recognize every name here; your workplace or a family setup tool can be legitimate.":
     "Las apps con poder de administrador pueden bloquear el teléfono, borrarlo y resistirse a ser eliminadas. Reconoce cada nombre; tu trabajo o una herramienta de configuración familiar pueden ser legítimos.",
+  "Show the device admin list": "Mostrar la lista de administradores del dispositivo",
   "Accessibility services, turned on": "Servicios de accesibilidad activados",
   "A service on this list can read the screen and watch what you type. Screen readers and automation tools belong here; anything you do not recognize deserves a hard look.":
     "Un servicio de esta lista puede leer la pantalla y observar lo que tecleas. Los lectores de pantalla y las herramientas de automatización tienen su lugar aquí; cualquier cosa que no reconozcas merece una mirada seria.",
+  "Show the accessibility services list": "Mostrar la lista de servicios de accesibilidad",
   "Apps without an icon": "Apps sin icono",
   "These installed apps have no launcher icon. Many are harmless helpers; hiding is also what surveillance apps do. Skim the names for anything you never installed.":
     "Estas apps instaladas no tienen icono en el lanzador. Muchas son ayudantes inofensivos; esconderse también es lo que hacen las apps de vigilancia. Repasa los nombres por si hay algo que nunca instalaste.",
+  "Show the apps without an icon": "Mostrar las apps sin icono",
   "Installed from outside a store": "Instaladas fuera de una tienda",
   "These apps did not come from a recognized app store. Sideloading is normal for plenty of people; it is also the only way most stalkerware arrives. You should remember installing each of these.":
     "Estas apps no llegaron de una tienda reconocida. Instalar a mano es normal para mucha gente; también es como llega la mayoría del stalkerware. Deberías recordar haber instalado cada una.",
-  "Show the list": "Mostrar la lista",
+  "Show the apps installed outside a store": "Mostrar las apps instaladas fuera de una tienda",
   "Before acting on anything above": "Antes de actuar sobre nada de lo anterior",
   "If the person who might be watching is someone you know, talk to an advocate before removing anything: removal can be noticed. National Domestic Violence Hotline (US): 1-800-799-7233. Tech safety planning: techsafety.org. Local organizations worldwide: stopstalkerware.org.":
     "Si la persona que podría estar vigilando es alguien que conoces, habla con profesionales antes de eliminar nada: la eliminación puede notarse. Línea Nacional contra la Violencia Doméstica (EE. UU., con español): 1-800-799-7233. Planificación de seguridad tecnológica: techsafety.org. Organizaciones locales en el mundo: stopstalkerware.org.",
   "Nothing on this screen is saved. Leaving this page discards the results.":
     "Nada de esta pantalla se guarda. Al salir de esta página, los resultados se descartan.",
   "Run it again": "Ejecutarla otra vez",
-  "The checkup could not run. Please report this.": "La revisión no pudo ejecutarse. Por favor, repórtalo.",
+  "The checkup could not run. Report it: Munzzyy1@proton.me or github.com/munzzyy/sweep/issues.":
+    "La revisión no pudo ejecutarse. Repórtalo: Munzzyy1@proton.me o github.com/munzzyy/sweep/issues.",
   "Nothing matched the known stalkerware list. The lists below need your eyes: only you know what belongs on this phone.":
     "Nada coincidió con la lista de stalkerware conocido. Las listas de abajo necesitan tus ojos: solo tú sabes qué pertenece a este teléfono.",
   "The detection data could not load; the checkup cannot run. Reinstall the app.":
     "Los datos de detección no se pudieron cargar; la revisión no puede ejecutarse. Reinstala la app.",
+  "The detection data could not load; the checkup cannot run. Reload the page.":
+    "Los datos de detección no se pudieron cargar; la revisión no puede ejecutarse. Recarga la página.",
 };
