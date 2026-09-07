@@ -1,0 +1,21 @@
+"Is something on my phone watching me" is a normal question with a hard
+answer. Sweep checks the places surveillance software actually lives:
+
+* Installed apps against a public, maintained stalkerware list (Echap's
+  indicators, bundled, matched by package name and signing certificate so
+  renamed copies still match).
+* Device admin apps, which can lock, wipe, and resist removal.
+* Enabled accessibility services, which can read the screen.
+* Apps with no launcher icon, and apps installed from outside any store.
+
+Every finding is explained in words. Sweep never says "you are safe": it
+says "these specific checks found nothing", and means exactly that.
+Matches lead with do-not-confront guidance and advocate hotlines, because
+removing stalkerware can escalate a dangerous situation.
+
+One permission (listing installed apps, which is the checkup itself) and
+no internet permission, so what Sweep sees cannot leave your phone.
+Results are never stored. A Leave fast button sits on every screen.
+
+Beta: offered to domain organizations for review. Treat Sweep as one
+tool, not an authority.

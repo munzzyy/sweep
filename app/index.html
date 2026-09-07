@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Sweep: a plain-language phone checkup</title>
+<meta name="description" content="Checks an Android phone for the specific things stalkerware abuses: known spyware apps, device admins, accessibility services, hidden apps, and sideloads. On-device, nothing stored, nothing sent.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f2f0ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141310" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main" data-i18n>Skip to content</a>
+<button id="btn-exit" class="quick-exit" data-i18n-attr="aria-label" aria-label="Leave this app fast" data-i18n>Leave fast</button>
+
+<main id="main">
+
+<!-- ============================================================= home -->
+<section id="screen-home" class="screen">
+  <div class="hero">
+    <img class="logo" src="icons/sweep.svg" alt="" width="72" height="72">
+    <h1>Sweep</h1>
+    <p class="tagline" data-i18n>A plain-language phone checkup.</p>
+    <p class="beta-line" data-i18n>Beta. Sweep is being offered to domain organizations for review; until that lands, treat it as one tool, not an authority.</p>
+    <p class="pitch" data-i18n>"Is something on my phone watching me" is a normal question with a hard answer. Sweep checks the specific places surveillance apps live: the list of installed apps against publicly identified stalkerware, device admin powers, accessibility services that can read your screen, apps with no icon, and installs that came from outside any store. Then it explains every finding in words, not scores.</p>
+    <button id="btn-run" class="btn-primary big" data-testid="run" hidden data-i18n>Run the checkup</button>
+    <p id="web-note" class="web-note" hidden data-i18n>The checkup itself runs in the Android app, because a web page cannot and should not see your installed apps. This page explains how it works.</p>
+  </div>
+
+  <div class="web-only landing">
+    <section class="lnd" id="landing-app">
+      <h2 data-i18n>Get the app</h2>
+      <p data-i18n>Sweep for Android asks for one permission: the ability to list installed apps, which is the whole point. It has no internet permission, so what it sees cannot leave your phone, and it keeps no history of results.</p>
+      <p class="apk-row"><a class="btn-primary" href="https://github.com/munzzyy/sweep/releases/latest/download/sweep.apk" data-i18n>Download the APK</a></p>
+    </section>
+  </div>
+
+  <section class="lnd">
+    <h2 data-i18n>What it checks</h2>
+    <div class="lnd-cards">
+      <article class="lnd-card"><h3 data-i18n>Known stalkerware</h3><p data-i18n>Installed apps are compared against a public, maintained list of surveillance products, by package name and by signing certificate, so renamed copies still match.</p></article>
+      <article class="lnd-card"><h3 data-i18n>Device admins</h3><p data-i18n>Apps with administrator power can lock the phone, wipe it, and resist removal. You should recognize every name on this list.</p></article>
+      <article class="lnd-card"><h3 data-i18n>Accessibility services</h3><p data-i18n>These services can read the screen and watch input. Wonderful for accessibility, and the favorite hiding place of watchers.</p></article>
+      <article class="lnd-card"><h3 data-i18n>Hidden and sideloaded apps</h3><p data-i18n>Apps with no icon, and apps installed from outside any store. Plenty are legitimate; the point is that you get to look at the list.</p></article>
+    </div>
+  </section>
+
+  <section class="lnd">
+    <h2 data-i18n>What Sweep will never tell you</h2>
+    <p data-i18n>That you are safe. A checkup can only report what its checks found, and sophisticated spyware works hard to fail them. Sweep says "these specific checks found nothing" and means exactly that, no more. If your gut says something is wrong, trust it over any app, this one included.</p>
+  </section>
+
+  <section class="lnd">
+    <h2 data-i18n>If you are in danger</h2>
+    <p data-i18n>If someone in your life may have put software on your phone, be careful with this checkup: removing an app or confronting the person can escalate things, and some spyware reports its own removal. Advocates who handle this every day can help you plan first. In the US: the National Domestic Violence Hotline, 1-800-799-7233, thehotline.org. Tech safety guides: techsafety.org. Worldwide: stopstalkerware.org lists local organizations.</p>
+  </section>
+
+  <section class="lnd">
+    <h2 data-i18n>Data sources</h2>
+    <p data-i18n>The stalkerware list comes from the stalkerware-indicators dataset maintained by Echap (github.com/AssoEchap/stalkerware-indicators), licensed CC-BY 4.0, bundled with the app and refreshed each release. Echap does not endorse Sweep. Nothing is fetched at runtime, because the app cannot reach the network at all.</p>
+  </section>
+
+  <footer class="land-footer web-only">
+    <a href="privacy.html" data-i18n>Privacy</a>
+    <a href="https://github.com/munzzyy/sweep">GitHub</a>
+    <span id="ver"></span>
+  </footer>
+  <p class="locale-line"><label><span class="sr-only" data-i18n>Language</span><select id="locale-pick"></select></label></p>
+</section>
+
+<!-- ========================================================== results -->
+<section id="screen-results" class="screen" hidden>
+  <header class="topbar">
+    <button id="btn-back" class="icon-btn" data-i18n-attr="aria-label" aria-label="Back">←</button>
+    <strong data-i18n>Checkup results</strong>
+  </header>
+  <p id="results-summary" class="results-summary" role="status"></p>
+  <div id="results-cards"></div>
+  <div class="card guidance">
+    <h2 data-i18n>Before acting on anything above</h2>
+    <p data-i18n>If the person who might be watching is someone you know, talk to an advocate before removing anything: removal can be noticed. National Domestic Violence Hotline (US): 1-800-799-7233. Tech safety planning: techsafety.org. Local organizations worldwide: stopstalkerware.org.</p>
+  </div>
+  <p class="ephemeral-note" data-i18n>Nothing on this screen is saved. Leaving this page discards the results.</p>
+  <button id="btn-rerun" class="btn-ghost" data-i18n>Run it again</button>
+</section>
+
+</main>
+
+<div id="toast" class="toast" aria-hidden="true"></div>
+<div id="sr-live" class="sr-only" aria-live="polite"></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

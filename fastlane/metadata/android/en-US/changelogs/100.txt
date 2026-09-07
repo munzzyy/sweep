@@ -1,0 +1,1 @@
+First release (beta): five plain-language checks, Echap indicator matching incl. certificates, survivor-safe copy, quick exit, EN+ES.

@@ -1,0 +1,15 @@
+{
+  "name": "Sweep",
+  "short_name": "Sweep",
+  "description": "A plain-language phone checkup for the things stalkerware abuses. On-device, nothing stored, nothing sent.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f2f0ea",
+  "theme_color": "#f2f0ea",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/sweep.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
