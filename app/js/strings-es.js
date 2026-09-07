@@ -50,8 +50,8 @@ export const es = {
 
   "Checkup results": "Resultados de la revisión",
   "Back": "Atrás",
-  "One of the checks needs your attention. Read it calmly; there is advice below.":
-    "Una de las comprobaciones necesita tu atención. Léela con calma; hay consejos abajo.",
+  "Something here needs your attention. Read it calmly; there is advice below.":
+    "Algo aquí necesita tu atención. Léelo con calma; hay consejos abajo.",
   "These specific checks found nothing. That is what it says, not a guarantee of safety.":
     "Estas comprobaciones concretas no encontraron nada. Eso es lo que dice, no una garantía de seguridad.",
   "Known surveillance apps": "Apps de vigilancia conocidas",
@@ -61,7 +61,7 @@ export const es = {
     "En este teléfono hay instalado software identificado públicamente como stalkerware. Respira antes de hacer nada: si una persona que conoces pudo haberlo puesto, eliminarlo o confrontarla puede escalar la situación, y algunas de estas apps avisan de su propia eliminación. Los consejos de abajo van primero.",
   "No installed app matched the public stalkerware list, by package name or by signing certificate.":
     "Ninguna app instalada coincidió con la lista pública de stalkerware, ni por nombre de paquete ni por certificado de firma.",
-  "{label} ({pkg}): matches {family}, by {via}": "{label} ({pkg}): coincide con {family}, por {via}",
+  "{label} ({pkg}): matches {family}, by {via}.": "{label} ({pkg}): coincide con {family}, por {via}.",
   "name": "nombre",
   "certificate": "certificado",
   "Show the matches": "Mostrar las coincidencias",
@@ -95,4 +95,30 @@ export const es = {
     "Los datos de detección no se pudieron cargar; la revisión no puede ejecutarse. Reinstala la app.",
   "The detection data could not load; the checkup cannot run. Reload the page.":
     "Los datos de detección no se pudieron cargar; la revisión no puede ejecutarse. Recarga la página.",
+  "This list is dated {date}.": "Esta lista tiene fecha del {date}.",
+  "This list is dated {date} and has not been refreshed since. Treat a clean result here a little more cautiously.":
+    "Esta lista tiene fecha del {date} y no se ha actualizado desde entonces. Toma un resultado limpio aquí con un poco más de cautela.",
+  "Installed {date}, from {installer}.": "Instalada el {date}, desde {installer}.",
+  "an unrecorded date": "una fecha no registrada",
+  "an unknown source": "una fuente desconocida",
+  "device admin power, which can resist being uninstalled until that access is turned off first":
+    "poder de administrador del dispositivo, que puede resistirse a ser desinstalada hasta que ese acceso se desactive primero",
+  "an enabled accessibility service, which can read the screen":
+    "un servicio de accesibilidad activado, que puede leer la pantalla",
+  "notification access, which can read incoming notifications":
+    "acceso a notificaciones, que puede leer las notificaciones que llegan",
+  "It also holds: {powers}.": "También tiene: {powers}.",
+  "{flagged} of {total} checks have something to look at.": "{flagged} de {total} comprobaciones tienen algo que revisar.",
+  "Apps that can read notifications": "Apps que pueden leer notificaciones",
+  "Apps on this list see the content of every notification that arrives on this phone. Smartwatches, notification-mirroring apps, and Do Not Disturb rules use this legitimately; anything you do not recognize deserves a hard look.":
+    "Las apps de esta lista ven el contenido de cada notificación que llega a este teléfono. Los relojes inteligentes, las apps que reflejan notificaciones y las reglas de No Molestar usan este permiso legítimamente; cualquier cosa que no reconozcas merece una mirada seria.",
+  "Show the notification-access list": "Mostrar la lista de acceso a notificaciones",
+  "Check Sweep itself": "Revisa a Sweep mismo",
+  "has internet": "tiene internet",
+  "no internet": "sin internet",
+  "Sweep's own permissions include internet access, which contradicts what this app tells you. Do not trust this build; get Sweep from the official release page instead.":
+    "Los permisos de Sweep incluyen acceso a internet, lo cual contradice lo que esta app te dice. No confíes en esta versión; consigue Sweep desde la página oficial de versiones.",
+  "Sweep just asked Android for its own permission list, the same way it asked for yours: no internet access is requested, so nothing this checkup sees can leave this phone. That is not a claim, it is what the phone just reported.":
+    "Sweep acaba de pedirle a Android su propia lista de permisos, igual que pidió la tuya: no solicita acceso a internet, así que nada de lo que ve esta revisión puede salir de este teléfono. Eso no es una afirmación, es lo que el teléfono acaba de reportar.",
+  "Show Sweep's own permissions": "Mostrar los propios permisos de Sweep",
 };

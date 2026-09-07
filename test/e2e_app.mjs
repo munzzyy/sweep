@@ -34,18 +34,29 @@ function check(name, cond, detail = "") {
 const scan = (infested) => ({
   admins: infested ? [{ pkg: BAD_PKG, label: "Sync Service" }] : [],
   accessibility: infested ? [{ pkg: BAD_PKG, service: "Watcher" }] : [],
+  notifications: infested ? [{ pkg: BAD_PKG, service: "Reader" }] : [],
   apps: [
-    { pkg: "com.whatsapp", label: "WhatsApp", system: false, hasLauncher: true, installer: "com.android.vending", certs: [] },
-    { pkg: "com.android.systemui", label: "System UI", system: true, hasLauncher: false, installer: null, certs: [] },
-    ...(infested ? [{ pkg: BAD_PKG, label: "Sync Service", system: false, hasLauncher: false, installer: null, certs: [] }] : []),
+    { pkg: "com.whatsapp", label: "WhatsApp", system: false, hasLauncher: true, installer: "com.android.vending", installedDate: "2025-11-02", certs: [] },
+    { pkg: "com.android.systemui", label: "System UI", system: true, hasLauncher: false, installer: null, installedDate: null, certs: [] },
+    ...(infested ? [{ pkg: BAD_PKG, label: "Sync Service", system: false, hasLauncher: false, installer: null, installedDate: "2026-08-30", certs: [] }] : []),
   ],
 });
 
-const BRIDGE_STUB = (infested) => `window.SweepNative = {
+const SELF_CHECK = (withInternet) =>
+  JSON.stringify({
+    pkg: "io.github.munzzyy.sweep",
+    version: "e2e",
+    permissions: withInternet
+      ? ["android.permission.QUERY_ALL_PACKAGES", "android.permission.INTERNET"]
+      : ["android.permission.QUERY_ALL_PACKAGES"],
+  });
+
+const BRIDGE_STUB = (infested, { fakeInternet = false } = {}) => `window.SweepNative = {
   platform: () => "android",
   version: () => "e2e",
   quickExit: () => { window.__exited = true; },
   scanJson: () => ${JSON.stringify(JSON.stringify(scan(infested)))},
+  selfCheck: () => ${JSON.stringify(SELF_CHECK(fakeInternet))},
 };`;
 
 async function waitFor(fn, desc, timeout = 20000) {
@@ -96,6 +107,24 @@ function connect(wsUrl) {
   };
 }
 
+// The results screen stages its cards in with a CSS entrance (sweep-reveal);
+// a screenshot taken the instant results land catches that animation
+// mid-flight instead of documenting the finished UI. Wait for every card
+// and the banner to actually reach full opacity first. Under
+// prefers-reduced-motion the animation never runs and opacity is already 1,
+// so this resolves immediately in that case.
+async function settleReveal(c) {
+  await waitFor(
+    () =>
+      c.evalJs(
+        `[...document.querySelectorAll('.verdict-banner, #results-cards > .check-card')]
+          .every((el) => parseFloat(getComputedStyle(el).opacity) >= 0.99)`,
+      ),
+    "staged reveal settled",
+    4000,
+  );
+}
+
 async function newTab({ stub = null } = {}) {
   const res = await fetch(`http://127.0.0.1:${CDP_PORT}/json/new?about:blank`, { method: "PUT" });
   const tab = await res.json();
@@ -144,6 +173,13 @@ async function main() {
     check("positive control: the planted stalkerware package surfaces", badText.includes(BAD_PKG), BAD_PKG);
     check("positive control: named as the known family", badText.includes(family.name), family.name);
     check("alarm card carries the do-not-confront guidance", /escalate|advocate/i.test(badText));
+    check("sixth surface: notification-access apps card present", badText.includes("read notifications") || badText.includes("Apps that can read notifications"));
+    check("notification listener surfaces the planted package", badText.includes(BAD_PKG) && /Reader|notification/i.test(badText));
+    check("cross-referenced match evidence: admin power is named on the match itself", /device admin power/.test(badText));
+    check("cross-referenced match evidence: accessibility power is named on the match itself", /accessibility service/.test(badText));
+    check("install date and installer identity: install date shown", badText.includes("2026-08-30"));
+    check("self-check card: honestly reports no internet permission", badText.includes("no internet") || /no internet access is requested/i.test(badText));
+    await settleReveal(bad);
     const shot = await bad.send("Page.captureScreenshot", { format: "png" });
     writeFileSync(path.join(SHOTS, "01-results-match.png"), Buffer.from(shot.result.data, "base64"));
 
@@ -164,11 +200,60 @@ async function main() {
     const cleanCards = await clean.evalJs("document.getElementById('results-cards').textContent");
     check("negative control: no match card alarm on a clean scan", !cleanCards.includes(family.name));
     check("the word 'safe' is never the verdict", !/you are safe/i.test(summary + cleanCards));
+    await settleReveal(clean);
     const shot2 = await clean.send("Page.captureScreenshot", { format: "png" });
     writeFileSync(path.join(SHOTS, "02-results-clean.png"), Buffer.from(shot2.result.data, "base64"));
     const errs = await clean.evalJs("(__sweepErrors || []).slice(0, 5)");
     check("clean run: console clean", errs.length === 0, JSON.stringify(errs));
     clean.close();
+
+    // ----------------------------------------------- self-check anti-lying
+    // A build whose own OS-reported permissions include INTERNET must have
+    // that surfaced, not swallowed: the self-check card is exactly the
+    // anti-lying test for Sweep's own no-network claim.
+    const liar = await newTab({ stub: BRIDGE_STUB(false, { fakeInternet: true }) });
+    await liar.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    await waitFor(() => liar.evalJs("__sweepApi.state.screen === 'results'"), "self-check results");
+    const liarText = await liar.evalJs("document.getElementById('results-cards').textContent");
+    check("self-check card catches a planted INTERNET permission, does not hide it", /has internet|contradicts/i.test(liarText), liarText);
+    liar.close();
+
+    // ------------------------------------------- older bridge, no selfCheck
+    // A bridge built before selfCheck existed still has to work: the guard
+    // in runCheckup that gates on native().selfCheck must degrade cleanly,
+    // never crash the checkup, and never render a self-check card it has no
+    // data for.
+    const OLD_BRIDGE_STUB = (infested) => `window.SweepNative = {
+      platform: () => "android",
+      version: () => "e2e-old",
+      quickExit: () => { window.__exited = true; },
+      scanJson: () => ${JSON.stringify(JSON.stringify(scan(infested)))},
+    };`;
+    const old = await newTab({ stub: OLD_BRIDGE_STUB(false) });
+    await old.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    await waitFor(() => old.evalJs("__sweepApi.state.screen === 'results'"), "old-bridge results");
+    const oldText = await old.evalJs("document.getElementById('results-cards').textContent");
+    check("old bridge with no selfCheck: results still render", oldText.includes("Known surveillance apps"));
+    check("old bridge with no selfCheck: no self-check card appears", !oldText.includes("Check Sweep itself"));
+    const oldErrs = await old.evalJs("(__sweepErrors || []).slice(0, 5)");
+    check("old bridge with no selfCheck: console clean, no crash", oldErrs.length === 0, JSON.stringify(oldErrs));
+    old.close();
+
+    // --------------------------------------------- leave fast: blackout order
+    // Plain web (no bridge), the web-fallback exit path. location.replace()
+    // is a non-configurable own property on Location instances in this
+    // Chromium, so it cannot be stubbed to prove strict ordering against
+    // the navigation call; the source order in app/js/main.js's
+    // web-fallback branch (blackout shown, then location.replace) is the
+    // actual guarantee. What this proves: the blackout element is real,
+    // wired to the exit button, and already visible the moment the
+    // synchronous click handler that also fires the redirect returns.
+    const leave = await newTab();
+    const blackoutHiddenAfterClick = await leave.evalJs(
+      "(() => { document.getElementById('btn-exit').click(); return document.getElementById('leave-blackout').hidden; })()",
+    );
+    check("leave fast: the blackout is already visible synchronously after the click, ahead of the redirect", blackoutHiddenAfterClick === false);
+    leave.close();
   } finally {
     chromium.kill();
     server.kill();

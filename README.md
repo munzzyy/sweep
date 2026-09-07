@@ -10,12 +10,15 @@ serious forensic tools that need a second computer and a trained
 advocate. Sweep sits in the gap: open source, runs on the phone itself,
 and explains what it finds in sentences.
 
-Five checks. Installed apps get compared against Echap's public
+Six checks. Installed apps get compared against Echap's public
 stalkerware-indicators dataset, by exact package name, by wildcard family
 prefix, and by signing certificate so a renamed copy still matches. Then
 the phone's own risk surfaces get listed with plain explanations: device
-admin apps, enabled accessibility services, apps with no launcher icon,
-and apps installed from outside any store.
+admin apps, enabled accessibility services, apps that can read
+notifications, apps with no launcher icon, and apps installed from
+outside any store. Every flagged entry carries when it was installed and
+by what, most recent first, and a match also says what other power it
+holds on the phone right now.
 
 The language is the product as much as the code. Sweep never says "you
 are safe", because no checkup can know that; a clean run says "these

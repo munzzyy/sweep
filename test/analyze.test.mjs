@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { analyze, matchKnown } from "../app/js/analyze.js";
+import { analyze, matchKnown, dataAge, selfCheckSummary } from "../app/js/analyze.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const INDICATORS = JSON.parse(readFileSync(path.join(ROOT, "app", "data", "indicators.json"), "utf8"));
@@ -87,12 +87,44 @@ test("analyze buckets admins, accessibility, hidden, and sideloaded", () => {
   assert.equal(report.counts.apps, 4);
 });
 
+test("dataAge: a list fetched today is never stale", () => {
+  const now = new Date("2026-09-06T12:00:00Z");
+  const age = dataAge({ fetched: "2026-09-06" }, now);
+  assert.equal(age.ageDays, 0);
+  assert.equal(age.stale, false);
+});
+
+test("dataAge: just under the threshold is not stale (negative control)", () => {
+  const now = new Date("2026-09-06T12:00:00Z");
+  const fetchedMs = now.getTime() - 120 * 86400000;
+  const fetched = new Date(fetchedMs).toISOString().slice(0, 10);
+  const age = dataAge({ fetched }, now);
+  assert.equal(age.ageDays, 120);
+  assert.equal(age.stale, false);
+});
+
+test("dataAge: just past the threshold is stale", () => {
+  const now = new Date("2026-09-06T12:00:00Z");
+  const fetchedMs = now.getTime() - 121 * 86400000;
+  const fetched = new Date(fetchedMs).toISOString().slice(0, 10);
+  const age = dataAge({ fetched }, now);
+  assert.equal(age.ageDays, 121);
+  assert.equal(age.stale, true);
+});
+
+test("dataAge: a missing or malformed fetch date never claims staleness", () => {
+  const now = new Date("2026-09-06T12:00:00Z");
+  assert.deepEqual(dataAge({}, now), { fetched: null, ageDays: null, stale: false });
+  assert.deepEqual(dataAge({ fetched: "not-a-date" }, now), { fetched: null, ageDays: null, stale: false });
+});
+
 test("a full simulated infested scan flags through every channel", () => {
   const family = INDICATORS.apps.find((a) => a.packages.some((p) => !p.endsWith("*")));
   const bad = family.packages.find((p) => !p.endsWith("*"));
   const scan = {
     admins: [{ pkg: bad }],
     accessibility: [{ pkg: bad, service: "Watcher" }],
+    notifications: [{ pkg: bad, service: "Reader" }],
     apps: [app(bad, { hasLauncher: false, installer: null })],
   };
   const report = analyze(scan, INDICATORS);
@@ -100,4 +132,95 @@ test("a full simulated infested scan flags through every channel", () => {
   assert.equal(report.hidden.length, 1);
   assert.equal(report.sideloaded.length, 1);
   assert.equal(report.admins.length, 1);
+  assert.equal(report.notifications.length, 1);
+});
+
+test("notification listeners are bucketed like accessibility services", () => {
+  const scan = {
+    notifications: [{ pkg: "com.watch.companion", service: "NotifListener" }],
+    apps: [app("com.watch.companion", { label: "Watch Companion" })],
+  };
+  const report = analyze(scan, INDICATORS);
+  assert.equal(report.notifications.length, 1);
+  assert.equal(report.notifications[0].label, "Watch Companion");
+  assert.equal(report.counts.notifications, 1);
+});
+
+test("negative control: no enabled notification listeners means an empty bucket", () => {
+  const report = analyze({ apps: [app("com.whatsapp")] }, INDICATORS);
+  assert.deepEqual(report.notifications, []);
+  assert.equal(report.counts.notifications, 0);
+});
+
+test("flagged lists sort most-recently-installed first, unknown dates last", () => {
+  const scan = {
+    admins: [
+      { pkg: "com.old.admin" },
+      { pkg: "com.new.admin" },
+      { pkg: "com.unknown.admin" },
+    ],
+    apps: [
+      app("com.old.admin", { installedDate: "2025-01-01" }),
+      app("com.new.admin", { installedDate: "2026-06-01" }),
+      app("com.unknown.admin", { installedDate: null }),
+    ],
+  };
+  const report = analyze(scan, INDICATORS);
+  assert.deepEqual(
+    report.admins.map((a) => a.pkg),
+    ["com.new.admin", "com.old.admin", "com.unknown.admin"],
+  );
+});
+
+test("every flagged entry carries an install date and installer, when known", () => {
+  const family = INDICATORS.apps.find((a) => a.packages.some((p) => !p.endsWith("*")));
+  const bad = family.packages.find((p) => !p.endsWith("*"));
+  const scan = {
+    apps: [app(bad, { installedDate: "2026-03-14", installer: "com.android.vending" })],
+  };
+  const report = analyze(scan, INDICATORS);
+  assert.equal(report.matches[0].installedDate, "2026-03-14");
+  assert.equal(report.matches[0].installer, "com.android.vending");
+});
+
+test("cross-referenced match evidence: a matched app's other powers are surfaced", () => {
+  const family = INDICATORS.apps.find((a) => a.packages.some((p) => !p.endsWith("*")));
+  const bad = family.packages.find((p) => !p.endsWith("*"));
+  const scan = {
+    admins: [{ pkg: bad }],
+    accessibility: [{ pkg: bad, service: "Watcher" }],
+    apps: [app(bad)],
+  };
+  const report = analyze(scan, INDICATORS);
+  assert.deepEqual(report.matches[0].powers, { admin: true, accessibility: true, notifications: false });
+});
+
+test("negative control: a match with no other surfaces holds no powers", () => {
+  const family = INDICATORS.apps.find((a) => a.packages.some((p) => !p.endsWith("*")));
+  const bad = family.packages.find((p) => !p.endsWith("*"));
+  const report = analyze({ apps: [app(bad)] }, INDICATORS);
+  assert.deepEqual(report.matches[0].powers, { admin: false, accessibility: false, notifications: false });
+});
+
+test("selfCheckSummary: no INTERNET permission reads as the honest claim", () => {
+  const summary = selfCheckSummary({
+    pkg: "io.github.munzzyy.sweep",
+    version: "0.2.0",
+    permissions: ["android.permission.QUERY_ALL_PACKAGES"],
+  });
+  assert.equal(summary.hasInternet, false);
+});
+
+test("negative control: a planted INTERNET permission is caught, not hidden", () => {
+  const summary = selfCheckSummary({
+    pkg: "io.github.munzzyy.sweep",
+    version: "0.2.0",
+    permissions: ["android.permission.QUERY_ALL_PACKAGES", "android.permission.INTERNET"],
+  });
+  assert.equal(summary.hasInternet, true);
+});
+
+test("selfCheckSummary: malformed data degrades to an honest unknown, never a crash", () => {
+  assert.deepEqual(selfCheckSummary({}), { pkg: null, version: null, permissions: [], hasInternet: false });
+  assert.deepEqual(selfCheckSummary(null), { pkg: null, version: null, permissions: [], hasInternet: false });
 });
