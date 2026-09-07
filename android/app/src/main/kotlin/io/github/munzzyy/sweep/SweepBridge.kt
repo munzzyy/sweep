@@ -28,7 +28,11 @@ class SweepBridge(private val activity: MainActivity) {
     }
 
     @JavascriptInterface
-    fun scanJson(): String {
+    fun scanJson(): String = runCatching { buildScan() }.getOrElse {
+        JSONObject().put("error", it.toString()).toString()
+    }
+
+    private fun buildScan(): String {
         val pm = activity.packageManager
         val out = JSONObject()
 
@@ -62,27 +66,40 @@ class SweepBridge(private val activity: MainActivity) {
         val apps = JSONArray()
         @Suppress("DEPRECATION")
         val installed = pm.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
-        val digest = MessageDigest.getInstance("SHA-256")
+        // Both digests per signer: the indicator dataset publishes SHA-1
+        // fingerprints today (an identifier lookup, not a security digest),
+        // and SHA-256 rides along for the day it switches.
+        val sha1 = MessageDigest.getInstance("SHA-1")
+        val sha256 = MessageDigest.getInstance("SHA-256")
         for (info in installed) {
-            val ai = info.applicationInfo ?: continue
-            val system = (ai.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
-            val launch = pm.getLaunchIntentForPackage(info.packageName) != null
-            val installer = runCatching { pm.getInstallSourceInfo(info.packageName).installingPackageName }.getOrNull()
-            val certs = JSONArray()
-            val signers = info.signingInfo?.apkContentsSigners ?: emptyArray()
-            for (sig in signers) {
-                digest.reset()
-                certs.put(digest.digest(sig.toByteArray()).joinToString("") { "%02X".format(it) })
+            runCatching {
+                val ai = info.applicationInfo ?: return@runCatching
+                val system = (ai.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
+                val launch = pm.getLaunchIntentForPackage(info.packageName) != null
+                val installer = if (android.os.Build.VERSION.SDK_INT >= 30) {
+                    runCatching { pm.getInstallSourceInfo(info.packageName).installingPackageName }.getOrNull()
+                } else {
+                    @Suppress("DEPRECATION")
+                    runCatching { pm.getInstallerPackageName(info.packageName) }.getOrNull()
+                }
+                val certs = JSONArray()
+                val signers = info.signingInfo?.apkContentsSigners ?: emptyArray()
+                for (sig in signers) {
+                    sha1.reset()
+                    certs.put(sha1.digest(sig.toByteArray()).joinToString("") { "%02X".format(it) })
+                    sha256.reset()
+                    certs.put(sha256.digest(sig.toByteArray()).joinToString("") { "%02X".format(it) })
+                }
+                apps.put(
+                    JSONObject()
+                        .put("pkg", info.packageName)
+                        .put("label", pm.getApplicationLabel(ai).toString())
+                        .put("system", system)
+                        .put("hasLauncher", launch)
+                        .put("installer", installer ?: JSONObject.NULL)
+                        .put("certs", certs),
+                )
             }
-            apps.put(
-                JSONObject()
-                    .put("pkg", info.packageName)
-                    .put("label", pm.getApplicationLabel(ai).toString())
-                    .put("system", system)
-                    .put("hasLauncher", launch)
-                    .put("installer", installer ?: JSONObject.NULL)
-                    .put("certs", certs),
-            )
         }
         out.put("apps", apps)
         return out.toString()

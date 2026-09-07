@@ -80,4 +80,8 @@ export const es = {
     "Nada de esta pantalla se guarda. Al salir de esta página, los resultados se descartan.",
   "Run it again": "Ejecutarla otra vez",
   "The checkup could not run. Please report this.": "La revisión no pudo ejecutarse. Por favor, repórtalo.",
+  "Nothing matched the known stalkerware list. The lists below need your eyes: only you know what belongs on this phone.":
+    "Nada coincidió con la lista de stalkerware conocido. Las listas de abajo necesitan tus ojos: solo tú sabes qué pertenece a este teléfono.",
+  "The detection data could not load; the checkup cannot run. Reinstall the app.":
+    "Los datos de detección no se pudieron cargar; la revisión no puede ejecutarse. Reinstala la app.",
 };

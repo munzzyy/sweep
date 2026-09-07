@@ -75,9 +75,12 @@ function renderResults(report) {
   wrap.textContent = "";
 
   const m = report.matches.length;
+  const review = report.admins.length + report.accessibility.length + report.hidden.length + report.sideloaded.length;
   $("results-summary").textContent = m
     ? t("One of the checks needs your attention. Read it calmly; there is advice below.")
-    : t("These specific checks found nothing. That is what it says, not a guarantee of safety.");
+    : review
+      ? t("Nothing matched the known stalkerware list. The lists below need your eyes: only you know what belongs on this phone.")
+      : t("These specific checks found nothing. That is what it says, not a guarantee of safety.");
 
   wrap.append(
     card({
@@ -135,11 +138,13 @@ async function runCheckup() {
   const label = btn.textContent;
   btn.textContent = t("Checking…");
   try {
+    if (!indicators) throw new Error("indicators unavailable");
     const scan = JSON.parse(native().scanJson());
+    if (scan.error) throw new Error(scan.error);
     renderResults(analyze(scan, indicators));
   } catch (err) {
     __sweepErrors.push(`scan: ${err}`);
-    announce(t("The checkup could not run. Please report this."));
+    toastLine(t("The checkup could not run. Please report this."));
   } finally {
     btn.disabled = false;
     btn.textContent = label;
@@ -148,7 +153,29 @@ async function runCheckup() {
 
 // ------------------------------------------------------------------ boot
 
+function toastLine(msg) {
+  const el = $("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  announce(msg);
+  setTimeout(() => el.classList.remove("show"), 5000);
+}
+
 async function boot() {
+  // The exit path depends on nothing and wires first: a broken asset or a
+  // failed fetch below must never leave Leave fast dead.
+  $("btn-exit").addEventListener("click", () => {
+    $("results-cards").textContent = "";
+    if (native()?.quickExit) native().quickExit();
+    else location.replace("https://weather.com");
+  });
+  $("btn-back").addEventListener("click", () => {
+    $("results-cards").textContent = "";
+    show("home");
+  });
+  $("btn-run").addEventListener("click", runCheckup);
+  $("btn-rerun").addEventListener("click", runCheckup);
+
   let pref = "auto";
   try {
     pref = localStorage.getItem("sweep-locale") || "auto";
@@ -171,7 +198,12 @@ async function boot() {
     translateDom();
   });
 
-  indicators = await (await fetch("data/indicators.json")).json();
+  try {
+    indicators = await (await fetch("data/indicators.json")).json();
+  } catch (err) {
+    __sweepErrors.push(`indicators: ${err}`);
+    toastLine(t("The detection data could not load; the checkup cannot run. Reinstall the app."));
+  }
 
   if (native()) {
     for (const node of document.querySelectorAll(".web-only")) node.remove();
@@ -184,20 +216,6 @@ async function boot() {
   }
   const ver = $("ver");
   if (ver) ver.textContent = `v${VERSION}`;
-
-  $("btn-run").addEventListener("click", runCheckup);
-  $("btn-rerun").addEventListener("click", runCheckup);
-  $("btn-back").addEventListener("click", () => {
-    $("results-cards").textContent = "";
-    show("home");
-  });
-  $("btn-exit").addEventListener("click", () => {
-    // Results off the screen first, then out. On the web the replace also
-    // buries this page in history.
-    $("results-cards").textContent = "";
-    if (native()?.quickExit) native().quickExit();
-    else location.replace("https://weather.com");
-  });
 
   show("home");
 }

@@ -61,13 +61,22 @@ export function analyze(scan, indicators) {
 
   const hidden = apps.filter((a) => !a.system && !a.hasLauncher);
 
+  // Major stores incl. the OEM ones on the budget devices at-risk users
+  // actually carry; a flooded sideload list teaches people to stop reading.
   const KNOWN_STORES = new Set([
     "com.android.vending",
     "org.fdroid.fdroid",
     "org.fdroid.basic",
+    "com.aurora.store",
     "com.amazon.venezia",
     "com.huawei.appmarket",
     "com.sec.android.app.samsungapps",
+    "com.xiaomi.mipicks",
+    "com.heytap.market",
+    "com.oppo.market",
+    "com.bbk.appstore",
+    "com.vivo.appstore",
+    "ru.vk.store",
   ]);
   const sideloaded = apps.filter((a) => !a.system && (!a.installer || !KNOWN_STORES.has(a.installer)));
 
