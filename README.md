@@ -33,17 +33,21 @@ and a Leave fast button sits on every screen.
 ## Get it
 
 Android only, by design: install [sweep.apk](https://github.com/munzzyy/sweep/releases/latest/download/sweep.apk)
-(the link always points at the current release, so Obtainium can track
-it). The web page explains the checks but cannot run them, because a
+on Android 10 or newer; the link always points at the current release,
+so Obtainium can track it. The same UI opened in a plain browser
+(`app/index.html`) explains the checks but cannot run them, because a
 web page cannot and should not see your installed apps.
 
 ## Trust math
 
-One permission: QUERY_ALL_PACKAGES, which IS the checkup. No INTERNET
-permission, so nothing Sweep sees can leave the phone, enforced by the
-OS and checkable in the manifest. The indicator data ships inside the app
-with attribution (CC-BY 4.0, Echap) and is refreshed at build time by
-`tools/fetch-indicators.py`, never at runtime. QUERY_ALL_PACKAGES makes
+One permission that grants anything: QUERY_ALL_PACKAGES, which IS the
+checkup (androidx's inert self-scoped marker rides along, as it does in
+every modern app). No INTERNET permission, so nothing Sweep sees can
+leave the phone, enforced by the OS and checkable in the manifest. The
+indicator data ships inside the app as a pinned snapshot with
+attribution (CC-BY 4.0, Echap), refreshed before each release by
+`tools/fetch-indicators.py` and stamped with its fetch date inside the
+JSON, never fetched at runtime. QUERY_ALL_PACKAGES makes
 this app a poor fit for Play's policies; it is built for F-Droid and
 sideloading, where the tradeoff can be explained instead of buried.
 
@@ -52,6 +56,15 @@ negative controls. `npm run e2e` drives the page with stubbed scans: a
 planted stalkerware package must surface with the family named, and a
 clean scan must produce the hedged found-nothing language, never a
 verdict.
+
+## Bugs, verification, contributions
+
+False reassurance is the failure mode that hurts people, so a check that
+misses what it claims to catch is the bug that matters;
+[SECURITY.md](SECURITY.md) has the private route.
+[docs/THREAT-MODEL.md](docs/THREAT-MODEL.md) says exactly what each
+check can and cannot see. Releases list the APK's sha256 and signing
+certificate digest. Issues and pull requests are open and welcome.
 
 ## Beta means beta
 
