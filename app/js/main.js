@@ -3,6 +3,7 @@
 
 import { analyze } from "./analyze.js";
 import { setLocale, resolveLocale, translateDom, t, LOCALE_CHOICES } from "./i18n.js";
+import { decideExit } from "./quickexit.js";
 
 const VERSION = "0.1.0";
 
@@ -34,9 +35,10 @@ const app = {
 };
 globalThis.__sweepApi = app;
 
-function show(name) {
+function show(name, { moveFocus = true } = {}) {
   for (const s of ["home", "results"]) $(`screen-${s}`).hidden = s !== name;
   window.scrollTo(0, 0);
+  if (moveFocus) $(name === "results" ? "results-title" : "home-title")?.focus();
 }
 
 // ----------------------------------------------------------------- cards
@@ -76,7 +78,7 @@ function renderResults(report) {
 
   const m = report.matches.length;
   const review = report.admins.length + report.accessibility.length + report.hidden.length + report.sideloaded.length;
-  $("results-summary").textContent = m
+  const summaryText = m
     ? t("One of the checks needs your attention. Read it calmly; there is advice below.")
     : review
       ? t("Nothing matched the known stalkerware list. The lists below need your eyes: only you know what belongs on this phone.")
@@ -101,7 +103,7 @@ function renderResults(report) {
       chipClass: report.admins.length ? "chip-review" : "chip-none",
       body: t("Apps with administrator power can lock the phone, wipe it, and resist removal. Recognize every name here; your workplace or a family setup tool can be legitimate."),
       items: report.admins.map((a) => `${a.label} (${a.pkg})`),
-      listLabel: t("Show the list"),
+      listLabel: t("Show the device admin list"),
     }),
     card({
       title: t("Accessibility services, turned on"),
@@ -109,27 +111,29 @@ function renderResults(report) {
       chipClass: report.accessibility.length ? "chip-review" : "chip-none",
       body: t("A service on this list can read the screen and watch what you type. Screen readers and automation tools belong here; anything you do not recognize deserves a hard look."),
       items: report.accessibility.map((a) => `${a.label} (${a.pkg})`),
-      listLabel: t("Show the list"),
+      listLabel: t("Show the accessibility services list"),
     }),
     card({
       title: t("Apps without an icon"),
       chip: String(report.hidden.length),
-      chipClass: "chip-review",
+      chipClass: report.hidden.length ? "chip-review" : "chip-none",
       body: t("These installed apps have no launcher icon. Many are harmless helpers; hiding is also what surveillance apps do. Skim the names for anything you never installed."),
       items: report.hidden.map((a) => `${a.label} (${a.pkg})`),
-      listLabel: t("Show the list"),
+      listLabel: t("Show the apps without an icon"),
     }),
     card({
       title: t("Installed from outside a store"),
       chip: String(report.sideloaded.length),
-      chipClass: "chip-review",
+      chipClass: report.sideloaded.length ? "chip-review" : "chip-none",
       body: t("These apps did not come from a recognized app store. Sideloading is normal for plenty of people; it is also the only way most stalkerware arrives. You should remember installing each of these."),
       items: report.sideloaded.map((a) => `${a.label} (${a.pkg})`),
-      listLabel: t("Show the list"),
+      listLabel: t("Show the apps installed outside a store"),
     }),
   );
-  announce($("results-summary").textContent);
+  // The summary text is set only after the screen is unhidden: a role="status"
+  // node under [hidden] never announces, no matter what its textContent says.
   show("results");
+  $("results-summary").textContent = summaryText;
 }
 
 async function runCheckup() {
@@ -144,7 +148,7 @@ async function runCheckup() {
     renderResults(analyze(scan, indicators));
   } catch (err) {
     __sweepErrors.push(`scan: ${err}`);
-    toastLine(t("The checkup could not run. Please report this."));
+    toastLine(t("The checkup could not run. Report it: Munzzyy1@proton.me or github.com/munzzyy/sweep/issues."));
   } finally {
     btn.disabled = false;
     btn.textContent = label;
@@ -161,13 +165,45 @@ function toastLine(msg) {
   setTimeout(() => el.classList.remove("show"), 5000);
 }
 
+// True whenever the page is running inside a wrapper, Android or iOS. iOS
+// injects no SweepNative bridge, so it is told apart by its fixed custom
+// scheme instead. Anything that needs the Android bridge itself (the
+// checkup) still gates on native() alone; this predicate is only for the
+// UI behaviors both wrappers should share, like hiding the website landing.
+const bundled = () => !!native() || location.protocol === "sweep:";
+
+function leaveFast() {
+  $("results-cards").textContent = "";
+  const action = decideExit({
+    hasNativeQuickExit: !!native()?.quickExit,
+    protocol: location.protocol,
+    hasLeaveFastBridge: !!globalThis.webkit?.messageHandlers?.leaveFast,
+  });
+  switch (action) {
+    case "native":
+      native().quickExit();
+      break;
+    case "bridge":
+      globalThis.webkit.messageHandlers.leaveFast.postMessage(null);
+      break;
+    case "fail-loud":
+      // A build of the iOS wrapper with no exit bridge must never sit
+      // dead and silent: say so, plainly, so the person is not stuck
+      // believing they left when they did not.
+      toastLine(t("Leave fast could not run in this build. Close the app by hand right now: swipe up from the bottom of the screen and swipe this app away."));
+      break;
+    case "web-fallback":
+      location.replace("https://weather.com");
+      break;
+  }
+}
+
 async function boot() {
   // The exit path depends on nothing and wires first: a broken asset or a
   // failed fetch below must never leave Leave fast dead.
-  $("btn-exit").addEventListener("click", () => {
-    $("results-cards").textContent = "";
-    if (native()?.quickExit) native().quickExit();
-    else location.replace("https://weather.com");
+  $("btn-exit").addEventListener("click", leaveFast);
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape") leaveFast();
   });
   $("btn-back").addEventListener("click", () => {
     $("results-cards").textContent = "";
@@ -202,11 +238,20 @@ async function boot() {
     indicators = await (await fetch("data/indicators.json")).json();
   } catch (err) {
     __sweepErrors.push(`indicators: ${err}`);
-    toastLine(t("The detection data could not load; the checkup cannot run. Reinstall the app."));
+    toastLine(
+      native()
+        ? t("The detection data could not load; the checkup cannot run. Reinstall the app.")
+        : t("The detection data could not load; the checkup cannot run. Reload the page."),
+    );
   }
 
-  if (native()) {
+  // Both wrappers hide the website landing (Download-the-APK button,
+  // browser-install hints); only Android also gets a live checkup, because
+  // only Android has SweepNative.
+  if (bundled()) {
     for (const node of document.querySelectorAll(".web-only")) node.remove();
+  }
+  if (native()) {
     $("btn-run").hidden = false;
   } else {
     $("web-note").hidden = false;
@@ -217,7 +262,7 @@ async function boot() {
   const ver = $("ver");
   if (ver) ver.textContent = `v${VERSION}`;
 
-  show("home");
+  show("home", { moveFocus: false });
 }
 
 boot();

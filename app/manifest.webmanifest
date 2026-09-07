@@ -1,9 +1,9 @@
 {
   "name": "Sweep",
   "short_name": "Sweep",
-  "description": "A plain-language phone checkup for the things stalkerware abuses. On-device, nothing stored, nothing sent.",
-  "start_url": "/",
-  "scope": "/",
+  "description": "A plain-language phone checkup for the things stalkerware abuses. On-device, nothing sent, no results stored.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f2f0ea",
   "theme_color": "#f2f0ea",
