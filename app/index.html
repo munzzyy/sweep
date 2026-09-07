@@ -19,6 +19,7 @@
 
 <a class="skip-link" href="#main" data-i18n>Skip to content</a>
 <button id="btn-exit" class="quick-exit" data-i18n>Leave fast</button>
+<div id="leave-blackout" class="leave-blackout" hidden aria-hidden="true"></div>
 
 <main id="main">
 
@@ -83,7 +84,14 @@
     <button id="btn-back" class="icon-btn" data-i18n-attr="aria-label" aria-label="Back">←</button>
     <strong id="results-title" tabindex="-1" data-i18n>Checkup results</strong>
   </header>
-  <p id="results-summary" class="results-summary" role="status"></p>
+  <div id="results-banner" class="verdict-banner">
+    <svg class="verdict-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <circle cx="13" cy="13" r="7"></circle>
+      <line x1="18.2" y1="18.2" x2="27" y2="27"></line>
+    </svg>
+    <p id="results-summary" class="results-summary" role="status"></p>
+    <p id="results-counts" class="verdict-counts"></p>
+  </div>
   <div id="results-cards"></div>
   <div class="card guidance">
     <h2 data-i18n>Before acting on anything above</h2>

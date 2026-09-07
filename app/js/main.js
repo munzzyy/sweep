@@ -1,7 +1,7 @@
 // Boot and flow. Results live only on the screen: no storage, no history,
 // and the quick-exit control works from everywhere.
 
-import { analyze } from "./analyze.js";
+import { analyze, dataAge, selfCheckSummary } from "./analyze.js";
 import { setLocale, resolveLocale, translateDom, t, LOCALE_CHOICES } from "./i18n.js";
 import { decideExit } from "./quickexit.js";
 
@@ -37,15 +37,54 @@ globalThis.__sweepApi = app;
 
 function show(name, { moveFocus = true } = {}) {
   for (const s of ["home", "results"]) $(`screen-${s}`).hidden = s !== name;
+  if (name === "results") {
+    // Restart the CSS-only entrance every run, even on a rerun of the same
+    // screen: remove the class, force a reflow, add it back. Content is
+    // already fully in the DOM by the time this runs, so nothing here can
+    // delay a screen reader from reaching the results.
+    const results = $("screen-results");
+    results.classList.remove("sweep-reveal");
+    void results.offsetWidth;
+    results.classList.add("sweep-reveal");
+  }
   window.scrollTo(0, 0);
   if (moveFocus) $(name === "results" ? "results-title" : "home-title")?.focus();
 }
 
 // ----------------------------------------------------------------- cards
 
-function card({ title, chip, chipClass, body, items, listLabel }) {
+// Every flagged entry answers the same question: when did this show up,
+// and who put it there. Kept as one full sentence per locale rather than
+// stitched fragments, so translation reads naturally.
+function installClause(a) {
+  return t("Installed {date}, from {installer}.", {
+    date: a.installedDate || t("an unrecorded date"),
+    installer: a.installer || t("an unknown source"),
+  });
+}
+
+function listItem(a) {
+  return `${a.label} (${a.pkg}) ${installClause(a)}`;
+}
+
+// A matched package that also shows up in another surface is not just
+// named, it is holding real power on this phone right now.
+function powersClause(x) {
+  const bits = [];
+  if (x.powers.admin) bits.push(t("device admin power, which can resist being uninstalled until that access is turned off first"));
+  if (x.powers.accessibility) bits.push(t("an enabled accessibility service, which can read the screen"));
+  if (x.powers.notifications) bits.push(t("notification access, which can read incoming notifications"));
+  if (!bits.length) return "";
+  return " " + t("It also holds: {powers}.", { powers: bits.join(", ") });
+}
+
+function card({ title, chip, chipClass, body, items, listLabel, note }) {
   const div = document.createElement("div");
-  div.className = `check-card${chipClass === "chip-alarm" ? " alarm" : ""}`;
+  // A card with nothing in it recedes: findings should stand out by
+  // contrast against a row of quiet zeros, not get lost among five
+  // identical slabs. The heading and full text stay either way.
+  const quiet = !items || !items.length;
+  div.className = `check-card${chipClass === "chip-alarm" ? " alarm" : ""}${quiet ? " quiet" : ""}`;
   const h = document.createElement("h2");
   h.textContent = title + " ";
   const c = document.createElement("span");
@@ -55,6 +94,12 @@ function card({ title, chip, chipClass, body, items, listLabel }) {
   const p = document.createElement("p");
   p.textContent = body;
   div.append(h, p);
+  if (note) {
+    const n = document.createElement("p");
+    n.className = "check-note";
+    n.textContent = note;
+    div.append(n);
+  }
   if (items && items.length) {
     const det = document.createElement("details");
     const sum = document.createElement("summary");
@@ -72,17 +117,27 @@ function card({ title, chip, chipClass, body, items, listLabel }) {
   return div;
 }
 
-function renderResults(report) {
+function renderResults(report, selfCheck) {
   const wrap = $("results-cards");
   wrap.textContent = "";
 
+  const surfaces = [report.matches, report.admins, report.accessibility, report.notifications, report.hidden, report.sideloaded];
   const m = report.matches.length;
-  const review = report.admins.length + report.accessibility.length + report.hidden.length + report.sideloaded.length;
+  const review = report.admins.length + report.accessibility.length + report.notifications.length + report.hidden.length + report.sideloaded.length;
   const summaryText = m
-    ? t("One of the checks needs your attention. Read it calmly; there is advice below.")
+    ? t("Something here needs your attention. Read it calmly; there is advice below.")
     : review
       ? t("Nothing matched the known stalkerware list. The lists below need your eyes: only you know what belongs on this phone.")
       : t("These specific checks found nothing. That is what it says, not a guarantee of safety.");
+  const flaggedSurfaces = surfaces.filter((s) => s.length).length;
+  const countsText = t("{flagged} of {total} checks have something to look at.", { flagged: flaggedSurfaces, total: surfaces.length });
+
+  const age = dataAge(indicators);
+  const listNote = age.fetched
+    ? age.stale
+      ? t("This list is dated {date} and has not been refreshed since. Treat a clean result here a little more cautiously.", { date: age.fetched })
+      : t("This list is dated {date}.", { date: age.fetched })
+    : null;
 
   wrap.append(
     card({
@@ -92,8 +147,10 @@ function renderResults(report) {
       body: m
         ? t("Software publicly identified as stalkerware is installed on this phone. Take a breath before doing anything: if a person you know may have put it there, removing it or confronting them can escalate the situation, and some of these apps report their own removal. The advice below comes first.")
         : t("No installed app matched the public stalkerware list, by package name or by signing certificate."),
+      note: listNote,
       items: report.matches.map((x) =>
-        t("{label} ({pkg}): matches {family}, by {via}", { label: x.label, pkg: x.pkg, family: x.family, via: x.via === "package" ? t("name") : t("certificate") }),
+        t("{label} ({pkg}): matches {family}, by {via}.", { label: x.label, pkg: x.pkg, family: x.family, via: x.via === "package" ? t("name") : t("certificate") }) +
+          ` ${installClause(x)}${powersClause(x)}`,
       ),
       listLabel: t("Show the matches"),
     }),
@@ -102,7 +159,7 @@ function renderResults(report) {
       chip: String(report.admins.length),
       chipClass: report.admins.length ? "chip-review" : "chip-none",
       body: t("Apps with administrator power can lock the phone, wipe it, and resist removal. Recognize every name here; your workplace or a family setup tool can be legitimate."),
-      items: report.admins.map((a) => `${a.label} (${a.pkg})`),
+      items: report.admins.map(listItem),
       listLabel: t("Show the device admin list"),
     }),
     card({
@@ -110,15 +167,23 @@ function renderResults(report) {
       chip: String(report.accessibility.length),
       chipClass: report.accessibility.length ? "chip-review" : "chip-none",
       body: t("A service on this list can read the screen and watch what you type. Screen readers and automation tools belong here; anything you do not recognize deserves a hard look."),
-      items: report.accessibility.map((a) => `${a.label} (${a.pkg})`),
+      items: report.accessibility.map(listItem),
       listLabel: t("Show the accessibility services list"),
+    }),
+    card({
+      title: t("Apps that can read notifications"),
+      chip: String(report.notifications.length),
+      chipClass: report.notifications.length ? "chip-review" : "chip-none",
+      body: t("Apps on this list see the content of every notification that arrives on this phone. Smartwatches, notification-mirroring apps, and Do Not Disturb rules use this legitimately; anything you do not recognize deserves a hard look."),
+      items: report.notifications.map(listItem),
+      listLabel: t("Show the notification-access list"),
     }),
     card({
       title: t("Apps without an icon"),
       chip: String(report.hidden.length),
       chipClass: report.hidden.length ? "chip-review" : "chip-none",
       body: t("These installed apps have no launcher icon. Many are harmless helpers; hiding is also what surveillance apps do. Skim the names for anything you never installed."),
-      items: report.hidden.map((a) => `${a.label} (${a.pkg})`),
+      items: report.hidden.map(listItem),
       listLabel: t("Show the apps without an icon"),
     }),
     card({
@@ -126,14 +191,36 @@ function renderResults(report) {
       chip: String(report.sideloaded.length),
       chipClass: report.sideloaded.length ? "chip-review" : "chip-none",
       body: t("These apps did not come from a recognized app store. Sideloading is normal for plenty of people; it is also the only way most stalkerware arrives. You should remember installing each of these."),
-      items: report.sideloaded.map((a) => `${a.label} (${a.pkg})`),
+      items: report.sideloaded.map(listItem),
       listLabel: t("Show the apps installed outside a store"),
     }),
   );
+
+  if (selfCheck) {
+    wrap.append(
+      card({
+        title: t("Check Sweep itself"),
+        chip: selfCheck.hasInternet ? t("has internet") : t("no internet"),
+        chipClass: selfCheck.hasInternet ? "chip-alarm" : "chip-none",
+        body: selfCheck.hasInternet
+          ? t("Sweep's own permissions include internet access, which contradicts what this app tells you. Do not trust this build; get Sweep from the official release page instead.")
+          : t("Sweep just asked Android for its own permission list, the same way it asked for yours: no internet access is requested, so nothing this checkup sees can leave this phone. That is not a claim, it is what the phone just reported."),
+        items: selfCheck.permissions,
+        listLabel: t("Show Sweep's own permissions"),
+      }),
+    );
+  }
+
+  // The banner's color and the magnifier both come from the same verdict
+  // math as the summary line, so they never disagree with the words.
+  const banner = $("results-banner");
+  banner.className = `verdict-banner ${m ? "banner-alarm" : review ? "banner-review" : "banner-ok"}`;
+
   // The summary text is set only after the screen is unhidden: a role="status"
   // node under [hidden] never announces, no matter what its textContent says.
   show("results");
   $("results-summary").textContent = summaryText;
+  $("results-counts").textContent = countsText;
 }
 
 async function runCheckup() {
@@ -145,7 +232,18 @@ async function runCheckup() {
     if (!indicators) throw new Error("indicators unavailable");
     const scan = JSON.parse(native().scanJson());
     if (scan.error) throw new Error(scan.error);
-    renderResults(analyze(scan, indicators));
+    // Self-check is a nice-to-have amplifier, not core to the checkup: a
+    // build without it (or a bridge that errors on it) still shows results.
+    let selfCheck = null;
+    try {
+      if (native().selfCheck) {
+        const raw = JSON.parse(native().selfCheck());
+        if (!raw.error) selfCheck = selfCheckSummary(raw);
+      }
+    } catch (err) {
+      __sweepErrors.push(`selfCheck: ${err}`);
+    }
+    renderResults(analyze(scan, indicators), selfCheck);
   } catch (err) {
     __sweepErrors.push(`scan: ${err}`);
     toastLine(t("The checkup could not run. Report it: Munzzyy1@proton.me or github.com/munzzyy/sweep/issues."));
@@ -193,6 +291,10 @@ function leaveFast() {
       toastLine(t("Leave fast could not run in this build. Close the app by hand right now: swipe up from the bottom of the screen and swipe this app away."));
       break;
     case "web-fallback":
+      // Paint over the screen before the navigation even starts: a full
+      // page load elsewhere would otherwise leave the results screen
+      // visible on someone else's network for the whole time it takes.
+      $("leave-blackout").hidden = false;
       location.replace("https://weather.com");
       break;
   }

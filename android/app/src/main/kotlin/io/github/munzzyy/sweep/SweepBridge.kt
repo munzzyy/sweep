@@ -32,6 +32,21 @@ class SweepBridge(private val activity: MainActivity) {
         JSONObject().put("error", it.toString()).toString()
     }
 
+    // Sweep's own OS-reported facts, read the same way as everything else
+    // on the phone: no separate trust channel, so a claim about this app
+    // is exactly as checkable as a claim about any other app.
+    @JavascriptInterface
+    fun selfCheck(): String = runCatching {
+        val info = activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_PERMISSIONS)
+        val permissions = JSONArray()
+        for (p in info.requestedPermissions ?: emptyArray()) permissions.put(p)
+        JSONObject()
+            .put("pkg", activity.packageName)
+            .put("version", info.versionName ?: "unknown")
+            .put("permissions", permissions)
+            .toString()
+    }.getOrElse { JSONObject().put("error", it.toString()).toString() }
+
     private fun buildScan(): String {
         val pm = activity.packageManager
         val out = JSONObject()
@@ -63,6 +78,22 @@ class SweepBridge(private val activity: MainActivity) {
         }
         out.put("accessibility", accessibility)
 
+        val notifications = JSONArray()
+        val enabledNotif = Settings.Secure.getString(
+            activity.contentResolver,
+            "enabled_notification_listeners",
+        ) ?: ""
+        for (entry in enabledNotif.split(':').filter { it.isNotBlank() }) {
+            val pkg = entry.substringBefore('/')
+            notifications.put(
+                JSONObject()
+                    .put("pkg", pkg)
+                    .put("service", entry.substringAfter('/', ""))
+                    .put("label", appLabel(pm, pkg)),
+            )
+        }
+        out.put("notifications", notifications)
+
         val apps = JSONArray()
         @Suppress("DEPRECATION")
         val installed = pm.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
@@ -71,11 +102,13 @@ class SweepBridge(private val activity: MainActivity) {
         // and SHA-256 rides along for the day it switches.
         val sha1 = MessageDigest.getInstance("SHA-1")
         val sha256 = MessageDigest.getInstance("SHA-256")
+        val dateFmt = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
         for (info in installed) {
             runCatching {
                 val ai = info.applicationInfo ?: return@runCatching
                 val system = (ai.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
                 val launch = pm.getLaunchIntentForPackage(info.packageName) != null
+                val installedDate = runCatching { dateFmt.format(java.util.Date(info.firstInstallTime)) }.getOrNull()
                 val installer = if (android.os.Build.VERSION.SDK_INT >= 30) {
                     runCatching { pm.getInstallSourceInfo(info.packageName).installingPackageName }.getOrNull()
                 } else {
@@ -97,6 +130,7 @@ class SweepBridge(private val activity: MainActivity) {
                         .put("system", system)
                         .put("hasLauncher", launch)
                         .put("installer", installer ?: JSONObject.NULL)
+                        .put("installedDate", installedDate ?: JSONObject.NULL)
                         .put("certs", certs),
                 )
             }
