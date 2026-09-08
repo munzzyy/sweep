@@ -54,6 +54,47 @@ live on it, is worth that risk. Sweep cannot tell a real screen reader
 from a lookalike claiming its name, so the notice appears whenever the
 list holds anything it cannot vouch for, screen reader or not.
 
+## The accessibility gate assumes an unrooted device
+
+unrecognizedAccessibility() waves a service through when its package name
+matches TalkBack or Voice Access AND PackageManager reports it as a
+system app. Both facts come from the same source, and neither is signed:
+FLAG_SYSTEM is a bit PackageManager hands back, not a certificate. A
+normal sideloaded install cannot set that bit, which is what closes the
+cheap version of this attack. A device the attacker has rooted is a
+different case: a Magisk systemless module, or a straight push to
+/system on an unlocked bootloader, can make PackageManager report any
+package as a system app, name it after TalkBack, turn it on, and walk
+through the gate. Sustained physical access to root a phone sits well
+inside who this app is written for, so that gap is real and worth
+writing down rather than papered over with a check that sounds stronger
+than it is.
+
+What it costs, specifically: skipping the gate skips the pause screen,
+nothing more. The results card lists every enabled accessibility service
+by name regardless of whether it matched the allowlist (app/js/main.js,
+the "Accessibility services, turned on" card), so a spoofed TalkBack
+still shows up on the list a reading user sees. What's lost is the extra
+beat of friction in front of a possible watcher, not the entry itself.
+
+Certificate pinning, the same approach matchKnown already uses for the
+indicator list, would close this: require the signing certificate match
+a hardcoded expected value, not just the flag. Doing that honestly needs
+the real signing certificate SHA-256 for these two Google packages, read
+off a genuine device or a source as verifiable as the indicator feed
+this app already trusts. I don't have either in hand, so I'm not
+hardcoding a guess; a wrong constant would either silently do nothing or
+lock out a real screen reader on a clean phone. Left as the honest floor
+until that value can be sourced properly.
+
+One more thing worth naming: root access does not stop at this one
+check. Every fact in a scan, the app list, the certificates, the system
+flag, comes from PackageManager, and a rooted device can lie to
+PackageManager about any of it. Cert pinning would raise the cost of
+spoofing accessibility specifically, but it would not change the
+underlying fact that root compromise means Sweep is asking a phone that
+may already be lying to tell the truth about itself.
+
 ## The device is the boundary
 
 Sweep reads the app list, active admins, and enabled accessibility
