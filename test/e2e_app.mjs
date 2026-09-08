@@ -43,21 +43,23 @@ const scan = (infested) => ({
 });
 
 // A clean app list plus one enabled accessibility entry, isolated from the stalkerware matcher.
-const scanWithAccessibility = (pkg, service) => ({
+// system carries whether the app record backing that service is a system app.
+const scanWithAccessibility = (pkg, service, system = false) => ({
   admins: [],
   accessibility: pkg ? [{ pkg, service }] : [],
   notifications: [],
   apps: [
     { pkg: "com.whatsapp", label: "WhatsApp", system: false, hasLauncher: true, installer: "com.android.vending", installedDate: "2025-11-02", certs: [] },
     { pkg: "com.android.systemui", label: "System UI", system: true, hasLauncher: false, installer: null, installedDate: null, certs: [] },
+    ...(pkg ? [{ pkg, label: service, system, hasLauncher: false, installer: null, installedDate: null, certs: [] }] : []),
   ],
 });
 
-const BRIDGE_STUB_ACCESSIBILITY = (pkg, service) => `window.SweepNative = {
+const BRIDGE_STUB_ACCESSIBILITY = (pkg, service, system = false) => `window.SweepNative = {
   platform: () => "android",
   version: () => "e2e",
   quickExit: () => { window.__exited = true; },
-  scanJson: () => ${JSON.stringify(JSON.stringify(scanWithAccessibility(pkg, service)))},
+  scanJson: () => ${JSON.stringify(JSON.stringify(scanWithAccessibility(pkg, service, system)))},
   selfCheck: () => ${JSON.stringify(SELF_CHECK(false))},
 };`;
 
@@ -246,11 +248,17 @@ async function main() {
     check("continuing past the notice still names the service in the results", flaggedCards.includes("com.example.helper"), flaggedCards);
     flagged.close();
 
-    const assistive = await newTab({ stub: BRIDGE_STUB_ACCESSIBILITY("com.google.android.marvin.talkback", "TalkBackService") });
+    const assistive = await newTab({ stub: BRIDGE_STUB_ACCESSIBILITY("com.google.android.marvin.talkback", "TalkBackService", true) });
     await assistive.evalJs("document.getElementById('btn-run').click(); 'ok'");
     await waitFor(() => assistive.evalJs("__sweepApi.state.screen === 'results'"), "results shown directly for a recognized assistive service");
     check("negative control: a recognized assistive service does not trigger the notice", await assistive.evalJs("document.getElementById('screen-notice').hidden"));
     assistive.close();
+
+    // A non-system clone of TalkBack's own package name must still gate on the notice.
+    const spoofed = await newTab({ stub: BRIDGE_STUB_ACCESSIBILITY("com.google.android.marvin.talkback", "EvilService", false) });
+    await spoofed.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    await waitFor(() => spoofed.evalJs("__sweepApi.state.screen === 'notice'"), "notice shown for a non-system clone of TalkBack's package name");
+    spoofed.close();
 
     const none = await newTab({ stub: BRIDGE_STUB_ACCESSIBILITY(null, null) });
     await none.evalJs("document.getElementById('btn-run').click(); 'ok'");

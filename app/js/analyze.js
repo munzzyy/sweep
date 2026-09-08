@@ -141,8 +141,9 @@ const KNOWN_ASSISTIVE_PACKAGES = new Set([
   "com.google.android.apps.accessibility.voiceaccess",
 ]);
 
+// A bare package-name match can be claimed by any non-system install; require system too.
 export function unrecognizedAccessibility(accessibility) {
-  return (accessibility || []).filter((a) => !KNOWN_ASSISTIVE_PACKAGES.has(a.pkg));
+  return (accessibility || []).filter((a) => !(KNOWN_ASSISTIVE_PACKAGES.has(a.pkg) && a.system === true));
 }
 
 // The bridge's own permission list, reduced to the one claim the app makes

@@ -23,8 +23,11 @@ what people encounter. But spyware sold to governments does not sit in
 the app list waiting to be matched, dual-use apps (family trackers,
 find-my tools) can be abuse in the wrong hands while looking legitimate,
 and watching can also happen off the phone entirely: a shared account, a
-known password, an old backup. If your gut disagrees with a clean
-checkup, your gut has more information than this app does.
+known password, an old backup. The accessibility check specifically only
+sees a service that is turned on right now; screen mirroring apps, remote
+support tools, root-level capture, and a person standing behind the phone
+read the screen without ever touching that list. If your gut disagrees
+with a clean checkup, your gut has more information than this app does.
 
 ## Why the other lists exist
 
@@ -35,6 +38,21 @@ system helpers, apps you sideloaded yourself. Sweep does not score them,
 because a score teaches people to stop reading. It shows the list and
 says what the power means, so the one entry you never granted stands out
 to the only person who can recognize it: you.
+
+## Why the results screen waits behind a notice
+
+When an accessibility service is turned on that Sweep does not recognize
+as a known screen reader, results wait behind one extra tap instead of
+rendering straight away. That extra step lands in exactly the runs where
+the phone may already be watched, which means more time with the app
+open in front of a possible watcher. That tradeoff is deliberate, not an
+oversight: rendering the results of a stalkerware checkup straight onto
+a screen that something else can already read would hand a watcher the
+one piece of information the whole app exists to keep from them, on the
+one run where it matters most. One more screen, with Leave fast still
+live on it, is worth that risk. Sweep cannot tell a real screen reader
+from a lookalike claiming its name, so the notice appears whenever the
+list holds anything it cannot vouch for, screen reader or not.
 
 ## The device is the boundary
 

@@ -170,6 +170,7 @@ function renderResults(report, selfCheck) {
       chip: String(report.accessibility.length),
       chipClass: report.accessibility.length ? "chip-review" : "chip-none",
       body: t("A service on this list can read the screen and watch what you type. Screen readers and automation tools belong here; anything you do not recognize deserves a hard look."),
+      note: t("This list only covers accessibility services. Screen mirroring, remote support tools, and someone simply looking at the screen leave nothing here to find."),
       items: report.accessibility.map(listItem),
       listLabel: t("Show the accessibility services list"),
     }),

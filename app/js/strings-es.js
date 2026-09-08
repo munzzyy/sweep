@@ -72,6 +72,8 @@ export const es = {
   "Accessibility services, turned on": "Servicios de accesibilidad activados",
   "A service on this list can read the screen and watch what you type. Screen readers and automation tools belong here; anything you do not recognize deserves a hard look.":
     "Un servicio de esta lista puede leer la pantalla y observar lo que tecleas. Los lectores de pantalla y las herramientas de automatización tienen su lugar aquí; cualquier cosa que no reconozcas merece una mirada seria.",
+  "This list only covers accessibility services. Screen mirroring, remote support tools, and someone simply looking at the screen leave nothing here to find.":
+    "Esta lista solo cubre los servicios de accesibilidad. La duplicación de pantalla, las herramientas de soporte remoto y alguien simplemente mirando la pantalla no dejan nada que encontrar aquí.",
   "Show the accessibility services list": "Mostrar la lista de servicios de accesibilidad",
   "Apps without an icon": "Apps sin icono",
   "These installed apps have no launcher icon. Many are harmless helpers; hiding is also what surveillance apps do. Skim the names for anything you never installed.":
@@ -125,7 +127,7 @@ export const es = {
   "Read this first": "Lee esto primero",
   "An app on this phone can read the screen as text right now, because accessibility access is turned on for it. That means the checkup results below could be visible to it too.":
     "Una app en este teléfono puede leer la pantalla como texto ahora mismo, porque tiene activado el acceso de accesibilidad. Eso significa que los resultados de esta revisión también podrían ser visibles para ella.",
-  "Screen readers and voice controls need this access, and so do some password managers and launchers. Sweep cannot tell which one this is; continuing will show you its name in the accessibility list.":
-    "Los lectores de pantalla y los controles por voz necesitan este acceso, y también algunos gestores de contraseñas y lanzadores. Sweep no puede saber cuál es este caso; si continúas, verás su nombre en la lista de accesibilidad.",
+  "Screen readers and voice controls need this access, and so do plenty of ordinary automation apps. Sweep only recognizes a couple of screen readers by name; anything else on this phone will need your own judgment. Continuing will show you its name in the accessibility list.":
+    "Los lectores de pantalla y los controles por voz necesitan este acceso, igual que muchas apps de automatización comunes. Sweep solo reconoce por nombre un par de lectores de pantalla; cualquier otra cosa en este teléfono necesitará tu propio criterio. Si continúas, verás su nombre en la lista de accesibilidad.",
   "See the results": "Ver los resultados",
 };
