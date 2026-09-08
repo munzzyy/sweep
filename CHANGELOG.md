@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.4.0
+
+Real headers on the site, and a pause before results if something else can already read the screen.
+
+- The site now ships actual security headers instead of relying on the meta
+  tag alone: nosniff, no framing, no referrer, a locked-down
+  permissions policy, HSTS, and a Content-Security-Policy that matches
+  index.html's exactly, so the two can never quietly disagree.
+- Before results render, an accessibility service Sweep does not
+  recognize now stops the scan on its own screen first: plain language
+  that something else may already be reading whatever shows up next,
+  naming screen readers and voice controls as real, legitimate holders
+  of that same access rather than treating the access itself as
+  suspicious. Continue to results or go back to home; either way the
+  actual service still shows up in the list.
+- That check first matched on package name alone, and a sideloaded app
+  can name itself whatever it wants. It now also requires the app be
+  flagged as a genuine system app, so a fake TalkBack can no longer
+  talk its way past the warning it exists to trigger.
+- A rooted phone can still forge that system flag along with the name,
+  so this closes the cheap version of that gap, not the expensive one.
+  Said plainly in the threat model instead of implied away.
+
 ## 0.3.0
 
 A sixth check, honest dates, and a calmer way to say it.
