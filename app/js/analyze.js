@@ -135,6 +135,16 @@ export function analyze(scan, indicators) {
   };
 }
 
+// Verified package names only; absence here is not a finding, just an unknown.
+const KNOWN_ASSISTIVE_PACKAGES = new Set([
+  "com.google.android.marvin.talkback",
+  "com.google.android.apps.accessibility.voiceaccess",
+]);
+
+export function unrecognizedAccessibility(accessibility) {
+  return (accessibility || []).filter((a) => !KNOWN_ASSISTIVE_PACKAGES.has(a.pkg));
+}
+
 // The bridge's own permission list, reduced to the one claim the app makes
 // about itself repeatedly in its copy: it cannot reach the network. Read
 // raw off the OS the same way everything else on the phone is read.

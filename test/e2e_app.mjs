@@ -42,6 +42,25 @@ const scan = (infested) => ({
   ],
 });
 
+// A clean app list plus one enabled accessibility entry, isolated from the stalkerware matcher.
+const scanWithAccessibility = (pkg, service) => ({
+  admins: [],
+  accessibility: pkg ? [{ pkg, service }] : [],
+  notifications: [],
+  apps: [
+    { pkg: "com.whatsapp", label: "WhatsApp", system: false, hasLauncher: true, installer: "com.android.vending", installedDate: "2025-11-02", certs: [] },
+    { pkg: "com.android.systemui", label: "System UI", system: true, hasLauncher: false, installer: null, installedDate: null, certs: [] },
+  ],
+});
+
+const BRIDGE_STUB_ACCESSIBILITY = (pkg, service) => `window.SweepNative = {
+  platform: () => "android",
+  version: () => "e2e",
+  quickExit: () => { window.__exited = true; },
+  scanJson: () => ${JSON.stringify(JSON.stringify(scanWithAccessibility(pkg, service)))},
+  selfCheck: () => ${JSON.stringify(SELF_CHECK(false))},
+};`;
+
 const SELF_CHECK = (withInternet) =>
   JSON.stringify({
     pkg: "io.github.munzzyy.sweep",
@@ -168,6 +187,9 @@ async function main() {
     const bad = await newTab({ stub: BRIDGE_STUB(true) });
     check("wrapper: run button offered", !(await bad.evalJs("document.getElementById('btn-run').hidden")));
     await bad.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    // BAD_PKG's accessibility service is not on the assistive allowlist, so the notice gates this too.
+    await waitFor(() => bad.evalJs("__sweepApi.state.screen === 'notice'"), "accessibility notice shown ahead of an infested scan");
+    await bad.evalJs("document.getElementById('btn-a11y-continue').click(); 'ok'");
     await waitFor(() => bad.evalJs("__sweepApi.state.screen === 'results'"), "results shown");
     const badText = await bad.evalJs("document.getElementById('results-cards').textContent + document.getElementById('results-summary').textContent");
     check("positive control: the planted stalkerware package surfaces", badText.includes(BAD_PKG), BAD_PKG);
@@ -195,6 +217,7 @@ async function main() {
     const clean = await newTab({ stub: BRIDGE_STUB(false) });
     await clean.evalJs("document.getElementById('btn-run').click(); 'ok'");
     await waitFor(() => clean.evalJs("__sweepApi.state.screen === 'results'"), "clean results");
+    check("negative control: no enabled accessibility service means no interstitial", await clean.evalJs("document.getElementById('screen-notice').hidden"));
     const summary = await clean.evalJs("document.getElementById('results-summary').textContent");
     check("negative control: found-nothing language, hedged", /found nothing/.test(summary) && /not a guarantee/.test(summary), summary);
     const cleanCards = await clean.evalJs("document.getElementById('results-cards').textContent");
@@ -206,6 +229,34 @@ async function main() {
     const errs = await clean.evalJs("(__sweepErrors || []).slice(0, 5)");
     check("clean run: console clean", errs.length === 0, JSON.stringify(errs));
     clean.close();
+
+    // --------------------------------------------- accessibility notice
+    // Three cases, each a negative control on the other two.
+    const flagged = await newTab({ stub: BRIDGE_STUB_ACCESSIBILITY("com.example.helper", "HelperService") });
+    await flagged.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    await waitFor(() => flagged.evalJs("__sweepApi.state.screen === 'notice'"), "notice shown for an unrecognized service");
+    const noticeText = await flagged.evalJs("document.getElementById('screen-notice').textContent");
+    check("notice: names what the access means, plainly", /read.*screen|read the screen/i.test(noticeText), noticeText);
+    check("notice: never claims to know it is spyware", !/spy|stalkerware|surveillance/i.test(noticeText), noticeText);
+    check("notice: names legitimate uses honestly", /screen reader|password manager|launcher/i.test(noticeText), noticeText);
+    check("notice: leave fast is still present and not hidden", !(await flagged.evalJs("document.getElementById('btn-exit').hidden")));
+    await flagged.evalJs("document.getElementById('btn-a11y-continue').click(); 'ok'");
+    await waitFor(() => flagged.evalJs("__sweepApi.state.screen === 'results'"), "results shown after continuing past the notice");
+    const flaggedCards = await flagged.evalJs("document.getElementById('results-cards').textContent");
+    check("continuing past the notice still names the service in the results", flaggedCards.includes("com.example.helper"), flaggedCards);
+    flagged.close();
+
+    const assistive = await newTab({ stub: BRIDGE_STUB_ACCESSIBILITY("com.google.android.marvin.talkback", "TalkBackService") });
+    await assistive.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    await waitFor(() => assistive.evalJs("__sweepApi.state.screen === 'results'"), "results shown directly for a recognized assistive service");
+    check("negative control: a recognized assistive service does not trigger the notice", await assistive.evalJs("document.getElementById('screen-notice').hidden"));
+    assistive.close();
+
+    const none = await newTab({ stub: BRIDGE_STUB_ACCESSIBILITY(null, null) });
+    await none.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    await waitFor(() => none.evalJs("__sweepApi.state.screen === 'results'"), "results shown directly with no accessibility services enabled");
+    check("negative control: no accessibility services enabled does not trigger the notice", await none.evalJs("document.getElementById('screen-notice').hidden"));
+    none.close();
 
     // ----------------------------------------------- self-check anti-lying
     // A build whose own OS-reported permissions include INTERNET must have

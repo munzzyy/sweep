@@ -78,6 +78,19 @@
   <p class="locale-line"><label><span class="sr-only" data-i18n>Language</span><select id="locale-pick"></select></label></p>
 </section>
 
+<!-- ============================================== accessibility notice -->
+<section id="screen-notice" class="screen" hidden>
+  <header class="topbar">
+    <button id="btn-a11y-back" class="icon-btn" data-i18n-attr="aria-label" aria-label="Back">←</button>
+    <strong id="notice-title" tabindex="-1" data-i18n>Read this first</strong>
+  </header>
+  <div class="card">
+    <p data-i18n>An app on this phone can read the screen as text right now, because accessibility access is turned on for it. That means the checkup results below could be visible to it too.</p>
+    <p data-i18n>Screen readers and voice controls need this access, and so do some password managers and launchers. Sweep cannot tell which one this is; continuing will show you its name in the accessibility list.</p>
+    <button id="btn-a11y-continue" class="btn-primary" data-i18n>See the results</button>
+  </div>
+</section>
+
 <!-- ========================================================== results -->
 <section id="screen-results" class="screen" hidden>
   <header class="topbar">

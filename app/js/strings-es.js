@@ -121,4 +121,11 @@ export const es = {
   "Sweep just asked Android for its own permission list, the same way it asked for yours: no internet access is requested, so nothing this checkup sees can leave this phone. That is not a claim, it is what the phone just reported.":
     "Sweep acaba de pedirle a Android su propia lista de permisos, igual que pidió la tuya: no solicita acceso a internet, así que nada de lo que ve esta revisión puede salir de este teléfono. Eso no es una afirmación, es lo que el teléfono acaba de reportar.",
   "Show Sweep's own permissions": "Mostrar los propios permisos de Sweep",
+
+  "Read this first": "Lee esto primero",
+  "An app on this phone can read the screen as text right now, because accessibility access is turned on for it. That means the checkup results below could be visible to it too.":
+    "Una app en este teléfono puede leer la pantalla como texto ahora mismo, porque tiene activado el acceso de accesibilidad. Eso significa que los resultados de esta revisión también podrían ser visibles para ella.",
+  "Screen readers and voice controls need this access, and so do some password managers and launchers. Sweep cannot tell which one this is; continuing will show you its name in the accessibility list.":
+    "Los lectores de pantalla y los controles por voz necesitan este acceso, y también algunos gestores de contraseñas y lanzadores. Sweep no puede saber cuál es este caso; si continúas, verás su nombre en la lista de accesibilidad.",
+  "See the results": "Ver los resultados",
 };
