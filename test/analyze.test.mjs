@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { analyze, matchKnown, dataAge, selfCheckSummary } from "../app/js/analyze.js";
+import { analyze, matchKnown, dataAge, selfCheckSummary, unrecognizedAccessibility } from "../app/js/analyze.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const INDICATORS = JSON.parse(readFileSync(path.join(ROOT, "app", "data", "indicators.json"), "utf8"));
@@ -223,4 +223,40 @@ test("negative control: a planted INTERNET permission is caught, not hidden", ()
 test("selfCheckSummary: malformed data degrades to an honest unknown, never a crash", () => {
   assert.deepEqual(selfCheckSummary({}), { pkg: null, version: null, permissions: [], hasInternet: false });
   assert.deepEqual(selfCheckSummary(null), { pkg: null, version: null, permissions: [], hasInternet: false });
+});
+
+test("negative control: a clean device has no unrecognized accessibility service", () => {
+  assert.deepEqual(unrecognizedAccessibility([]), []);
+  assert.deepEqual(unrecognizedAccessibility(undefined), []);
+});
+
+test("negative control: a recognized, system-installed assistive service is not flagged", () => {
+  const list = [
+    { pkg: "com.google.android.marvin.talkback", service: "TalkBackService", system: true },
+    { pkg: "com.google.android.apps.accessibility.voiceaccess", service: "VoiceAccessService", system: true },
+  ];
+  assert.deepEqual(unrecognizedAccessibility(list), []);
+});
+
+test("a planted, unrecognized accessibility service is flagged", () => {
+  const list = [{ pkg: "com.evil.tracker", service: "Watcher", system: false }];
+  assert.deepEqual(unrecognizedAccessibility(list), list);
+});
+
+test("a mix of recognized and unrecognized services flags only the unrecognized one", () => {
+  const list = [
+    { pkg: "com.google.android.marvin.talkback", service: "TalkBackService", system: true },
+    { pkg: "com.evil.tracker", service: "Watcher", system: false },
+  ];
+  assert.deepEqual(unrecognizedAccessibility(list), [list[1]]);
+});
+
+test("a spoofed clone using TalkBack's own package name is flagged, because it is not a system app", () => {
+  const list = [{ pkg: "com.google.android.marvin.talkback", service: "EvilService", system: false }];
+  assert.deepEqual(unrecognizedAccessibility(list), list);
+});
+
+test("a name match with no system field at all (unenriched input) is not trusted either", () => {
+  const list = [{ pkg: "com.google.android.marvin.talkback", service: "EvilService" }];
+  assert.deepEqual(unrecognizedAccessibility(list), list);
 });

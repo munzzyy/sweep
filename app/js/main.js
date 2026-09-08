@@ -1,7 +1,7 @@
 // Boot and flow. Results live only on the screen: no storage, no history,
 // and the quick-exit control works from everywhere.
 
-import { analyze, dataAge, selfCheckSummary } from "./analyze.js";
+import { analyze, dataAge, selfCheckSummary, unrecognizedAccessibility } from "./analyze.js";
 import { setLocale, resolveLocale, translateDom, t, LOCALE_CHOICES } from "./i18n.js";
 import { decideExit } from "./quickexit.js";
 
@@ -22,11 +22,12 @@ const announce = (msg) => {
 };
 
 let indicators = null;
+let pendingResults = null;
 
 const app = {
   get state() {
     return {
-      screen: ["home", "results"].find((s) => !$(`screen-${s}`).hidden) || "none",
+      screen: ["home", "results", "notice"].find((s) => !$(`screen-${s}`).hidden) || "none",
       wrapper: !!native(),
       version: VERSION,
     };
@@ -35,8 +36,10 @@ const app = {
 };
 globalThis.__sweepApi = app;
 
+const SCREEN_TITLES = { home: "home-title", results: "results-title", notice: "notice-title" };
+
 function show(name, { moveFocus = true } = {}) {
-  for (const s of ["home", "results"]) $(`screen-${s}`).hidden = s !== name;
+  for (const s of Object.keys(SCREEN_TITLES)) $(`screen-${s}`).hidden = s !== name;
   if (name === "results") {
     // Restart the CSS-only entrance every run, even on a rerun of the same
     // screen: remove the class, force a reflow, add it back. Content is
@@ -48,7 +51,7 @@ function show(name, { moveFocus = true } = {}) {
     results.classList.add("sweep-reveal");
   }
   window.scrollTo(0, 0);
-  if (moveFocus) $(name === "results" ? "results-title" : "home-title")?.focus();
+  if (moveFocus) $(SCREEN_TITLES[name])?.focus();
 }
 
 // ----------------------------------------------------------------- cards
@@ -167,6 +170,7 @@ function renderResults(report, selfCheck) {
       chip: String(report.accessibility.length),
       chipClass: report.accessibility.length ? "chip-review" : "chip-none",
       body: t("A service on this list can read the screen and watch what you type. Screen readers and automation tools belong here; anything you do not recognize deserves a hard look."),
+      note: t("This list only covers accessibility services. Screen mirroring, remote support tools, and someone simply looking at the screen leave nothing here to find."),
       items: report.accessibility.map(listItem),
       listLabel: t("Show the accessibility services list"),
     }),
@@ -243,7 +247,13 @@ async function runCheckup() {
     } catch (err) {
       __sweepErrors.push(`selfCheck: ${err}`);
     }
-    renderResults(analyze(scan, indicators), selfCheck);
+    const report = analyze(scan, indicators);
+    if (unrecognizedAccessibility(report.accessibility).length) {
+      pendingResults = { report, selfCheck };
+      show("notice");
+    } else {
+      renderResults(report, selfCheck);
+    }
   } catch (err) {
     __sweepErrors.push(`scan: ${err}`);
     toastLine(t("The checkup could not run. Report it: Munzzyy1@proton.me or github.com/munzzyy/sweep/issues."));
@@ -272,6 +282,7 @@ const bundled = () => !!native() || location.protocol === "sweep:";
 
 function leaveFast() {
   $("results-cards").textContent = "";
+  pendingResults = null;
   const action = decideExit({
     hasNativeQuickExit: !!native()?.quickExit,
     protocol: location.protocol,
@@ -310,6 +321,16 @@ async function boot() {
   $("btn-back").addEventListener("click", () => {
     $("results-cards").textContent = "";
     show("home");
+  });
+  $("btn-a11y-back").addEventListener("click", () => {
+    pendingResults = null;
+    show("home");
+  });
+  $("btn-a11y-continue").addEventListener("click", () => {
+    if (!pendingResults) return;
+    const { report, selfCheck } = pendingResults;
+    pendingResults = null;
+    renderResults(report, selfCheck);
   });
   $("btn-run").addEventListener("click", runCheckup);
   $("btn-rerun").addEventListener("click", runCheckup);
