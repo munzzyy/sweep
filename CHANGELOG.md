@@ -1,5 +1,59 @@
 # Changelog
 
+## 0.5.0
+
+A much deeper scan, and a report that opens with what it could not see.
+
+- Every result now starts with the honest count: how many surfaces were
+  read out of how many Sweep knows exist, with a concrete reason for each
+  one it could not read. Three reasons never go away, because Android
+  shows usage-access, overlay, and install-unknown grants only to
+  privileged system apps. Saying that every time beats implying the
+  check happened.
+- Accessibility services show the capabilities the OS actually enforces
+  for them: reading the screen, watching keys, seeing text as it is
+  typed, tapping by itself, taking screenshots, and whether the service
+  watches every app or only some. The old settings-string read stays as
+  a cross-check, and a disagreement between the two records is itself
+  reported.
+- Per-app permission grants come straight from the OS grant table, so a
+  finding says what an app can do on this phone right now: microphone,
+  camera, location and background location, SMS, call log, contacts,
+  calendar, and the rest. Appop-gated specials are reported as declared
+  only, never claimed as granted.
+- Device admins list their declared powers in plain words: erase this
+  phone remotely, lock the screen, change the unlock password, watch
+  failed unlocks, turn off the camera. An unreadable admin says so.
+- New surfaces: enabled keyboards, certificate authorities a person
+  added, VPN-capable apps plus the always-on VPN setting, default SMS
+  and dialer holders, device and profile owners and work-profile
+  presence, battery-optimization exemptions, boot receivers and declared
+  background service types, install provenance including who started the
+  install, and the USB and wireless debugging switches.
+- Match wording is tiered by evidence. A certificate match speaks
+  plainly; a package-name-only match says in the same sentence that
+  names can be reused and the certificate did not corroborate; a prefix
+  match alone never surfaces at all.
+- Parental-monitoring products (the upstream watchware list) now ship in
+  the data but live on a fully separate track with their own wording:
+  presence alone does not mean misuse, and the track cannot borrow
+  stalkerware language because it is a separate array and a separate
+  renderer, not a flag on the same object.
+- A disguise check that cannot fire on a name alone: it takes the
+  system-app naming pattern, no system record, and an installer other
+  than the Play Store together, and the legitimate counter-example rides
+  in the same sentence as the warning.
+- The indicator refresh is pinned to an exact upstream commit, validates
+  every certificate and package shape, prints an added and removed diff
+  against the committed data, and refuses a family-count swing over 20
+  percent without an explicit flag. The bundled data records the commit
+  it came from and carries family aliases for recognition.
+- A labeled benign corpus (screen readers, password managers, Find My
+  Device, MDM, family tools, a Play-updated Google app) holds the
+  false-accusation floor at zero in CI, and spoofed twins of those same
+  fixtures must diverge from their benign versions, so a dead rule fails
+  the build instead of passing quietly.
+
 ## 0.4.0
 
 Real headers on the site, and a pause before results if something else can already read the screen.

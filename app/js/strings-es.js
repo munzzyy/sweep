@@ -61,10 +61,6 @@ export const es = {
     "En este teléfono hay instalado software identificado públicamente como stalkerware. Respira antes de hacer nada: si una persona que conoces pudo haberlo puesto, eliminarlo o confrontarla puede escalar la situación, y algunas de estas apps avisan de su propia eliminación. Los consejos de abajo van primero.",
   "No installed app matched the public stalkerware list, by package name or by signing certificate.":
     "Ninguna app instalada coincidió con la lista pública de stalkerware, ni por nombre de paquete ni por certificado de firma.",
-  "{label} ({pkg}): matches {family}, by {via}.": "{label} ({pkg}): coincide con {family}, por {via}.",
-  "name": "nombre",
-  "certificate": "certificado",
-  "Show the matches": "Mostrar las coincidencias",
   "Device admin apps": "Apps administradoras del dispositivo",
   "Apps with administrator power can lock the phone, wipe it, and resist removal. Recognize every name here; your workplace or a family setup tool can be legitimate.":
     "Las apps con poder de administrador pueden bloquear el teléfono, borrarlo y resistirse a ser eliminadas. Reconoce cada nombre; tu trabajo o una herramienta de configuración familiar pueden ser legítimos.",
@@ -98,8 +94,8 @@ export const es = {
   "The detection data could not load; the checkup cannot run. Reload the page.":
     "Los datos de detección no se pudieron cargar; la revisión no puede ejecutarse. Recarga la página.",
   "This list is dated {date}.": "Esta lista tiene fecha del {date}.",
-  "This list is dated {date} and has not been refreshed since. Treat a clean result here a little more cautiously.":
-    "Esta lista tiene fecha del {date} y no se ha actualizado desde entonces. Toma un resultado limpio aquí con un poco más de cautela.",
+  "This list is dated {date} and has not been refreshed since. Treat a no-matches result here a little more cautiously.":
+    "Esta lista tiene fecha del {date} y no se ha actualizado desde entonces. Toma un resultado sin coincidencias aquí con un poco más de cautela.",
   "Installed {date}, from {installer}.": "Instalada el {date}, desde {installer}.",
   "an unrecorded date": "una fecha no registrada",
   "an unknown source": "una fuente desconocida",
@@ -130,4 +126,214 @@ export const es = {
   "Screen readers and voice controls need this access, and so do plenty of ordinary automation apps. Sweep only recognizes a couple of screen readers by name; anything else on this phone will need your own judgment. Continuing will show you its name in the accessibility list.":
     "Los lectores de pantalla y los controles por voz necesitan este acceso, igual que muchas apps de automatización comunes. Sweep solo reconoce por nombre un par de lectores de pantalla; cualquier otra cosa en este teléfono necesitará tu propio criterio. Si continúas, verás su nombre en la lista de accesibilidad.",
   "See the results": "Ver los resultados",
+
+  "What this checkup could actually see": "Lo que esta revisión pudo ver realmente",
+  "{checked} of {total}": "{checked} de {total}",
+  "This checkup read {checked} of the {total} surfaces it knows about on this phone. What it could not read is listed here with the reason; an unreadable surface is an unknown, never good news or bad news.":
+    "Esta revisión leyó {checked} de las {total} superficies que conoce en este teléfono. Lo que no pudo leer está listado aquí con la razón; una superficie ilegible es una incógnita, nunca una buena ni una mala noticia.",
+  "Show what could not be checked ({count})": "Mostrar lo que no se pudo comprobar ({count})",
+  "Android only exposes this to privileged system apps": "Android solo expone esto a apps privilegiadas del sistema",
+  "this scan did not report it; the app that ran the scan is older than this check":
+    "esta exploración no lo informó; la app que la ejecutó es más antigua que esta comprobación",
+  "the installed app list": "la lista de apps instaladas",
+  "active device admin apps": "las apps administradoras del dispositivo activas",
+  "the powers each device admin declares": "los poderes que declara cada administrador del dispositivo",
+  "enabled accessibility services, from the settings record": "los servicios de accesibilidad activados, según el registro de ajustes",
+  "what each enabled accessibility service can do": "qué puede hacer cada servicio de accesibilidad activado",
+  "apps with notification access": "las apps con acceso a notificaciones",
+  "which sensitive permissions each app actually holds": "qué permisos sensibles tiene realmente cada app",
+  "declared background services and boot receivers": "los servicios en segundo plano declarados y los receptores de arranque",
+  "where each app was installed from": "de dónde se instaló cada app",
+  "enabled keyboards": "los teclados habilitados",
+  "which keyboard is active": "qué teclado está activo",
+  "certificate authorities a person added to this phone": "las autoridades de certificación que una persona añadió a este teléfono",
+  "which app handles text messages": "qué app gestiona los mensajes de texto",
+  "which app handles calls": "qué app gestiona las llamadas",
+  "which app acts as the assistant": "qué app actúa como asistente",
+  "battery optimization exemptions": "las exenciones de optimización de batería",
+  "device owner, profile owner, and work profile": "propietario del dispositivo, propietario de perfil y perfil de trabajo",
+  "USB debugging and developer settings": "la depuración USB y los ajustes de desarrollador",
+  "apps that can run a VPN": "las apps que pueden ejecutar una VPN",
+  "the always-on VPN setting": "el ajuste de VPN siempre activa",
+  "which apps were granted usage access": "a qué apps se les concedió el acceso de uso",
+  "which apps were granted draw-over-other-apps": "a qué apps se les concedió dibujar sobre otras apps",
+  "which apps were granted install-unknown-apps": "a qué apps se les concedió instalar apps desconocidas",
+
+  "This app is signed with a certificate that appears in the public stalkerware indicator list, under the family {family}.":
+    "Esta app está firmada con un certificado que aparece en la lista pública de indicadores de stalkerware, bajo la familia {family}.",
+  "This app's package name and its signing certificate both match the stalkerware family {family} on the public indicator list.":
+    "El nombre de paquete de esta app y su certificado de firma coinciden ambos con la familia de stalkerware {family} de la lista pública de indicadores.",
+  "This app's package name matches one documented for the stalkerware family {family}. A package name alone can be reused by an unrelated app, and the signing certificate here did not also match, so hold that doubt while you read this.":
+    "El nombre de paquete de esta app coincide con uno documentado para la familia de stalkerware {family}. Un nombre de paquete por sí solo puede ser reutilizado por una app sin relación, y aquí el certificado de firma no coincidió también, así que mantén esa duda mientras lees esto.",
+  "This app's package name starts with a prefix documented for the stalkerware family {family}. A name prefix is weak evidence on its own; this is shown because the app also holds real power on this phone.":
+    "El nombre de paquete de esta app empieza con un prefijo documentado para la familia de stalkerware {family}. Un prefijo de nombre es evidencia débil por sí solo; esto se muestra porque la app además tiene poder real en este teléfono.",
+  "{label} is commonly marketed for parental or partner monitoring. It does not appear on the stalkerware-indicator list checked here, and its presence alone does not mean misuse.":
+    "{label} se comercializa habitualmente para el monitoreo parental o de pareja. No aparece en la lista de indicadores de stalkerware consultada aquí, y su presencia por sí sola no significa un mal uso.",
+  "This app names itself like a system app ({prefix}) but Android does not record it as part of the system and it was not installed by the Play Store; an app updated through a manufacturer's own store can look the same way, so treat this as something to check, not proof.":
+    "Esta app se nombra como una app del sistema ({prefix}) pero Android no la registra como parte del sistema y no la instaló la Play Store; una app actualizada por la tienda propia del fabricante puede verse igual, así que trátalo como algo para comprobar, no como una prueba.",
+  "This app arrived from outside any store this scan recognizes, has no icon in the launcher, is set up to keep running, and can {access}; some device management and backup tools legitimately look the same, so the question is whether you know what this app is.":
+    "Esta app llegó de fuera de cualquier tienda que esta revisión reconozca, no tiene icono en el lanzador, está preparada para seguir ejecutándose y puede {access}; algunas herramientas de gestión de dispositivos y de copias de seguridad se ven igual de forma legítima, así que la pregunta es si sabes qué es esta app.",
+
+  "Monitoring apps sold openly": "Apps de monitoreo vendidas abiertamente",
+  "Apps in this section are sold openly for keeping an eye on someone's phone, usually marketed to parents or partners. They are not on the stalkerware list this checkup uses, and one being installed does not by itself mean misuse; the question only you can answer is whether you knew it was here.":
+    "Las apps de esta sección se venden abiertamente para vigilar el teléfono de alguien, normalmente dirigidas a padres o parejas. No están en la lista de stalkerware que usa esta revisión, y que una esté instalada no significa por sí solo un mal uso; la pregunta que solo tú puedes responder es si sabías que estaba aquí.",
+  "Patterns worth a second look": "Patrones que merecen una segunda mirada",
+  "Nothing in this section matched any list. These are combinations of facts that surveillance tools tend to use and that some legitimate tools share; each card says exactly which pattern fired and why.":
+    "Nada de esta sección coincidió con ninguna lista. Son combinaciones de hechos que las herramientas de vigilancia suelen usar y que algunas herramientas legítimas comparten; cada tarjeta dice exactamente qué patrón se activó y por qué.",
+
+  "On this phone right now, Android reports this app can: {powers}.":
+    "En este teléfono ahora mismo, Android informa que esta app puede: {powers}.",
+  "Show the raw evidence": "Mostrar la evidencia en bruto",
+  "Check it yourself (menu names vary by phone): {path}":
+    "Compruébalo tú (los nombres de los menús varían según el teléfono): {path}",
+  "Careful before acting: a person who installed a monitoring app can sometimes tell when it is found or removed. Plan your safety first; techsafety.org has guides written for exactly this.":
+    "Cuidado antes de actuar: una persona que instaló una app de monitoreo a veces puede notar cuando se encuentra o se elimina. Planifica tu seguridad primero; techsafety.org tiene guías escritas exactamente para esto.",
+  "Last updated {date}.": "Última actualización el {date}.",
+  "The install was started by {pkg}.": "La instalación la inició {pkg}.",
+  "Android recorded the install as coming from {type}.": "Android registró que la instalación vino de {type}.",
+  "an app store": "una tienda de apps",
+  "a local file": "un archivo local",
+  "a downloaded file": "un archivo descargado",
+  "another source": "otra fuente",
+  "Settings > Apps > All apps": "Ajustes > Aplicaciones > Ver todas las apps",
+  "Settings > Security > Device admin apps": "Ajustes > Seguridad > Apps de administración del dispositivo",
+  "Settings > Accessibility": "Ajustes > Accesibilidad",
+  "Settings > Apps > Special app access > Notification access": "Ajustes > Aplicaciones > Acceso especial de apps > Acceso a notificaciones",
+  "Settings > System > Keyboard": "Ajustes > Sistema > Teclado",
+  "Settings > Security > Encryption and credentials > Trusted credentials": "Ajustes > Seguridad > Cifrado y credenciales > Credenciales de confianza",
+  "Settings > Network and internet > VPN": "Ajustes > Red e internet > VPN",
+  "Settings > Apps > Default apps": "Ajustes > Aplicaciones > Apps predeterminadas",
+  "Settings > Security": "Ajustes > Seguridad",
+  "Settings > System > Developer options": "Ajustes > Sistema > Opciones de desarrollador",
+  "rule fired": "regla activada",
+  "This app starts when the phone boots and declares a background service typed for {sensors}; media, navigation, and assistant apps legitimately do the same, so check that you recognize it.":
+    "Esta app se inicia cuando el teléfono arranca y declara un servicio en segundo plano tipado para {sensors}; las apps de música, navegación y asistente hacen lo mismo legítimamente, así que comprueba que la reconoces.",
+  "the microphone": "el micrófono",
+  "the camera": "la cámara",
+  "location": "la ubicación",
+  "The battery exemption read here is Android's own list; some phone brands keep a separate allowlist this scan cannot see, so not exempt here proves nothing either way.":
+    "La exención de batería que se lee aquí es la lista propia de Android; algunas marcas de teléfonos mantienen una lista aparte que esta revisión no puede ver, así que no exenta aquí no prueba nada en ningún sentido.",
+
+  "Could not read this admin's declared powers.": "No se pudieron leer los poderes que declara este administrador.",
+  "It declares the power to: {powers}.": "Declara el poder de: {powers}.",
+  "erase this phone remotely": "borrar este teléfono de forma remota",
+  "lock the screen at will": "bloquear la pantalla a voluntad",
+  "change the unlock password": "cambiar la contraseña de desbloqueo",
+  "watch failed unlock attempts": "vigilar los intentos fallidos de desbloqueo",
+  "turn the camera off phone-wide": "apagar la cámara en todo el teléfono",
+
+  "Android says this service can: {things}.": "Android dice que este servicio puede: {things}.",
+  "It applies to every app on this phone.": "Se aplica a todas las apps de este teléfono.",
+  "It applies only to: {pkgs}.": "Se aplica solo a: {pkgs}.",
+  "Two OS records of enabled accessibility services disagree on this phone; both are shown, and the mismatch itself deserves attention.":
+    "Dos registros del sistema sobre los servicios de accesibilidad activados no coinciden en este teléfono; se muestran ambos, y ese desajuste merece atención por sí mismo.",
+  "read what is on the screen": "leer lo que hay en la pantalla",
+  "perform taps and swipes by itself": "hacer toques y deslizamientos por sí mismo",
+  "watch keys as they are pressed": "observar las teclas según se pulsan",
+  "control screen magnification": "controlar la ampliación de la pantalla",
+  "take screenshots": "hacer capturas de pantalla",
+  "see text as it is typed": "ver el texto mientras se escribe",
+
+  "Keyboards in use": "Teclados en uso",
+  "A keyboard sees everything typed with it, in every app: messages, searches, passwords. The phone's own keyboard belongs here; a keyboard you do not remember choosing deserves a hard look.":
+    "Un teclado ve todo lo que se escribe con él, en cualquier app: mensajes, búsquedas, contraseñas. El teclado propio del teléfono tiene su lugar aquí; un teclado que no recuerdas haber elegido merece una mirada seria.",
+  "Show the enabled keyboards": "Mostrar los teclados habilitados",
+  "This is the keyboard in use right now.": "Este es el teclado en uso ahora mismo.",
+
+  "Certificate authorities added by a person": "Autoridades de certificación añadidas por una persona",
+  "A certificate authority someone added lets whoever controls it inspect this phone's secure traffic in some setups. Workplaces add these for device management; so do some filtering and monitoring tools. A work profile keeps a separate list this scan cannot see.":
+    "Una autoridad de certificación que alguien añadió permite a quien la controla inspeccionar el tráfico seguro de este teléfono en algunas configuraciones. Los trabajos las añaden para gestionar dispositivos; también lo hacen algunas herramientas de filtrado y monitoreo. Un perfil de trabajo mantiene una lista separada que esta revisión no puede ver.",
+  "Show the added certificate authorities": "Mostrar las autoridades de certificación añadidas",
+  "Trusted: {subject}. Issued by {issuer}. Valid {from} to {to}.":
+    "De confianza: {subject}. Emitido por {issuer}. Válido del {from} al {to}.",
+
+  "Apps that can run a VPN": "Apps que pueden ejecutar una VPN",
+  "An app that runs a VPN can route this phone's traffic through itself. A VPN you chose is normal; one that is hidden or arrived from outside a store deserves a hard look.":
+    "Una app que ejecuta una VPN puede dirigir el tráfico de este teléfono a través de sí misma. Una VPN que tú elegiste es normal; una que está oculta o llegó de fuera de una tienda merece una mirada seria.",
+  "Show the VPN-capable apps": "Mostrar las apps con capacidad de VPN",
+  "Android reports an always-on VPN is set: {pkg}.": "Android informa que hay una VPN siempre activa configurada: {pkg}.",
+  "It has no launcher icon.": "No tiene icono en el lanzador.",
+  "It did not come from a recognized store.": "No llegó de una tienda reconocida.",
+
+  "Default app roles": "Apps predeterminadas",
+  "The default SMS app sees every text message, including security codes, and the default dialer handles every call. These should be apps you recognize and chose.":
+    "La app de SMS predeterminada ve cada mensaje de texto, incluidos los códigos de seguridad, y el marcador predeterminado gestiona cada llamada. Deberían ser apps que reconoces y elegiste.",
+  "Show the role holders": "Mostrar qué apps tienen cada rol",
+  "Text messages are handled by {label} ({pkg}).": "Los mensajes de texto los gestiona {label} ({pkg}).",
+  "That app is not part of the phone's system image; every text, including security codes, goes through it.":
+    "Esa app no es parte del sistema del teléfono; cada mensaje, incluidos los códigos de seguridad, pasa por ella.",
+  "Calls are handled by {label} ({pkg}).": "Las llamadas las gestiona {label} ({pkg}).",
+  "That app is not part of the phone's system image.": "Esa app no es parte del sistema del teléfono.",
+  "The assistant role is held by {value}.": "El rol de asistente lo tiene {value}.",
+
+  "Who controls this phone": "Quién controla este teléfono",
+  "A device owner or profile owner can set policy, install and remove apps, and read device state on the side it manages. Employers use this legitimately every day; on a personal phone it deserves a hard look.":
+    "Un propietario del dispositivo o de un perfil puede fijar políticas, instalar y eliminar apps, y leer el estado del dispositivo en el lado que gestiona. Los empleadores lo usan legítimamente a diario; en un teléfono personal merece una mirada seria.",
+  "Show the management facts": "Mostrar los datos de gestión",
+  "{label} ({pkg}) is the device owner, the strongest control Android grants; it can set policy for this whole phone. Work phones are commonly set up this way.":
+    "{label} ({pkg}) es el propietario del dispositivo, el control más fuerte que concede Android; puede fijar políticas para todo este teléfono. Los teléfonos de trabajo suelen configurarse así.",
+  "{label} ({pkg}) manages a profile on this phone.": "{label} ({pkg}) gestiona un perfil en este teléfono.",
+  "A work profile exists on this phone. Its manager can see and control the work side; this checkup runs on the personal side and cannot see into the work side.":
+    "Existe un perfil de trabajo en este teléfono. Quien lo gestiona puede ver y controlar el lado de trabajo; esta revisión se ejecuta en el lado personal y no puede ver dentro del lado de trabajo.",
+
+  "Debugging switches": "Interruptores de depuración",
+  "Debugging switches let a trusted computer install apps and change settings. Developers leave these on for themselves all the time; if nobody who uses this phone is one, ask why they are on.":
+    "Los interruptores de depuración permiten que una computadora de confianza instale apps y cambie ajustes. Los desarrolladores los dejan activados para sí mismos todo el tiempo; si nadie que use este teléfono lo es, pregúntate por qué están activados.",
+  "Show the debugging switches": "Mostrar los interruptores de depuración",
+  "USB debugging is turned on. A computer this phone trusts can install apps and change settings over a cable.":
+    "La depuración USB está activada. Una computadora en la que este teléfono confía puede instalar apps y cambiar ajustes por cable.",
+  "Wireless debugging is turned on, which allows the same control over Wi-Fi.":
+    "La depuración inalámbrica está activada, lo que permite el mismo control por Wi-Fi.",
+  "Developer options are turned on.": "Las opciones de desarrollador están activadas.",
+
+  "package": "paquete",
+  "app label": "nombre visible de la app",
+  "system app": "app del sistema",
+  "installer": "instalador",
+  "install started by": "instalación iniciada por",
+  "install source type": "tipo de fuente de instalación",
+  "installed": "instalada",
+  "last updated": "última actualización",
+  "targets Android API": "apunta a la API de Android",
+  "shared user id": "id de usuario compartido",
+  "debuggable build": "compilación depurable",
+  "matched family": "familia coincidente",
+  "matched by": "coincidió por",
+  "matching certificate SHA-1": "SHA-1 del certificado coincidente",
+  "also sold as": "también vendida como",
+  "certificate registered to": "certificado registrado a nombre de",
+  "list entry type": "tipo de entrada en la lista",
+
+  "use the microphone": "usar el micrófono",
+  "use the camera": "usar la cámara",
+  "read the phone's precise location": "leer la ubicación precisa del teléfono",
+  "read the phone's approximate location": "leer la ubicación aproximada del teléfono",
+  "read the location while in the background": "leer la ubicación estando en segundo plano",
+  "read text messages": "leer los mensajes de texto",
+  "see text messages as they arrive": "ver los mensajes de texto cuando llegan",
+  "read the call history": "leer el historial de llamadas",
+  "see outgoing calls": "ver las llamadas salientes",
+  "read the contact list": "leer la lista de contactos",
+  "read the phone's identity and call state": "leer la identidad del teléfono y el estado de las llamadas",
+  "read the calendar": "leer el calendario",
+  "post notifications": "publicar notificaciones",
+  "ask to track which apps get used; whether that was granted could not be checked here":
+    "pedir rastrear qué apps se usan; si eso se concedió no se pudo comprobar aquí",
+  "ask to draw over other apps; whether that was granted could not be checked here":
+    "pedir dibujar sobre otras apps; si eso se concedió no se pudo comprobar aquí",
+  "ask to install other apps; whether that was granted could not be checked here":
+    "pedir instalar otras apps; si eso se concedió no se pudo comprobar aquí",
+  "ask for access to all files; whether that was granted could not be checked here":
+    "pedir acceso a todos los archivos; si eso se concedió no se pudo comprobar aquí",
+  "start itself when the phone boots": "iniciarse sola cuando el teléfono arranca",
+  "keep running with battery optimization switched off for it":
+    "seguir ejecutándose con la optimización de batería desactivada para ella",
+  "read the screen through an enabled accessibility service": "leer la pantalla a través de un servicio de accesibilidad activado",
+  "read incoming notifications": "leer las notificaciones que llegan",
+  "act as a device administrator": "actuar como administrador del dispositivo",
+  "run a long-lived background service typed for location": "ejecutar un servicio persistente en segundo plano tipado para ubicación",
+  "run a long-lived background service typed for the camera": "ejecutar un servicio persistente en segundo plano tipado para la cámara",
+  "run a long-lived background service typed for the microphone": "ejecutar un servicio persistente en segundo plano tipado para el micrófono",
+  "run a long-lived background service typed for screen capture": "ejecutar un servicio persistente en segundo plano tipado para captura de pantalla",
+  "run a long-lived background service typed for calls": "ejecutar un servicio persistente en segundo plano tipado para llamadas",
 };
