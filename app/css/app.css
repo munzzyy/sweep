@@ -307,6 +307,31 @@ button { background: none; border: none; cursor: pointer; }
 .check-card li { font-size: 0.875rem; overflow-wrap: anywhere; margin-bottom: 6px; }
 .guidance { max-width: none; }
 .ephemeral-note { color: var(--ink-soft); font-size: 0.84375rem; }
+.chip-info { background: var(--paper-2); color: var(--ink-soft); }
+.finding {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 10px 0;
+  background: var(--paper);
+}
+.finding-alarm { border-color: var(--warn); }
+.finding-dual { border-left: 4px solid var(--accent); }
+.finding h3 { margin: 0 0 6px; font-size: 0.96875rem; overflow-wrap: anywhere; }
+.check-card .finding-headline { color: var(--ink); font-weight: 600; }
+.finding p { margin: 4px 0; font-size: 0.875rem; }
+.finding-prov { color: var(--ink-soft); }
+.finding-safety { color: var(--warn); }
+.evidence {
+  background: var(--paper-2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 6px 0 0;
+  font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 .doc-page main { max-width: 680px; margin: 0 auto; padding: 32px 20px; }
 
 /* The results screen settling into place: the sweep finding what it finds,

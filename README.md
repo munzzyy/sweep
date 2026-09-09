@@ -10,7 +10,7 @@ serious forensic tools that need a second computer and a trained
 advocate. Sweep sits in the gap: open source, runs on the phone itself,
 and explains what it finds in sentences.
 
-Six checks. Installed apps get compared against Echap's public
+The checks. Installed apps get compared against Echap's public
 stalkerware-indicators dataset, by exact package name, by wildcard family
 prefix, and by signing certificate so a renamed copy still matches. Then
 the phone's own risk surfaces get listed with plain explanations: device
@@ -19,6 +19,20 @@ notifications, apps with no launcher icon, and apps installed from
 outside any store. Every flagged entry carries when it was installed and
 by what, most recent first, and a match also says what other power it
 holds on the phone right now.
+
+Since 0.5.0 the scan reads everything Android exposes to an unprivileged
+app, and the honesty model is part of the product: every result opens
+with how many surfaces were read out of how many Sweep knows exist, and
+names each one it could not read with the concrete reason, including the
+three grant lists Android reserves for privileged system apps. Findings
+carry the raw evidence and the exact rule that fired; match wording is
+tiered by evidence strength, so a certificate match speaks more plainly
+than a package-name match ever does; openly sold parental-monitoring
+apps live on a separate track with separate wording, because presence is
+not proof of misuse; and the disguise check needs a broken trust anchor,
+never just a familiar-looking name. An unreadable surface is reported as
+unknown rather than skipped, which is the difference between found
+nothing and looked at nothing.
 
 The language is the product as much as the code. Sweep never says "you
 are safe", because no checkup can know that; a clean run says "these

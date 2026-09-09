@@ -1,7 +1,8 @@
 {
  "source": "https://github.com/AssoEchap/stalkerware-indicators",
  "license": "CC-BY 4.0 (Echap)",
- "fetched": "2026-09-06",
+ "commit": "a04c5c1958bff93fec3b1b56edbb412b209f2a38",
+ "fetched": "2026-09-09",
  "apps": [
   {
    "name": "AbsoluTrack",
@@ -26,6 +27,9 @@
     "8851279B5177EF52B0B8540EE1FCED4BABDFB318",
     "C9BE6C42B975258DEA10EB6946A7986E4FE955E2",
     "D1BB66A93F621A66094F28856988C7A2AE9972D0"
+   ],
+   "aliases": [
+    "RemoteSecurity"
    ]
   },
   {
@@ -48,6 +52,9 @@
    "certificates": [
     "BCA2BCB87F6E28FB403CED643311B135CA0DC0A2",
     "F038CD90AFEA9C037A801FFAE67DF55A870879C4"
+   ],
+   "aliases": [
+    "AiSpyer"
    ]
   },
   {
@@ -67,6 +74,10 @@
     "B6A744B0E8AE049AC0C20402EBC137B1192699A9",
     "F1912CEE4B5D6C1EA4070B53B440E2F660FFCBBD",
     "F7871F09D6E58B9BEA5913FB2FA879E5427725E3"
+   ],
+   "aliases": [
+    "AllTracker",
+    "Russcity"
    ]
   },
   {
@@ -78,6 +89,9 @@
    ],
    "certificates": [
     "9EECE9B4ECF4DC0C5981FEACFB271E1C0A2967FF"
+   ],
+   "aliases": [
+    "AndroidLost"
    ]
   },
   {
@@ -89,6 +103,10 @@
    "certificates": [
     "558765849658A3821FE4054ED2C1FF6E28B4B8A0",
     "92EBDB7D7C18A34705A6918B5F327DDB0E8C8452"
+   ],
+   "aliases": [
+    "AndroidMonitor",
+    "UltimatePhoneSpy"
    ]
   },
   {
@@ -131,6 +149,12 @@
     "E6F85CAB3903304DC16197B7EDA8F67ED6D65A1A",
     "EAD44242A3C0A73DEF7976C56AC10A4530E8F67A",
     "ED5BADBC20B1B027F5858D29DAFBF66535C46DB9"
+   ],
+   "aliases": [
+    "AndrMonitor",
+    "AndroidMon",
+    "Dromon",
+    "MonitorChecker"
    ]
   },
   {
@@ -158,6 +182,10 @@
     "B7BB744C68FD6EB4C49298E7506BED53DC4773FF",
     "C863D800B89648724CD483911FBF756F36497CC9",
     "F57CACB890BE22907709DDE69ED3887F6943734E"
+   ],
+   "aliases": [
+    "ASpy",
+    "AndroSpy"
    ]
   },
   {
@@ -184,6 +212,9 @@
    ],
    "certificates": [
     "CE94B8512390676F62F3EC61BECEDDDE9AB5519F"
+   ],
+   "aliases": [
+    "AntiFurtoDroid"
    ]
   },
   {
@@ -194,6 +225,9 @@
    ],
    "certificates": [
     "C51C36FE4F1DFC0C5B8CD55F74773135C1C1E1E5"
+   ],
+   "aliases": [
+    "AppMia"
    ]
   },
   {
@@ -213,6 +247,11 @@
     "9E09874197988F20DB51EB6A34BFD908AC42C35B",
     "D98C69B50C1092FE21F7CF748DC8B2F91BE56B64",
     "FB926CF2937331BB8A46E2C5280233C04DA2342E"
+   ],
+   "aliases": [
+    "AppSpy",
+    "FreeSpy",
+    "MobileFindFree"
    ]
   },
   {
@@ -223,6 +262,9 @@
    ],
    "certificates": [
     "473F919A69BBAD3457AF2F0E3AFC34E513F103F1"
+   ],
+   "aliases": [
+    "bark"
    ]
   },
   {
@@ -233,6 +275,10 @@
    ],
    "certificates": [
     "4CACA12EB37B7A7F07AE380C7E1741D2C36531DF"
+   ],
+   "aliases": [
+    "BlurSpy",
+    "XOXOSpy"
    ]
   },
   {
@@ -283,6 +329,9 @@
     "71AD1F579C3DCF32AA1E00E02245D359F80C260B",
     "DBC4B607C3B07C48F40F9D184DE443D651436CA5",
     "FD5E1BBC94E5609F366DD4816C975C1CF4003F40"
+   ],
+   "aliases": [
+    "ControlPhone"
    ]
   },
   {
@@ -295,6 +344,12 @@
    "certificates": [
     "0C01AEB7346C700D02613EBA513BD40E87A182F8",
     "8F576BEEB71EA74E5F27764917BFF5B508017B68"
+   ],
+   "aliases": [
+    "CallSMSTracker",
+    "HiddenSMSTracker",
+    "Multiverze",
+    "Quizmo"
    ]
   },
   {
@@ -319,6 +374,9 @@
     "9FE876AF76CDCB685102A38528A3A732B0872DC6",
     "B927DACA3BB3876523E2E8B1BDB56CE84B0DFFF7",
     "F18B3369F152EC3C74EC884BE977B3CA0E0C996D"
+   ],
+   "aliases": [
+    "CatWatchful"
    ]
   },
   {
@@ -345,6 +403,14 @@
     "BC693B48B7EC988E275CF9E1CDAA1447A31717D9",
     "C87A87F7F5EDE2D279DDA0CCDE55E6AB85549D70",
     "F2633353631EE72F7B7A7B946FABE1EF0A339041"
+   ],
+   "aliases": [
+    "Cerberus",
+    "Cerberus Enterprise",
+    "Cerberus Kids",
+    "Cerberus Personal Safety",
+    "Lock Screen Protector",
+    "System Framework"
    ]
   },
   {
@@ -357,6 +423,10 @@
    "certificates": [
     "CCE55D4C3E844E8A7542036D40BFBB4AA98B89D7",
     "E48C6714DBFD2AB6E5CF85C87EFD05BD8E11E6FB"
+   ],
+   "aliases": [
+    "ClevGuard",
+    "KidsGuard"
    ]
   },
   {
@@ -399,6 +469,17 @@
     "C377ADFF5DF116AB7297D32850ADE8A8FC3F8FB9",
     "CC866E79BDAD431A2B1E07229B92E64808221610",
     "F25D72FCCB84BAF7F73467FC9571024B7E274CA3"
+   ],
+   "aliases": [
+    "Cocospy",
+    "FoneMonitor",
+    "MinSpy",
+    "NeatSpy",
+    "SafeSpy",
+    "Spyic",
+    "Spyine",
+    "Spyzie",
+    "TeenSafe"
    ]
   },
   {
@@ -411,6 +492,9 @@
    "certificates": [
     "18CD402CC43DF0BC03E9951B0F843DC4B1552DC6",
     "BC53CC2A9996DE47BF72348F2A592DC0EBDAF06B"
+   ],
+   "aliases": [
+    "CouplerTracker"
    ]
   },
   {
@@ -465,6 +549,9 @@
     "8698564FBEC700167FCC53D1AED00FFADF6BED6C",
     "8F23E1457ADC6189F6ED504A60DF8896FEC6D970",
     "D15A276F181C839E0390672A43065E8D97F140E9"
+   ],
+   "aliases": [
+    "EasyLogger"
    ]
   },
   {
@@ -480,6 +567,10 @@
     "4A3742E0C96AFB91954D613AAA637076750E5A0B",
     "892C4F172AD3262EC398B40BBF8130C6421040A1",
     "FC5A4AD10F0686AA8EAE2C08BA13CC451CBD6037"
+   ],
+   "aliases": [
+    "EasyPhoneTrack",
+    "Ppapp"
    ]
   },
   {
@@ -490,6 +581,10 @@
    ],
    "certificates": [
     "60DA6A5B04C0100DFCE1213C850EFBDEB0D1E8D7"
+   ],
+   "aliases": [
+    "EspiaoAndroid",
+    "FoxSpy"
    ]
   },
   {
@@ -509,6 +604,9 @@
    ],
    "certificates": [
     "5F2DCC133AF3E19D3935A85A3E2871856602A21D"
+   ],
+   "aliases": [
+    "MobileSpyIo"
    ]
   },
   {
@@ -530,7 +628,10 @@
     "com.mango.findmyphone2",
     "com.mango.findmyphone3"
    ],
-   "certificates": []
+   "certificates": [],
+   "aliases": [
+    "InMobi"
+   ]
   },
   {
    "name": "FlashKeylogger",
@@ -542,6 +643,9 @@
    ],
    "certificates": [
     "340FE1F4AA4A401AD8E326907E35FB9E0C2486BD"
+   ],
+   "aliases": [
+    "FlashKeylog"
    ]
   },
   {
@@ -563,6 +667,9 @@
     "93385A087BB5CAB96EAE83A1AF874E0E39B2990F",
     "984F8786102D9BF26E5244BBC93733D3609948F4",
     "F6422B9D4DD3C7370E3ED2879EA4DC8F463CD2A2"
+   ],
+   "aliases": [
+    "FlexiSpy"
    ]
   },
   {
@@ -574,6 +681,9 @@
    ],
    "certificates": [
     "E0103BF20E95E826920A3F0F7B3BD03A899127D7"
+   ],
+   "aliases": [
+    "FreeAndroidSpy"
    ]
   },
   {
@@ -585,6 +695,9 @@
    ],
    "certificates": [
     "6156DB551938BB4560D4643B54527E4F169ED44F"
+   ],
+   "aliases": [
+    "GPSTrackerLoki"
    ]
   },
   {
@@ -621,6 +734,13 @@
     "A40D8FDC7953AD69D970FF00658EB0F58B3A052A",
     "CD8F39DAECC7793F33D8D847A598373B8F25A7B7",
     "F6914F044B9385D6005DC9C50A9AECDC2349F413"
+   ],
+   "aliases": [
+    "1TopSpy",
+    "HelloSPy",
+    "MaxxSpy",
+    "MobiiSpy",
+    "SpyHide"
    ]
   },
   {
@@ -635,6 +755,19 @@
    "certificates": [
     "48A2190050B80F31E1E3CCFAF9909FAD238D9849",
     "683722A1C629AD5734B93E08ADFAA61775AD196F"
+   ],
+   "aliases": [
+    "AutoForward",
+    "DDI",
+    "DDIUtilities",
+    "EasySpy",
+    "Highster",
+    "HighsterMobile",
+    "HighsterSpy",
+    "PhoneSpector",
+    "SafeGuarde",
+    "SurePoint",
+    "TurboSpy"
    ]
   },
   {
@@ -685,6 +818,11 @@
     "CC4A78DBE96AC1FA5977E03C97052A9A334113B4",
     "E8FF1077D207E47AB4B53F275C437C0889579658",
     "F21ECAFCFF000686E8EC090F1ECDAECE08798BFF"
+   ],
+   "aliases": [
+    "Hoverwatch",
+    "Refog",
+    "SpyBubble"
    ]
   },
   {
@@ -710,6 +848,9 @@
     "B8F5FDFAE5920C4CFB6ACE214D39327F299FA76D",
     "C1D83F5FFE3EC319FF103EC7346CDDF218B5634D",
     "F747F0BBEF33FFEE6AFC4E7CFA03B28215985F24"
+   ],
+   "aliases": [
+    "iKeyMonitor"
    ]
   },
   {
@@ -723,6 +864,9 @@
     "3EA68714AE224B0C0EEED64A14B11D3983C3D6F8",
     "5C5EF3DFE98B02251A6EC82609F22A092562AFEE",
     "BFC4C15E35E3506095B42E2B428E4016B1FFA1AB"
+   ],
+   "aliases": [
+    "iMonitorSpy"
    ]
   },
   {
@@ -750,6 +894,9 @@
     "D3E6A092741CBA59BE9308FBA72DF887EAB184FD",
     "D8418B279414687729D37B34E53AB75D502B9F73",
     "EE35E2740576480486307C991C762A3FBA8DA46D"
+   ],
+   "aliases": [
+    "ttspy"
    ]
   },
   {
@@ -794,6 +941,21 @@
     "AA4F85CD7C24116BB51FA733BE59290B7BB8C204",
     "F575CA9980D3075CF728F2081D9EC5F910CC17E8",
     "FD84821C80C1499A2446F6F7E13BF8BDA6A66402"
+   ],
+   "aliases": [
+    "KidLogger",
+    "MonitorMinor",
+    "SelfSpy",
+    "SpyTrac",
+    "TelcadoAndroid",
+    "TiFamily",
+    "TiSpy",
+    "TracerSpy",
+    "Triada",
+    "VipTelefonProgrami"
+   ],
+   "certificateOrganizations": [
+    "Tesline-Service SRL"
    ]
   },
   {
@@ -816,6 +978,11 @@
     "69EE83CB3E0968B49E33849D40F7D91B0592C7DB",
     "8F0EAD4F1DA5DAAF8C0F7A51096CECEEF81D0C76",
     "EF6BC4C13FE455CD98192E56D96317069BDF7658"
+   ],
+   "aliases": [
+    "LetMeSpy",
+    "RemCmd",
+    "RemoteCommand"
    ]
   },
   {
@@ -832,7 +999,11 @@
    "packages": [
     "com.metasploit.stage"
    ],
-   "certificates": []
+   "certificates": [],
+   "aliases": [
+    "ForeverSpy",
+    "Metasploit"
+   ]
   },
   {
    "name": "MeuSpy",
@@ -881,6 +1052,9 @@
     "B9F546776987F0F2FF893325D2CCDF7F62F0D56E",
     "DD34B4E5125F07BA50738192FBE7B745785FC15A",
     "E0E02AD30F042E096A7A5654217B846EA08C02D1"
+   ],
+   "aliases": [
+    "MeuSpy"
    ]
   },
   {
@@ -894,6 +1068,11 @@
    "certificates": [
     "3E9B3E5190F64BA9A952B7F57942AA21FFDA50BA",
     "7F11358AC560C5E90B735A21B907F1C8143353DF"
+   ],
+   "aliases": [
+    "Jopsik",
+    "MobTool",
+    "MobileTool"
    ]
   },
   {
@@ -984,6 +1163,13 @@
     "DDCF7F1032E7D9DA4E3D245A5145363F69F9C393",
     "E8395BE2A32B62C1BA21E37663E3BF1583E00FAA",
     "FB2EEA183C183B486B3001EC5FC4E8C906593356"
+   ],
+   "aliases": [
+    "CellTracker",
+    "MTrack",
+    "MobileTrackerFree",
+    "MonitorLoverman",
+    "TrackMobil"
    ]
   },
   {
@@ -994,6 +1180,9 @@
    ],
    "certificates": [
     "B5075AB201EE483C8ECADE1BC4FC711293D6932B"
+   ],
+   "aliases": [
+    "MobiSpy"
    ]
   },
   {
@@ -1009,6 +1198,13 @@
    "certificates": [
     "5AD2ACB089F8BE5112FF5125D94036983DE3E8D5",
     "FED69D6F09AE8C98DD4053C1934CCAF57D31824D"
+   ],
+   "aliases": [
+    "MobiStealth",
+    "Stealthcell"
+   ],
+   "certificateOrganizations": [
+    "mobizim"
    ]
   },
   {
@@ -1033,6 +1229,13 @@
    "certificates": [
     "718F3191938DA39D3A4EAC0EF0F44C70F32B0989",
     "77142DA3A865C256FCDD24E187FDCEBA1B4EC587"
+   ],
+   "aliases": [
+    "mobrec"
+   ],
+   "certificateOrganizations": [
+    "MobileRecorder",
+    "mrecorder2"
    ]
   },
   {
@@ -1046,6 +1249,10 @@
     "1BE914194D14B3DEDA93EA06E0C58ECD420BB89F",
     "4FEAF05665D7CA7D017962CADFDB4E38CC8D79E7",
     "E82EDEDCDC22C6FA054AA74274AB789412B1C2F5"
+   ],
+   "aliases": [
+    "SpyPhone",
+    "SpyX"
    ]
   },
   {
@@ -1073,6 +1280,16 @@
     "7FFE6DA96346FEE822E1F791176CD6970A1DC770",
     "CB28ADFD818FBFFDF5542F2EFC5140D596EE957E",
     "FE821A533BDC31822D9EB5F98243EB16917C8EE7"
+   ],
+   "aliases": [
+    "FakeSys",
+    "KidSecured",
+    "Phonsee",
+    "SecureChildren",
+    "celSpy",
+    "eyeZy",
+    "mSpy",
+    "mSpyOnline"
    ]
   },
   {
@@ -1085,6 +1302,13 @@
    ],
    "certificates": [
     "D09EE9D79FF75E737429DDE34FD13EDFDDA34E78"
+   ],
+   "aliases": [
+    "CellSpy",
+    "MCSpy"
+   ],
+   "certificateOrganizations": [
+    "H20201128"
    ]
   },
   {
@@ -1104,6 +1328,9 @@
    "certificates": [
     "C7FBC97C3BD3949A6C19FF332E6CF2F2E5CEE561",
     "E871393054ED858ACB5854C0DB9F674C42160344"
+   ],
+   "aliases": [
+    "Spyoo"
    ]
   },
   {
@@ -1115,6 +1342,9 @@
    ],
    "certificates": [
     "9ED8DD944D3EB545E1EEEEEC1D8174772CF37C07"
+   ],
+   "aliases": [
+    "NeoSpy"
    ]
   },
   {
@@ -1125,6 +1355,9 @@
    ],
    "certificates": [
     "A4E169AAF0068A1FC5F7900B7F59A438B833364C"
+   ],
+   "aliases": [
+    "NetSpy"
    ]
   },
   {
@@ -1150,6 +1383,10 @@
    ],
    "certificates": [
     "E43B5671CBA3F48619BF00D6E380BBC2F02A5DCA"
+   ],
+   "aliases": [
+    "FamilyLocator",
+    "PhoneTrackerByNumber"
    ]
   },
   {
@@ -1165,6 +1402,11 @@
     "0FB6643902E891C230F6E6662083442EEA1F16CE",
     "E458DC7CD8928A41865F502A884F0D51309E0BEF",
     "E7D395DF3B8077C733D9BE67D841FDF271F49406"
+   ],
+   "aliases": [
+    "ChyldMonitor",
+    "OneMonitar",
+    "OneSpy"
    ]
   },
   {
@@ -1177,6 +1419,11 @@
    "certificates": [
     "14A071616D4BC37F08BE865D375101F4C963777A",
     "CA5304E94F4BC97DA9D147E76858DBF70AB8B4E6"
+   ],
+   "aliases": [
+    "OwnSpy",
+    "SaferSpy",
+    "WebDetetive"
    ]
   },
   {
@@ -1187,6 +1434,10 @@
    ],
    "certificates": [
     "CCD5678FF73D6ECF4E74317166422AFE67D77406"
+   ],
+   "aliases": [
+    "PanSpy",
+    "SurveilStar"
    ]
   },
   {
@@ -1206,6 +1457,9 @@
    "certificates": [
     "20F092BEC76C406223A7943371A1DBBB5BF66C13",
     "934A3C0DC8912C4F2F8620F666FC7621BD7B97B8"
+   ],
+   "aliases": [
+    "pcTattletale"
    ]
   },
   {
@@ -1237,6 +1491,13 @@
    "certificates": [
     "F28F3A97D25E51AB266E56D3B80F04747D242E50",
     "F57CBB4CBB9834A14AF675222CECA6A0D26D838E"
+   ],
+   "aliases": [
+    "MobileNanny",
+    "PeekTab",
+    "PhoneSheriff",
+    "RetinaSpy",
+    "RetinaX"
    ]
   },
   {
@@ -1293,6 +1554,11 @@
     "9BD494107EFED96F630D29D6E18AE4DCC47149E2",
     "B61326887306E5A65726AE6BFD1D720D2760CEFF",
     "D3A7E0E542A3E1112741806AC31F341C4200FBA1"
+   ],
+   "aliases": [
+    "CyberNanny",
+    "Reptilicus",
+    "Vkur"
    ]
   },
   {
@@ -1301,7 +1567,10 @@
    "packages": [
     "com.tools.secretcamcorder"
    ],
-   "certificates": []
+   "certificates": [],
+   "aliases": [
+    "SecretCamRecorder"
+   ]
   },
   {
    "name": "ShadowSpy",
@@ -1315,6 +1584,9 @@
     "01E49C220A9776D4978C1D28D6C32F86D145B8AE",
     "AD231A7CD57E2CEF8162F4D341C3573DE2B8F443",
     "FE7626A8D3C38FD78EA2A729B39B943BA814F014"
+   ],
+   "aliases": [
+    "ShadowSpy"
    ]
   },
   {
@@ -1336,6 +1608,12 @@
    ],
    "certificates": [
     "842676B67005E6561808B650152F598035D12800"
+   ],
+   "aliases": [
+    "Hiddad"
+   ],
+   "certificateOrganizations": [
+    "AwamiSolution"
    ]
   },
   {
@@ -1346,6 +1624,9 @@
    ],
    "certificates": [
     "1E15B0D27C0551061885340A3990D52A93F646B8"
+   ],
+   "aliases": [
+    "SMForw"
    ]
   },
   {
@@ -1376,6 +1657,9 @@
     "5E16BA998632C1C3E4D4AE707D6EE2454ED2AEB5",
     "854F7978408EA58C5B792C1C1EF9733FC2D5E813",
     "E023517B163AAAE209CBD97E312752960F575D38"
+   ],
+   "aliases": [
+    "Snoopza"
    ]
   },
   {
@@ -1392,6 +1676,9 @@
    "certificates": [
     "79C395148C34F0826E04B37A6632A53A7977A1AA",
     "F5C25A3B800311E8053295676ADB112753E03F0B"
+   ],
+   "aliases": [
+    "Spy24"
    ]
   },
   {
@@ -1402,6 +1689,10 @@
    ],
    "certificates": [
     "B374A75F87F992A6F57CF99A24197ABCEB17A1E7"
+   ],
+   "aliases": [
+    "FreeSpyPhone",
+    "SpyAdvice"
    ]
   },
   {
@@ -1422,7 +1713,10 @@
    "packages": [
     "com.spyapp247.system"
    ],
-   "certificates": []
+   "certificates": [],
+   "aliases": [
+    "SpyApp247"
+   ]
   },
   {
    "name": "SpyAppGhazi",
@@ -1448,6 +1742,9 @@
    ],
    "certificates": [
     "813A3AD37D87AA36120DFEC64146C311DB5F4CA9"
+   ],
+   "aliases": [
+    "SpyEra"
    ]
   },
   {
@@ -1469,6 +1766,9 @@
     "E169250B134E5C46C3064F166E457CDBFCC16524",
     "E2AC495C52B9FBD49B83CFAE0C167878A2F796A5",
     "F9265164219A1C5DEE4A76D66BEA0C35A1FD6032"
+   ],
+   "aliases": [
+    "SpyHuman"
    ]
   },
   {
@@ -1477,7 +1777,10 @@
    "packages": [
     "com.sc.spyier.v2"
    ],
-   "certificates": []
+   "certificates": [],
+   "aliases": [
+    "Spyier"
+   ]
   },
   {
    "name": "SpyKontrol",
@@ -1506,6 +1809,9 @@
    "certificates": [
     "630BB83172B184A6571126229E2B2DCA2EB4123F",
     "73BF44A503427F7682C7136B109631E3BE4114DE"
+   ],
+   "aliases": [
+    "SpyLive360"
    ]
   },
   {
@@ -1529,6 +1835,9 @@
     "8AD595A53B76014B7B919ED231DB372096D358E7",
     "9B07A93BC509C0AE614AEAFFCD6B56797CD02166",
     "C8BAE63357CA1DCD9B084BCC99399C96A5B67D49"
+   ],
+   "aliases": [
+    "SpyMasterPro"
    ]
   },
   {
@@ -1539,6 +1848,9 @@
    ],
    "certificates": [
     "05B23C7E9156A4C55768DA27936FF2D7AF09BB8F"
+   ],
+   "aliases": [
+    "Spymie"
    ]
   },
   {
@@ -1549,6 +1861,9 @@
    ],
    "certificates": [
     "56C8FA19250EDBA1A91A37F500DA91FBC0657B1F"
+   ],
+   "aliases": [
+    "SpyMug"
    ]
   },
   {
@@ -1559,6 +1874,9 @@
    ],
    "certificates": [
     "9997E63018756CC7034F94B005205A5E15A3770C"
+   ],
+   "aliases": [
+    "discovenger"
    ]
   },
   {
@@ -1570,6 +1888,10 @@
    ],
    "certificates": [
     "219D542F901D8DB85C729B0F7AE32410096077CB"
+   ],
+   "aliases": [
+    "Scream",
+    "Screamon"
    ]
   },
   {
@@ -1609,6 +1931,9 @@
     "26AF8554EE338D6969FAC51BF4DAC3186098056E",
     "8C017FDB2A81807EC879A8E30F4AB05D5CA02034",
     "9477420001BC79500623374EC586B054AAC97BF9"
+   ],
+   "aliases": [
+    "SpyPhoneApp"
    ]
   },
   {
@@ -1620,6 +1945,9 @@
    ],
    "certificates": [
     "5F61BEB9591ADBDF9DA5B141A1EF35CDC0944C8C"
+   ],
+   "aliases": [
+    "SpyphoneMobileTracker"
    ]
   },
   {
@@ -1638,6 +1966,9 @@
    ],
    "certificates": [
     "6F93929AB60AC760000E873CD7C56BA79A9E6CAD"
+   ],
+   "aliases": [
+    "SpyToApp"
    ]
   },
   {
@@ -1667,6 +1998,9 @@
    "certificates": [
     "08ACB92D02487EBC0CEA42B672A631BA7EA59ADF",
     "AF821DD021558AEDF49730D2892063BD502DEA14"
+   ],
+   "aliases": [
+    "TalkLog"
    ]
   },
   {
@@ -1680,6 +2014,10 @@
     "9DE8D6C6757152EC819C1A09F5665B77F72493A2",
     "B6D2D36C75931CCA18538B79C5DE3A04EF4AF777",
     "D46492F02F25877E9F5D6CFFA4CE99DAC64D981A"
+   ],
+   "aliases": [
+    "OgyMogy",
+    "TheOneSpy"
    ]
   },
   {
@@ -1714,6 +2052,21 @@
     "E6502D8A870C3F3910EA34F5B46D20D923047580",
     "F9181C6CF9AACB3AB1092F5338C3198A8D833431",
     "FF8CCD9816B0524A58FBDE1809FB227DBCDFD692"
+   ],
+   "aliases": [
+    "Copy9",
+    "ExactSpy",
+    "FoneTracker",
+    "GuestSpy",
+    "InoSPy",
+    "MxSpy",
+    "PhoneSpying",
+    "PhoneTracker",
+    "SpyZee",
+    "TheSpyApp",
+    "TheTruthSpy",
+    "XySpy",
+    "iSpyoo"
    ]
   },
   {
@@ -1738,6 +2091,9 @@
     "AA752803419B66BC6D5CFCD61A7C88935FFE5511",
     "DAE17DA900E269741688CEA3DAF929A8D896536D",
     "F4F16BDEB31AED018276B47CAD9007063029FD22"
+   ],
+   "aliases": [
+    "Traca"
    ]
   },
   {
@@ -1753,6 +2109,11 @@
     "603881E46350999FF7A5CBD68FE6A5897C50CEDE",
     "665D624FD53E4D538DFE9F7A87087C513CB40506",
     "86D94A8CE736F82D834FA588F34106AE7B69D325"
+   ],
+   "aliases": [
+    "TrackSmart",
+    "TrackingSmart",
+    "XZBO"
    ]
   },
   {
@@ -1802,6 +2163,9 @@
     "B7285348B05EDAEFF7F032384E4F90182E1C1F27",
     "EBD3713DFB02D79ADC90C88DE1E0B547882F5A42",
     "F5A5336B28456208EF357B4630A93A91206CF21A"
+   ],
+   "aliases": [
+    "TrackMyPhones"
    ]
   },
   {
@@ -1882,6 +2246,15 @@
     "EF8006163D09D176083936CFB068BB07A8918118",
     "F5EAEFDECAD39B93134E859BEDC7D3ED42FBE2B3",
     "FD4C2144DF6E431378A46EAEACC696AF94DE9D56"
+   ],
+   "aliases": [
+    "Gpspy",
+    "S2mob",
+    "Spy2Mobile",
+    "SpyToMobile",
+    "Spymob",
+    "sap4mobile",
+    "spy2mobile"
    ]
   },
   {
@@ -1911,6 +2284,14 @@
     "A9A302C9606AF4BE4468A4FC74F7873DDADA2AB0",
     "BD3986483D9B962B029D65BF34BF4B7C568FF204",
     "FEEF07EA18BA2EF7B75AD311F45A45AB4C1E8F0E"
+   ],
+   "aliases": [
+    "Bakuf",
+    "Clues",
+    "ESpy",
+    "IZSpy",
+    "IzKid",
+    "Kurulum"
    ]
   },
   {
@@ -1960,6 +2341,10 @@
     "96A1F635F940D8D154FD42D550B6201B60692744",
     "B14E50E56D5D483031137FD247D4A5466D0E61B4",
     "CB97E71AFA4665D6D28697B9197046C81E5E5D6C"
+   ],
+   "aliases": [
+    "LifeCircle",
+    "TrackView"
    ]
   },
   {
@@ -1974,6 +2359,9 @@
     "575F8E8A04A5967E78BC5B5A3E31FDACF42F4FB1",
     "6696449AA96EBA57CDF4707F0F84274958BE4523",
     "F4E6DA34F0071AEB70010EBB69875E5212D69140"
+   ],
+   "aliases": [
+    "uMobix"
    ]
   },
   {
@@ -1991,6 +2379,9 @@
     "A519EF2B8C4E73A097065B322687C9D38DED610C",
     "B5895930053256D408DE74B66BA132B73CB21527",
     "FCB6F780EA8F2FE7249F66C6348572BDBD54F576"
+   ],
+   "aliases": [
+    "Unisafe"
    ]
   },
   {
@@ -2005,6 +2396,9 @@
     "2E104C33C8DA4DB32E59A45701D8E0C4CAD16BD3",
     "437940A417B58B1C2CDB85EDE4D37C3DE6EFDC95",
     "5A73C8FE7CBA5C9E70B0DF69B3A111C42A10B215"
+   ],
+   "aliases": [
+    "VIPTrack"
    ]
   },
   {
@@ -2032,6 +2426,12 @@
     "B9D5BAEDCF0C711317E8B6E54D60F0A5EDEE9517",
     "E689432F7C2A39379BD64CB0BD2A6028F3A666DD",
     "FC786B8F918655D45245C685A471BD57F02FB366"
+   ],
+   "aliases": [
+    "Atic",
+    "Interguard",
+    "Screentime",
+    "atispy"
    ]
   },
   {
@@ -2064,6 +2464,9 @@
    ],
    "certificates": [
     "BB5E2C0E8DFDC54730C1E9B48754977E7DBCCCF9"
+   ],
+   "aliases": [
+    "WtSpy"
    ]
   },
   {
@@ -2093,6 +2496,9 @@
    ],
    "certificates": [
     "9BCE25527FF174A4AD6CDE233B17038641A5EEF9"
+   ],
+   "aliases": [
+    "Xnore"
    ]
   },
   {
@@ -2105,6 +2511,13 @@
    ],
    "certificates": [
     "C276C3B087207C9D3CEEDA766C01E0BDEF7EAC71"
+   ],
+   "aliases": [
+    "SpyXiz4",
+    "SpyXiz4Me",
+    "TrackMyPhone",
+    "XNSpy",
+    "ZTI"
    ]
   },
   {
@@ -2114,6 +2527,260 @@
     "com.remote.app"
    ],
    "certificates": []
+  }
+ ],
+ "watchware": [
+  {
+   "name": "Accountable2you",
+   "type": "watchware",
+   "packages": [
+    "com.accountable2you.ap1"
+   ],
+   "certificates": [
+    "78CFFA689DD23FDD7E84DDFBF28F86D4843C6129"
+   ]
+  },
+  {
+   "name": "Boomrang",
+   "type": "watchware",
+   "packages": [
+    "com.nationaledtech.Boomerang"
+   ],
+   "certificates": [
+    "E6157A76E1DCF43159529212009A0AA335499B7D"
+   ]
+  },
+  {
+   "name": "Discovenger",
+   "type": "watchware",
+   "packages": [
+    "com.discovenger.app"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "FamilyOrbit",
+   "type": "watchware",
+   "packages": [
+    "com.familyorbit.child"
+   ],
+   "certificates": [
+    "DB8DF9C3D6524B298F3EAD22E6A77D7FB2F1003A"
+   ]
+  },
+  {
+   "name": "FamiSafe",
+   "type": "watchware",
+   "packages": [
+    "com.wondershare.famisafe",
+    "com.wondershare.famisafe.kids"
+   ],
+   "certificates": [
+    "095514BA4F28DBE521C74ABF77972BE3C86A50A5",
+    "61B90229F79F730043D06FEE46BB8FD9E3A0E70B"
+   ]
+  },
+  {
+   "name": "FamiShield",
+   "type": "watchware",
+   "packages": [
+    "com.USIB.Child.ChildControl"
+   ],
+   "certificates": [
+    "4598FFB867E28560BC1198D61EC83A1CCA0F1612"
+   ],
+   "aliases": [
+    "Mitbe"
+   ]
+  },
+  {
+   "name": "FindMyKids",
+   "type": "watchware",
+   "packages": [
+    "org.findmykids.app"
+   ],
+   "certificates": [
+    "2A57777E3B9491A37392AFCE2E69D030DBF95037"
+   ]
+  },
+  {
+   "name": "FlareFamilyLocator",
+   "type": "watchware",
+   "packages": [
+    "com.probit.flare"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "GeoZilla",
+   "type": "watchware",
+   "packages": [
+    "com.geozilla.family"
+   ],
+   "certificates": [
+    "EE74E09E40A324B806AE5ED68A4543E50C3B6FC2"
+   ]
+  },
+  {
+   "name": "KasperskySafeKids",
+   "type": "watchware",
+   "packages": [
+    "com.kaspersky.safekids"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "Kiddoware",
+   "type": "watchware",
+   "packages": [
+    "com.kiddoware.kidsplace"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "Kidgy",
+   "type": "watchware",
+   "packages": [
+    "com.parental.control.kidgy"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "KidsControl",
+   "type": "watchware",
+   "packages": [
+    "app.gpsme"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "KidsLox",
+   "type": "watchware",
+   "packages": [
+    "com.kidslox.app"
+   ],
+   "certificates": [
+    "4BBD8F7E244B86B6B82F2A343EE8EDB5E797FEF8"
+   ]
+  },
+  {
+   "name": "Life360",
+   "type": "watchware",
+   "packages": [
+    "com.life360.android.safetymapd"
+   ],
+   "certificates": [
+    "19C0868F028757F49FD8F7BDF39FF70C771D622B"
+   ]
+  },
+  {
+   "name": "LockItTight",
+   "type": "watchware",
+   "packages": [
+    "com.timeon.litclient"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "MicrosoftFamilySafe",
+   "type": "watchware",
+   "packages": [
+    "com.microsoft.familysafety"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "MMGuardian",
+   "type": "watchware",
+   "packages": [
+    "com.mmguardian.childapp",
+    "com.mmguardian.parentapp",
+    "com.mmguardian.tabletsecurity"
+   ],
+   "certificates": [
+    "842933609E604063B55C04BBB47763AC7C0FC327"
+   ]
+  },
+  {
+   "name": "MobileFence",
+   "type": "watchware",
+   "packages": [
+    "com.mobilefence.family"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "Netnanny",
+   "type": "watchware",
+   "packages": [
+    "com.contentwatch.ghoti.cp2.child"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "Qustodio",
+   "type": "watchware",
+   "packages": [
+    "com.qustodio.qustodioapp"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "SafeNet",
+   "type": "watchware",
+   "packages": [
+    "com.cisai.safenetchild"
+   ],
+   "certificates": [
+    "7F0D7ED5D614B03962014483E654A215A40F029F"
+   ]
+  },
+  {
+   "name": "ScreenTime",
+   "type": "watchware",
+   "packages": [
+    "com.screentime.rc"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "SeekDroid",
+   "type": "watchware",
+   "packages": [
+    "org.gtmedia.seekdroid"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "Trulpe",
+   "type": "watchware",
+   "packages": [
+    "com.camhart.netcountable"
+   ],
+   "certificates": []
+  },
+  {
+   "name": "WiseMo",
+   "type": "watchware",
+   "packages": [
+    "com.wisemo.host.v10"
+   ],
+   "certificates": [
+    "9B48840CBF93379410172B4B85989624D2B33D59"
+   ],
+   "aliases": [
+    "WiseMo"
+   ]
+  },
+  {
+   "name": "ZoeMob",
+   "type": "watchware",
+   "packages": [
+    "com.zoemob.gpstracking"
+   ],
+   "certificates": [
+    "F9761F7C7AA6317B667671CB8F66479970630EAD"
+   ]
   }
  ]
 }

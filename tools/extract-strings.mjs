@@ -1,6 +1,7 @@
 // Lists every translatable English source string: data-i18n texts and
-// attributes from the HTML, plus t("...") calls in the JS. Compares against
-// the Spanish catalog and prints what is missing or stale.
+// attributes from the HTML, plus t("...") calls and msg("...") templates in
+// the JS. Compares against the Spanish catalog and prints what is missing
+// or stale.
 //
 // Run from the repo root:  node tools/extract-strings.mjs
 
@@ -45,7 +46,7 @@ const jsDir = path.join(ROOT, "app", "js");
 for (const file of readdirSync(jsDir)) {
   if (!file.endsWith(".js") || file === "strings-es.js") continue;
   const src = readFileSync(path.join(jsDir, file), "utf8");
-  for (const m of src.matchAll(/\bt\(\s*"((?:[^"\\]|\\.)*)"/g)) {
+  for (const m of src.matchAll(/\b(?:t|msg|pathNote)\(\s*"((?:[^"\\]|\\.)*)"/g)) {
     strings.add(norm(m[1].replace(/\\"/g, '"')));
   }
 }
