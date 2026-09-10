@@ -1,1 +1,1 @@
-A plain-language stalkerware checkup. On-device, nothing stored, nothing sent, never says "you are safe".
+Plain-language stalkerware checkup. On-device, nothing stored or sent
