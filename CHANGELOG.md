@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- License moved from MIT to GPL-3.0-or-later.
+
 ## 0.5.0
 
 A much deeper scan, and a report that opens with what it could not see.

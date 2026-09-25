@@ -1,6 +1,6 @@
 # Sweep
 
-[![release](https://img.shields.io/github/v/release/munzzyy/sweep)](https://github.com/munzzyy/sweep/releases/latest) [![ci](https://github.com/munzzyy/sweep/actions/workflows/ci.yml/badge.svg)](https://github.com/munzzyy/sweep/actions/workflows/ci.yml) [![license: MIT](https://img.shields.io/badge/license-MIT-7a5817)](LICENSE)
+[![release](https://img.shields.io/github/v/release/munzzyy/sweep)](https://github.com/munzzyy/sweep/releases/latest) [![ci](https://github.com/munzzyy/sweep/actions/workflows/ci.yml/badge.svg)](https://github.com/munzzyy/sweep/actions/workflows/ci.yml) [![license: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-7a5817)](LICENSE)
 
 A plain-language phone checkup. Beta.
 
@@ -114,4 +114,4 @@ The plan of record is review by the organizations that do this work
 anyone in crisis. Until then it is one tool with stated limits, not an
 authority.
 
-MIT. Indicator data CC-BY 4.0 by Echap.
+[GPL-3.0-or-later](LICENSE). You can use, study, change and share it. If you distribute a copy or a modified version, it has to stay under the GPL and come with its source. Releases up to v0.5.0 were under MIT. Indicator data CC-BY 4.0 by Echap.
