@@ -689,6 +689,7 @@ async function boot() {
   // only Android has SweepNative.
   if (bundled()) {
     for (const node of document.querySelectorAll(".web-only")) node.remove();
+    $("about-site").hidden = false;
   }
   if (native()) {
     $("btn-run").hidden = false;

@@ -336,4 +336,5 @@ export const es = {
   "run a long-lived background service typed for the microphone": "ejecutar un servicio persistente en segundo plano tipado para el micrófono",
   "run a long-lived background service typed for screen capture": "ejecutar un servicio persistente en segundo plano tipado para captura de pantalla",
   "run a long-lived background service typed for calls": "ejecutar un servicio persistente en segundo plano tipado para llamadas",
+  "Made by": "Hecho por",
 };
