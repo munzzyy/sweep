@@ -183,11 +183,17 @@ async function main() {
     check("web: run button hidden without the bridge", await web.evalJs("document.getElementById('btn-run').hidden"));
     check("web: explains why, offers the APK", !(await web.evalJs("document.getElementById('web-note').hidden")));
     check("web: attribution to the data source present", (await web.evalJs("document.body.textContent")).includes("Echap"));
+    check("web: in-app author credit stays hidden (the web footer already has one)", await web.evalJs("document.getElementById('about-site').hidden"));
     web.close();
 
     // ------------------------------------------------------------ infested
     const bad = await newTab({ stub: BRIDGE_STUB(true) });
     check("wrapper: run button offered", !(await bad.evalJs("document.getElementById('btn-run').hidden")));
+    check("wrapper: author credit revealed", !(await bad.evalJs("document.getElementById('about-site').hidden")));
+    check(
+      "wrapper: author credit links to the author, not the repo",
+      (await bad.evalJs("document.querySelector('#about-site a').href")) === "https://github.com/munzzyy",
+    );
     await bad.evalJs("document.getElementById('btn-run').click(); 'ok'");
     // BAD_PKG's accessibility service is not on the assistive allowlist, so the notice gates this too.
     await waitFor(() => bad.evalJs("__sweepApi.state.screen === 'notice'"), "accessibility notice shown ahead of an infested scan");
