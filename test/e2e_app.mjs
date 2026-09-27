@@ -146,6 +146,18 @@ async function settleReveal(c) {
   );
 }
 
+// "N of M checks" in the banner against the cards under it: M check cards,
+// N of them wearing a review or alarm chip.
+const COUNTS_VS_CARDS = `(() => {
+  const m = document.getElementById('results-counts').textContent.match(/^(\\d+) of (\\d+) checks/);
+  const checks = [...document.querySelectorAll('#results-cards > .check-card')].filter(
+    (c) => !c.classList.contains('surfaces-card') && !c.querySelector(':scope > h2').textContent.startsWith('Check Sweep itself'),
+  );
+  const flagged = checks.filter((c) => c.querySelector(':scope > h2 .chip-alarm, :scope > h2 .chip-review')).length;
+  return { said: m ? [Number(m[1]), Number(m[2])] : null, cards: [flagged, checks.length] };
+})()`;
+const countsAgree = (r) => !!r.said && r.said[0] === r.cards[0] && r.said[1] === r.cards[1];
+
 async function newTab({ stub = null } = {}) {
   const res = await fetch(`http://127.0.0.1:${CDP_PORT}/json/new?about:blank`, { method: "PUT" });
   const tab = await res.json();
@@ -220,6 +232,8 @@ async function main() {
     })()`);
     check("banner: the counts line sits under the headline, not squeezed beside it", layout.countsBelow, JSON.stringify(layout));
     check("chips stay on one line at phone width", layout.wrapped.length === 0, JSON.stringify(layout));
+    const badCounts = await bad.evalJs(COUNTS_VS_CARDS);
+    check("infested: the banner's check count matches the flagged cards", countsAgree(badCounts) && badCounts.said[0] > 0, JSON.stringify(badCounts));
     const shot = await bad.send("Page.captureScreenshot", { format: "png" });
     writeFileSync(path.join(SHOTS, "01-results-match.png"), Buffer.from(shot.result.data, "base64"));
 
@@ -242,6 +256,8 @@ async function main() {
     check("negative control: no match card alarm on a clean scan", !cleanCards.includes(family.name));
     check("the word 'safe' is never the verdict", !/you are safe/i.test(summary + cleanCards));
     await settleReveal(clean);
+    const cleanCounts = await clean.evalJs(COUNTS_VS_CARDS);
+    check("clean: the banner's check count matches the flagged cards", countsAgree(cleanCounts) && cleanCounts.said[0] === 0, JSON.stringify(cleanCounts));
     const shot2 = await clean.send("Page.captureScreenshot", { format: "png" });
     writeFileSync(path.join(SHOTS, "02-results-clean.png"), Buffer.from(shot2.result.data, "base64"));
     const errs = await clean.evalJs("(__sweepErrors || []).slice(0, 5)");
