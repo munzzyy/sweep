@@ -5,6 +5,10 @@
 - License moved from MIT to GPL-3.0-or-later.
 - Added a "Made by Munzzyy" credit, visible inside the app itself (not
   just the website), plus FUNDING.yml and an F-Droid author link.
+- On a phone, the results banner puts "N of 14 checks have something to
+  look at" on its own line under the headline instead of squeezing it
+  into a narrow column beside it, and count chips no longer break across
+  two lines.
 
 ## 0.5.0
 

@@ -267,8 +267,9 @@ button { background: none; border: none; cursor: pointer; }
 
 .verdict-banner {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
+  gap: 0 14px;
   padding: 14px 18px;
   border-radius: var(--radius);
   border: 1px solid var(--line);
@@ -280,8 +281,9 @@ button { background: none; border: none; cursor: pointer; }
 .verdict-banner.banner-alarm { background: var(--warn-bg); border-color: var(--warn); }
 .verdict-mark { width: 30px; height: 30px; flex: none; display: none; fill: none; stroke: var(--ok); stroke-width: 2.4; stroke-linecap: round; }
 .verdict-banner.banner-ok .verdict-mark { display: block; }
-.results-summary { font-weight: 650; font-size: 1.0625rem; margin: 0; }
-.verdict-counts { margin: 4px 0 0; color: var(--ink-soft); font-size: 0.84375rem; }
+.results-summary { flex: 1 1 0; font-weight: 650; font-size: 1.0625rem; margin: 0; }
+.verdict-counts { flex-basis: 100%; margin: 4px 0 0; color: var(--ink-soft); font-size: 0.84375rem; }
+.verdict-banner.banner-ok .verdict-counts { padding-left: 44px; }
 .check-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -298,7 +300,7 @@ button { background: none; border: none; cursor: pointer; }
    reads as quieter next to a bordered, filled card with a finding in it. */
 .check-card.quiet { background: transparent; border-color: transparent; box-shadow: none; }
 .check-card h2 { margin: 0 0 6px; font-size: 1.0625rem; display: flex; gap: 10px; align-items: center; }
-.check-chip { font-size: 0.75rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
+.check-chip { flex: none; white-space: nowrap; font-size: 0.75rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
 .chip-none { background: var(--ok-bg); color: var(--ok); }
 .chip-review { background: var(--warn-bg); color: var(--ink); }
 .chip-alarm { background: var(--warn); color: var(--accent-ink); }

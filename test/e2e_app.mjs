@@ -210,6 +210,16 @@ async function main() {
     check("install date and installer identity: install date shown", badText.includes("2026-08-30"));
     check("self-check card: honestly reports no internet permission", badText.includes("no internet") || /no internet access is requested/i.test(badText));
     await settleReveal(bad);
+    const layout = await bad.evalJs(`(() => {
+      const s = document.getElementById('results-summary').getBoundingClientRect();
+      const n = document.getElementById('results-counts').getBoundingClientRect();
+      const wrapped = [...document.querySelectorAll('#results-cards .check-chip')]
+        .filter((c) => c.getBoundingClientRect().height > 2 * parseFloat(getComputedStyle(c).lineHeight))
+        .map((c) => c.textContent);
+      return { countsBelow: n.top >= s.bottom - 1, countsWidth: Math.round(n.width), wrapped };
+    })()`);
+    check("banner: the counts line sits under the headline, not squeezed beside it", layout.countsBelow, JSON.stringify(layout));
+    check("chips stay on one line at phone width", layout.wrapped.length === 0, JSON.stringify(layout));
     const shot = await bad.send("Page.captureScreenshot", { format: "png" });
     writeFileSync(path.join(SHOTS, "01-results-match.png"), Buffer.from(shot.result.data, "base64"));
 
