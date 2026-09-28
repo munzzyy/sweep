@@ -1,0 +1,1 @@
+The results banner no longer squeezes its count into a narrow column on a phone, and Sweep now says who made it. Sweep is now GPL-3.0-or-later.

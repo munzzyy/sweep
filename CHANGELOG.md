@@ -1,14 +1,18 @@
 # Changelog
 
-## Unreleased
+## 0.5.1
 
-- License moved from MIT to GPL-3.0-or-later.
-- Added a "Made by Munzzyy" credit, visible inside the app itself (not
-  just the website), plus FUNDING.yml and an F-Droid author link.
+The results banner reads cleanly on a phone, and Sweep says who made it.
+
 - On a phone, the results banner puts "N of 14 checks have something to
   look at" on its own line under the headline instead of squeezing it
   into a narrow column beside it, and count chips no longer break across
   two lines.
+- A "Made by Munzzyy" credit, linking to the author's GitHub, is visible
+  inside the app itself and not just on the website.
+- License moved from MIT to GPL-3.0-or-later. 0.5.0 and earlier stay MIT.
+- The F-Droid listing gets an author link, a Donate link, and sharper
+  screenshots.
 
 ## 0.5.0
 
