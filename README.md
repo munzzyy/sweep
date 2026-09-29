@@ -49,13 +49,15 @@ and a Leave fast button sits on every screen.
 
 ## Get it
 
+[<img src="https://munzzyy.github.io/tern/badge.png" alt="Get it with Tern" height="80">](https://munzzyy.github.io/tern/add/?url=https%3A%2F%2Fgithub.com%2Fmunzzyy%2Fsweep)
+
 Android only, by design: install [sweep.apk](https://github.com/munzzyy/sweep/releases/latest/download/sweep.apk)
 on Android 10 or newer. Sweep is not in the Play Store, so Android will
 warn you before it installs: something like "For your security, your
 phone is not allowed to install unknown apps from this source." That
 warning exists for apps in general, not for Sweep specifically; tap
 Settings in that prompt, allow installs from your browser or file
-manager, then install the file again. [Obtainium](https://github.com/ImranR98/Obtainium)
+manager, then install the file again. [Tern](https://github.com/munzzyy/tern)
 is a free app that watches a GitHub release link like this one and
 offers you updates automatically, so you do not have to come back and
 redownload by hand; it is optional. The same UI opened in a plain browser
