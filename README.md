@@ -115,3 +115,11 @@ anyone in crisis. Until then it is one tool with stated limits, not an
 authority.
 
 [GPL-3.0-or-later](LICENSE). You can use, study, change and share it. If you distribute a copy or a modified version, it has to stay under the GPL and come with its source. Releases up to v0.5.0 were under MIT. Indicator data CC-BY 4.0 by Echap.
+
+## Support
+
+If you want to help keep Sweep going, you can sponsor on [GitHub Sponsors](https://github.com/sponsors/munzzyy) or send Monero to:
+
+```
+8BApLkfsBS39oNXz4L1qCmZ7f5zKVRr1qLJgrHddRZb4JRcnjDkcKdk7wW7uThCeV9CuLn8o7gAn8d6vFeWNiyeXSmrRUSq
+```
