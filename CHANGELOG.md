@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- On Android 15 and later the app no longer draws under the status bar, the
+  camera cutout or the navigation bar.
+
 ## 0.5.1
 
 The results banner reads cleanly on a phone, and Sweep says who made it.
