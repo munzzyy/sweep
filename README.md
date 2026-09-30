@@ -49,7 +49,7 @@ and a Leave fast button sits on every screen.
 
 ## Get it
 
-[<img src="https://munzzyy.github.io/tern/badge.png" alt="Get it with Tern" height="80">](https://munzzyy.github.io/tern/add/?url=https%3A%2F%2Fgithub.com%2Fmunzzyy%2Fsweep)
+[<img src="https://tern.munzzyy.dev/badge.png" alt="Get it with Tern" height="80">](https://tern.munzzyy.dev/add/?url=https%3A%2F%2Fgithub.com%2Fmunzzyy%2Fsweep)
 
 Android only, by design: install [sweep.apk](https://github.com/munzzyy/sweep/releases/latest/download/sweep.apk)
 on Android 10 or newer. Sweep is not in the Play Store, so Android will
@@ -61,7 +61,8 @@ manager, then install the file again. [Tern](https://github.com/munzzyy/tern)
 is a free app that watches a GitHub release link like this one and
 offers you updates automatically, so you do not have to come back and
 redownload by hand; it is optional. The same UI opened in a plain browser
-(`app/index.html`) explains the checks but cannot run them, because a
+(`app/index.html`, or [sweep.munzzyy.dev](https://sweep.munzzyy.dev))
+explains the checks but cannot run them, because a
 web page cannot and should not see your installed apps.
 
 ## Trust math
@@ -94,8 +95,9 @@ There is a native iOS wrapper in `ios/`, and it cannot run the checkup.
 Android concepts with no iOS equivalent, so the wrapper shows the same
 explainer-only mode a plain browser sees and points at the Android APK for
 the actual checks. Today that means an iPhone has no working checkup to
-install: not from the App Store (Sweep is not on it), and not as a
-website either, because `app/` is not hosted anywhere public yet.
+install: not from the App Store (Sweep is not on it), and not from
+[sweep.munzzyy.dev](https://sweep.munzzyy.dev) either, which shows the same
+explainer because no web page can list installed apps.
 [docs/IOS.md](docs/IOS.md) has the honest version of why, and what
 building the wrapper yourself from source looks like if you want to read
 the explainer as a real app in the meantime.

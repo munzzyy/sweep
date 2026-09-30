@@ -127,9 +127,8 @@ gets shipped for iOS, it changes this file first.
 Safari on iOS can install the hosted app directly: open the site, tap Share,
 then "Add to Home Screen". That copy shows exactly the same explainer-only
 mode as the wrapper, for the same reason: no browser on any platform can list
-installed apps either. As of this writing there is no hosted copy of `app/`
-at a public URL yet; this section describes what will work once one exists,
-not a link you can follow today. The wrapper exists for people who prefer a
+installed apps either. The hosted copy is
+[sweep.munzzyy.dev](https://sweep.munzzyy.dev). The wrapper exists for people who prefer a
 real app binary whose contents are pinned by a release they can verify.
 
 ## Beta means beta
