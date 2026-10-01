@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.6.0
+
+Sweep runs on Android 9.
 
 - Sweep installs on Android 9 now. The first time it opens there, it says
   once that Android 9 has had no security fixes since January 2022, and that

@@ -1,0 +1,1 @@
+Runs on Android 9, with a one-time note about its missing security fixes and what that means for a checkup. With an Android System WebView older than 87, it says which version it needs instead of showing a blank page.
