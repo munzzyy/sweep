@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "io.github.munzzyy.sweep"
-        minSdk = 29
+        minSdk = 28
         targetSdk = 36
         versionCode = 502
         versionName = "0.5.2"

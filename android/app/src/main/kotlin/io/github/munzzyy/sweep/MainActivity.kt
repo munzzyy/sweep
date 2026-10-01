@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
         // Checkup results on screen are exactly what a watcher would want a
         // thumbnail of.
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        if (SystemCheck.blockIfWebViewTooOld(this)) return
 
         webView = WebView(this)
         val root = FrameLayout(this)
@@ -102,6 +103,7 @@ class MainActivity : ComponentActivity() {
         })
 
         webView.loadUrl(START_URL)
+        SystemCheck.noteAndroid9(this)
     }
 
     fun quickExit() {

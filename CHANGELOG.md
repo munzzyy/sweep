@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Sweep installs on Android 9 now. The first time it opens there, it says
+  once that Android 9 has had no security fixes since January 2022, and that
+  spyware getting in through one of those holes might not show up as an app.
+- With an Android System WebView older than 87, the app says which version
+  it needs instead of opening to a blank page.
+
 ## 0.5.2
 
 Sweep stays clear of the status bar and the camera cutout.

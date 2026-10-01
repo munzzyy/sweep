@@ -52,7 +52,7 @@ and a Leave fast button sits on every screen.
 [<img src="https://tern.munzzyy.dev/badge.png" alt="Get it with Tern" height="80">](https://tern.munzzyy.dev/add/?url=https%3A%2F%2Fgithub.com%2Fmunzzyy%2Fsweep)
 
 Android only, by design: install [sweep.apk](https://github.com/munzzyy/sweep/releases/latest/download/sweep.apk)
-on Android 10 or newer. Sweep is not in the Play Store, so Android will
+on Android 9 or newer. Sweep is not in the Play Store, so Android will
 warn you before it installs: something like "For your security, your
 phone is not allowed to install unknown apps from this source." That
 warning exists for apps in general, not for Sweep specifically; tap
@@ -64,6 +64,16 @@ redownload by hand; it is optional. The same UI opened in a plain browser
 (`app/index.html`, or [sweep.munzzyy.dev](https://sweep.munzzyy.dev))
 explains the checks but cannot run them, because a
 web page cannot and should not see your installed apps.
+
+Android 9 works, with two catches. Google's last security fixes for Android 9
+came out in January 2022, so holes in Android found since then stay open on a
+phone that old. Sweep checks installed apps and their settings, and spyware
+that got in through one of those holes might not show up as an app, so on
+Android 9 a checkup tells you less than it would on a newer phone. Sweep
+says so once, the first time it opens there. It also runs inside Android
+System WebView and needs version 87 or newer. A phone that gets updates
+through Google Play should already have it; with an older WebView, Sweep
+explains how to update it instead of opening to a blank screen.
 
 ## Trust math
 

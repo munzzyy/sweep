@@ -17,5 +17,10 @@ One permission (listing installed apps, which is the checkup itself) and
 no internet permission, so what Sweep sees cannot leave your phone.
 Results are never stored. A Leave fast button sits on every screen.
 
+Runs on Android 9 and newer, with Android System WebView 87 or newer.
+Android 9 has had no security fixes since January 2022, so on a phone that
+old the checkup tells you less: spyware that got in through an unpatched
+hole might not show up as an app.
+
 Beta: offered to domain organizations for review. Treat Sweep as one
 tool, not an authority.

@@ -514,8 +514,11 @@ class SweepBridge(private val activity: MainActivity) {
         runCatching {
             val info = pm.getPackageInfo(pkg, PackageManager.GET_SERVICES)
             var mask = 0
-            for (svc in info.services ?: emptyArray()) {
-                mask = mask or svc.foregroundServiceType
+            // Android 9 has no foreground service types; nothing to read.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                for (svc in info.services ?: emptyArray()) {
+                    mask = mask or svc.foregroundServiceType
+                }
             }
             val types = JSONArray()
             if (mask and ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION != 0) types.put("location")
