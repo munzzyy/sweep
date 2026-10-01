@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.1
+
+Sweep has an icon of its own.
+
+- The icon is now a radar sweep on green. The brass magnifier sat too close to Sepia's
+  brown, and a magnifier says search, not sweep.
+
 ## 0.6.0
 
 Sweep runs on Android 9.

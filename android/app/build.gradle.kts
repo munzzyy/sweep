@@ -11,8 +11,8 @@ android {
         applicationId = "io.github.munzzyy.sweep"
         minSdk = 28
         targetSdk = 36
-        versionCode = 600
-        versionName = "0.6.0"
+        versionCode = 601
+        versionName = "0.6.1"
     }
 
     buildTypes {
