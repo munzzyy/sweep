@@ -335,9 +335,17 @@ function globalItems(globals) {
   return items;
 }
 
+// A match pulls the advocate card into the results, so put it back before wiping them.
+function clearResults() {
+  const wrap = $("results-cards");
+  const guidance = wrap.querySelector(".guidance");
+  if (guidance) wrap.after(guidance);
+  wrap.textContent = "";
+}
+
 function renderResults(report, selfCheck) {
   const wrap = $("results-cards");
-  wrap.textContent = "";
+  clearResults();
 
   const nonSystemImes = report.imes.filter((i) => i.system === false);
   const vpnFlagged = report.vpnApps.filter((v) => v.hidden === true || v.sideloadedInstall === true);
@@ -388,20 +396,22 @@ function renderResults(report, selfCheck) {
   }
   a11yNote += " " + pathNote("Settings > Accessibility");
 
+  const matchCard = card({
+    title: t("Known surveillance apps"),
+    chip: m ? t("found: {count}", { count: m }) : t("none found"),
+    chipClass: m ? "chip-alarm" : "chip-none",
+    body: m
+      ? t("Software publicly identified as stalkerware is installed on this phone. Take a breath before doing anything: if a person you know may have put it there, removing it or confronting them can escalate the situation, and some of these apps report their own removal. The advice below comes first.")
+      : t("No installed app matched the public stalkerware list, by package name or by signing certificate."),
+    note: listNote,
+    children: report.matches.map((x) =>
+      findingCard(x, { alarm: true, safetyNote: true, settingsPath: APPS_PATH }),
+    ),
+  });
+
   wrap.append(
     surfacesCard(report.header),
-    card({
-      title: t("Known surveillance apps"),
-      chip: m ? t("found: {count}", { count: m }) : t("none found"),
-      chipClass: m ? "chip-alarm" : "chip-none",
-      body: m
-        ? t("Software publicly identified as stalkerware is installed on this phone. Take a breath before doing anything: if a person you know may have put it there, removing it or confronting them can escalate the situation, and some of these apps report their own removal. The advice below comes first.")
-        : t("No installed app matched the public stalkerware list, by package name or by signing certificate."),
-      note: listNote,
-      children: report.matches.map((x) =>
-        findingCard(x, { alarm: true, safetyNote: true, settingsPath: APPS_PATH }),
-      ),
-    }),
+    matchCard,
     dualUseCard(report.dualUse),
     card({
       title: t("Patterns worth a second look"),
@@ -516,6 +526,8 @@ function renderResults(report, selfCheck) {
     }),
   );
 
+  if (m) matchCard.after(document.querySelector(".guidance"));
+
   if (selfCheck) {
     wrap.append(
       card({
@@ -597,7 +609,7 @@ function toastLine(msg) {
 const bundled = () => !!native() || location.protocol === "sweep:";
 
 function leaveFast() {
-  $("results-cards").textContent = "";
+  clearResults();
   pendingResults = null;
   const action = decideExit({
     hasNativeQuickExit: !!native()?.quickExit,
@@ -635,7 +647,7 @@ async function boot() {
     if (ev.key === "Escape") leaveFast();
   });
   $("btn-back").addEventListener("click", () => {
-    $("results-cards").textContent = "";
+    clearResults();
     show("home");
   });
   $("btn-a11y-back").addEventListener("click", () => {

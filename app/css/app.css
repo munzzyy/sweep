@@ -167,7 +167,7 @@ button { background: none; border: none; cursor: pointer; }
 }
 
 .topbar { display: flex; align-items: center; gap: 8px; padding: 4px 0 12px; }
-.topbar strong { font-size: 1.125rem; }
+.topbar h1 { margin: 0; font-size: 1.125rem; }
 .top-space { flex: 1; }
 .chain-badge { font-size: 0.8125rem; font-weight: 700; border-radius: 999px; padding: 3px 10px; }
 .chain-badge.ok { background: var(--ok-bg); color: var(--ok); }
@@ -357,6 +357,7 @@ button { background: none; border: none; cursor: pointer; }
   .sweep-reveal #results-cards > .check-card:nth-child(6) { animation-delay: 0.31s; }
   .sweep-reveal #results-cards > .check-card:nth-child(n + 7) { animation-delay: 0.36s; }
   .sweep-reveal .guidance { animation-delay: 0.4s; }
+  .sweep-reveal #results-cards > .guidance { animation-delay: 0.16s; }
 
   /* The magnifier line-draws in only for the found-nothing moment, after
      the banner itself has settled: the quiet reward, not a verdict icon. */

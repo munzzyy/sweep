@@ -187,6 +187,17 @@ const COUNTS_VS_CARDS = `(() => {
 })()`;
 const countsAgree = (r) => !!r.said && r.said[0] === r.cards[0] && r.said[1] === r.cards[1];
 
+const GUIDANCE_UNDER_MATCH = `(() => {
+  const c = [...document.querySelectorAll('#results-cards > .check-card')].find((el) => el.querySelector('h2').textContent.startsWith('Known surveillance apps'));
+  return !!c && !!c.nextElementSibling && c.nextElementSibling.classList.contains('guidance');
+})()`;
+const GUIDANCE_AFTER_RESULTS = `(() => {
+  const g = document.querySelectorAll('.guidance');
+  return g.length === 1 && document.getElementById('results-cards').nextElementSibling === g[0];
+})()`;
+const ONE_H1 = `[...document.querySelectorAll('section.screen')].filter((s) => !s.hidden).map((s) => s.querySelectorAll('h1').length)`;
+const FOCUSED = `document.activeElement.tagName + '#' + document.activeElement.id`;
+
 async function newTab({ stub = null } = {}) {
   const res = await fetch(`http://127.0.0.1:${CDP_PORT}/json/new?about:blank`, { method: "PUT" });
   const tab = await res.json();
@@ -242,8 +253,13 @@ async function main() {
     await bad.evalJs("document.getElementById('btn-run').click(); 'ok'");
     // BAD_PKG's accessibility service is not on the assistive allowlist, so the notice gates this too.
     await waitFor(() => bad.evalJs("__sweepApi.state.screen === 'notice'"), "accessibility notice shown ahead of an infested scan");
+    check("notice: one h1 on the visible screen", JSON.stringify(await bad.evalJs(ONE_H1)) === "[1]", JSON.stringify(await bad.evalJs(ONE_H1)));
+    check("notice: focus lands on the h1 title", (await bad.evalJs(FOCUSED)) === "H1#notice-title", await bad.evalJs(FOCUSED));
     await bad.evalJs("document.getElementById('btn-a11y-continue').click(); 'ok'");
     await waitFor(() => bad.evalJs("__sweepApi.state.screen === 'results'"), "results shown");
+    check("results: one h1 on the visible screen", JSON.stringify(await bad.evalJs(ONE_H1)) === "[1]", JSON.stringify(await bad.evalJs(ONE_H1)));
+    check("results: focus lands on the h1 title", (await bad.evalJs(FOCUSED)) === "H1#results-title", await bad.evalJs(FOCUSED));
+    check("match: the advocate card sits right under the match card", await bad.evalJs(GUIDANCE_UNDER_MATCH));
     const badText = await bad.evalJs("document.getElementById('results-cards').textContent + document.getElementById('results-summary').textContent");
     check("positive control: the planted stalkerware package surfaces", badText.includes(BAD_PKG), BAD_PKG);
     check("positive control: named as the known family", badText.includes(family.name), family.name);
@@ -270,10 +286,18 @@ async function main() {
     const shot = await bad.send("Page.captureScreenshot", { format: "png" });
     writeFileSync(path.join(SHOTS, "01-results-match.png"), Buffer.from(shot.result.data, "base64"));
 
+    await bad.evalJs("document.getElementById('btn-rerun').click(); 'ok'");
+    await waitFor(() => bad.evalJs("__sweepApi.state.screen === 'notice'"), "notice again on the rerun");
+    await bad.evalJs("document.getElementById('btn-a11y-continue').click(); 'ok'");
+    await waitFor(() => bad.evalJs("__sweepApi.state.screen === 'results'"), "rerun results");
+    check("match: the advocate card is still under the match after a rerun", await bad.evalJs(GUIDANCE_UNDER_MATCH));
+    check("match: still exactly one advocate card after a rerun", (await bad.evalJs("document.querySelectorAll('.guidance').length")) === 1);
+
     // Quick exit clears the screen before leaving.
     await bad.evalJs("document.getElementById('btn-exit').click(); 'ok'");
     await waitFor(() => bad.evalJs("!!window.__exited"), "quick exit fired");
     check("quick exit: results are wiped from the DOM", (await bad.evalJs("document.getElementById('results-cards').textContent")) === "");
+    check("quick exit: the advocate card survives the wipe, back after the results", await bad.evalJs(GUIDANCE_AFTER_RESULTS));
     const badErrs = await bad.evalJs("(__sweepErrors || []).slice(0, 5)");
     check("infested run: console clean", badErrs.length === 0, JSON.stringify(badErrs));
     bad.close();
@@ -289,6 +313,7 @@ async function main() {
     check("negative control: no match card alarm on a clean scan", !cleanCards.includes(family.name));
     check("the word 'safe' is never the verdict", !/you are safe/i.test(summary + cleanCards));
     await settleReveal(clean);
+    check("clean: the advocate card follows the last check card", await clean.evalJs(GUIDANCE_AFTER_RESULTS));
     const cleanCounts = await clean.evalJs(COUNTS_VS_CARDS);
     check("clean: the banner's check count matches the flagged cards", countsAgree(cleanCounts) && cleanCounts.said[0] === 0, JSON.stringify(cleanCounts));
     const shot2 = await clean.send("Page.captureScreenshot", { format: "png" });
