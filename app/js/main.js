@@ -5,7 +5,7 @@ import { analyze, dataAge, selfCheckSummary, unrecognizedAccessibility, accessib
 import { setLocale, resolveLocale, translateDom, t, LOCALE_CHOICES } from "./i18n.js";
 import { decideExit } from "./quickexit.js";
 
-const VERSION = "0.7.0";
+const VERSION = "0.7.1";
 
 globalThis.__sweepErrors = [];
 window.addEventListener("error", (ev) => __sweepErrors.push(String(ev.message)));

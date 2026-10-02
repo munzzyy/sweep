@@ -1,0 +1,1 @@
+The checkup button now shows "Checking…" and greys out while the scan runs, so a tap is not mistaken for nothing happening and taps made while waiting no longer run extra checkups.

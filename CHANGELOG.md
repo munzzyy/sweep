@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.1 (2026-10-02)
+
+The checkup button shows that it is working.
+
+- Tapping Run the checkup now shows "Checking…" and greys the button
+  before the scan starts. The scan holds the screen until it finishes,
+  so before this the label never got drawn, and the taps people made
+  while waiting were queued up and ran extra checkups once the button
+  came back (#8).
+
 ## 0.7.0 (2026-10-02)
 
 Sweep says plainly what it could not read, and a match puts the hotlines
