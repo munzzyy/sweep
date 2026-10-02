@@ -11,6 +11,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { setTimeout as sleep } from "node:timers/promises";
+import { benignScan, appRec } from "./corpus.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const HTTP_PORT = 8971;
@@ -79,6 +80,34 @@ const BRIDGE_STUB = (infested, { fakeInternet = false } = {}) => `window.SweepNa
   scanJson: () => ${JSON.stringify(JSON.stringify(scan(infested)))},
   selfCheck: () => ${JSON.stringify(SELF_CHECK(fakeInternet))},
 };`;
+
+const BRIDGE_STUB_SCAN = (scanObj) => `window.SweepNative = {
+  platform: () => "android",
+  version: () => "e2e",
+  quickExit: () => { window.__exited = true; },
+  scanJson: () => ${JSON.stringify(JSON.stringify(scanObj))},
+  selfCheck: () => ${JSON.stringify(SELF_CHECK(false))},
+};`;
+
+// The 0.5.0 bridge shape: every surface reported, and one finding on each
+// of the deep cards, so main.js has to render all of them.
+function deepScan() {
+  const s = benignScan();
+  s.userCertificates = [{ subject: "CN=Example Root", issuer: "CN=Example Root", notBefore: "2026-01-01", notAfter: "2036-01-01" }];
+  s.vpnServices = ["com.example.vpn"];
+  s.alwaysOnVpn = "com.example.vpn";
+  s.apps.push(appRec("com.example.vpn", { label: "Example VPN", installer: null }));
+  s.globals = { ...s.globals, adbEnabled: true };
+  s.apps.push(appRec("com.example.texts", { label: "Example Texts", system: false }));
+  s.roles = { ...s.roles, sms: "com.example.texts" };
+  s.owners = { ...s.owners, deviceOwner: "com.microsoft.windowsintune.companyportal" };
+  return s;
+}
+
+const cardText = (title) => `(() => {
+  const c = [...document.querySelectorAll('#results-cards > .check-card')].find((el) => el.querySelector('h2').textContent.startsWith(${JSON.stringify(title)}));
+  return c ? c.textContent : null;
+})()`;
 
 async function waitFor(fn, desc, timeout = 20000) {
   const t0 = Date.now();
@@ -263,6 +292,42 @@ async function main() {
     const errs = await clean.evalJs("(__sweepErrors || []).slice(0, 5)");
     check("clean run: console clean", errs.length === 0, JSON.stringify(errs));
     clean.close();
+
+    // ---------------------------------------------------------------- deep
+    const deep = await newTab({ stub: BRIDGE_STUB_SCAN(deepScan()) });
+    await deep.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    // LastPass and Bitwarden are not on the assistive allowlist.
+    await waitFor(() => deep.evalJs("__sweepApi.state.screen === 'notice'"), "notice ahead of the deep scan");
+    await deep.evalJs("document.getElementById('btn-a11y-continue').click(); 'ok'");
+    await waitFor(() => deep.evalJs("__sweepApi.state.screen === 'results'"), "deep results");
+    const chip = await deep.evalJs("document.querySelector('.surfaces-card .check-chip').textContent");
+    check("deep: the surfaces chip reads 20 of 23", chip === "20 of 23", chip);
+    const surfacesText = await deep.evalJs("document.querySelector('.surfaces-card').textContent");
+    for (const name of ["which apps were granted usage access", "which apps were granted draw-over-other-apps", "which apps were granted install-unknown-apps"]) {
+      check(`deep: could-not-check names ${name}`, surfacesText.includes(`${name}: Android only exposes this to privileged system apps`), surfacesText);
+    }
+    const deepCards = [
+      ["Keyboards in use", "This is the keyboard in use right now."],
+      ["Default app roles", "not part of the phone's system image"],
+      ["Who controls this phone", "is the device owner"],
+      ["Debugging switches", "USB debugging is turned on"],
+      ["Certificate authorities added by a person", "CN=Example Root"],
+      ["Apps that can run a VPN", "always-on VPN is set: com.example.vpn"],
+      ["Device admin apps", "It declares the power to: erase this phone remotely"],
+      ["Accessibility services, turned on", "Android says this service can:"],
+    ];
+    for (const [title, want] of deepCards) {
+      const text = await deep.evalJs(cardText(title));
+      check(`deep: ${title} card says "${want}"`, typeof text === "string" && text.includes(want), String(text).slice(0, 300));
+    }
+    await settleReveal(deep);
+    const deepCounts = await deep.evalJs(COUNTS_VS_CARDS);
+    check("deep: the banner's check count matches the flagged cards", countsAgree(deepCounts), JSON.stringify(deepCounts));
+    const deepErrs = await deep.evalJs("(__sweepErrors || []).slice(0, 5)");
+    check("deep run: console clean", deepErrs.length === 0, JSON.stringify(deepErrs));
+    const shot3 = await deep.send("Page.captureScreenshot", { format: "png" });
+    writeFileSync(path.join(SHOTS, "03-results-deep.png"), Buffer.from(shot3.result.data, "base64"));
+    deep.close();
 
     // --------------------------------------------- accessibility notice
     // Three cases, each a negative control on the other two.
