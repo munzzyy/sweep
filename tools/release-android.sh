@@ -14,7 +14,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-KEYSTORE="${MAGPIE_KEYSTORE:-$HOME/keys/sweep-upload.jks}"
+KEYSTORE="${SWEEP_KEYSTORE:-$HOME/keys/sweep-upload.jks}"
 ALIAS=sweep-upload
 SDK="${ANDROID_HOME:-$HOME/Android/Sdk}"
 SIGN_TOOLS_VERSION=34.0.0
@@ -47,7 +47,8 @@ AAB_OUT="dist/sweep-$VERSION.aab"
 echo "== sign apk (schemes v2+v3) =="
 "$APKSIGNER" sign --ks "$KEYSTORE" --ks-key-alias "$ALIAS" --ks-pass env:KSPW \
   --out "$APK_OUT" "$APK_IN"
-"$APKSIGNER" verify --print-certs "$APK_OUT" | head -4
+ANDROID_HOME="$SDK" bash tools/verify-apk.sh "$APK_OUT" >/dev/null
+echo "apk is signed by the release key and nothing else"
 
 echo "== sign aab (jar signature; Play verifies the upload key from it) =="
 cp "$AAB_IN" "$AAB_OUT"
@@ -63,3 +64,8 @@ cp "$APK_OUT" dist/sweep.apk
 
 echo "== artifacts =="
 sha256sum "$APK_OUT" "$AAB_OUT" dist/sweep.apk
+
+echo "== for the release notes =="
+ANDROID_HOME="$SDK" bash tools/verify-apk.sh "$APK_OUT" "$AAB_OUT"
+echo
+echo "\`sweep.apk\` is the same file as \`$(basename "$APK_OUT")\` under a stable name."

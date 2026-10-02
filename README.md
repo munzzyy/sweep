@@ -118,8 +118,13 @@ False reassurance is the failure mode that hurts people, so a check that
 misses what it claims to catch is the bug that matters;
 [SECURITY.md](SECURITY.md) has the private route.
 [docs/THREAT-MODEL.md](docs/THREAT-MODEL.md) says exactly what each
-check can and cannot see. Releases list the APK's sha256 and signing
-certificate digest. Issues and pull requests are open and welcome.
+check can and cannot see. Every release APK is signed with one key, and
+its certificate SHA-256 is
+`10319fc7dd916baa9e6e2e49a2323fa1b3ea395d50d36c4b966086e67b7e12e8`.
+`apksigner verify --print-certs` on the file you downloaded should print
+exactly that and nothing else; `tools/verify-apk.sh` runs the same check
+and prints the sha256 block for the release notes. Issues and pull
+requests are open and welcome.
 
 ## Beta means beta
 

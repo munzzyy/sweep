@@ -51,8 +51,12 @@ grep -q "VERSION = \"$ver\"" app/js/main.js || { echo "app/js/main.js VERSION !=
 grep -q "VERSION = \"sweep-v$ver\"" app/sw.js || { echo "app/sw.js VERSION != sweep-v$ver"; bad=1; }
 grep -q "versionName = \"$ver\"" android/app/build.gradle.kts || { echo "gradle versionName != $ver"; bad=1; }
 grep -q "^## $ver" CHANGELOG.md || { echo "CHANGELOG.md missing ## $ver"; bad=1; }
+# F-Droid reads the release notes for a tag from this file; without it the listing shows none.
+code=$(grep -oE 'versionCode = [0-9]+' android/app/build.gradle.kts | grep -oE '[0-9]+')
+notes="fastlane/metadata/android/en-US/changelogs/$code.txt"
+[ -n "$code" ] && [ -s "$notes" ] || { echo "missing $notes for versionCode ${code:-?}"; bad=1; }
 if [ "$bad" -eq 1 ]; then exit 1; fi
-echo "version $ver consistent across package.json, main.js, sw.js, gradle, changelog"
+echo "version $ver (code $code) consistent across package.json, main.js, sw.js, gradle, changelog, fastlane notes"
 
 if [ "$fail" -eq 0 ]; then echo "clean: no em/en dashes, no AI attribution"; fi
 exit $fail

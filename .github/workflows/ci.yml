@@ -36,7 +36,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: build debug apk
+      - name: build release apk
         run: cd android && ./gradlew --no-daemon assembleRelease
       - name: assert zero permissions
         run: |
