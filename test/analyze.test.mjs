@@ -99,6 +99,17 @@ test("an installer that could not be read is unknown, not outside a store", () =
   assert.deepEqual(report.sideloaded.map((a) => a.pkg), ["com.no.store"]);
 });
 
+test("Sweep's own sideloaded install is listed but not counted", () => {
+  const sweep = app("io.github.munzzyy.sweep", { installer: null });
+  const alone = analyze({ apps: [sweep, app("com.whatsapp")] }, INDICATORS);
+  assert.equal(alone.counts.sideloaded, 0);
+  assert.equal(alone.sideloaded.length, 1);
+  assert.equal(alone.sideloaded[0].self, true);
+  const withOther = analyze({ apps: [sweep, app("com.example.other", { installer: null })] }, INDICATORS);
+  assert.equal(withOther.counts.sideloaded, 1);
+  assert.ok(!withOther.sideloaded.find((a) => a.pkg === "com.example.other").self);
+});
+
 test("dataAge: a list fetched today is never stale", () => {
   const now = new Date("2026-09-06T12:00:00Z");
   const age = dataAge({ fetched: "2026-09-06" }, now);

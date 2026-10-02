@@ -294,6 +294,8 @@ const KNOWN_STORES = new Set([
 
 const DISGUISE_PREFIXES = ["com.google.android.", "com.android.", "com.samsung.", "com.sec."];
 
+const SELF_PKG = "io.github.munzzyy.sweep";
+
 // installer null is Android recording no store; a missing installer key is a read that failed.
 const outsideStore = (a) => !a.system && a.installer !== undefined && (!a.installer || !KNOWN_STORES.has(a.installer));
 
@@ -417,7 +419,8 @@ export function analyze(scan, indicators) {
 
   const hidden = byRecency(apps.filter((a) => !a.system && !a.hasLauncher));
 
-  const sideloaded = byRecency(apps.filter(outsideStore));
+  // Sweep itself is almost always sideloaded; it stays listed but is never counted as something to review.
+  const sideloaded = byRecency(apps.filter(outsideStore)).map((a) => (a.pkg === SELF_PKG ? { ...a, self: true } : a));
 
   const adminPkgs = new Set(admins.map((a) => a.pkg));
   const accessibilityPkgs = new Set(accessibility.map((a) => a.pkg));
@@ -629,7 +632,7 @@ export function analyze(scan, indicators) {
       accessibility: accessibility.length,
       notifications: notifications.length,
       hidden: hidden.length,
-      sideloaded: sideloaded.length,
+      sideloaded: sideloaded.filter((a) => !a.self).length,
       imes: imes.length,
       userCerts: userCerts.length,
       vpnApps: vpnApps.length,

@@ -78,6 +78,7 @@ export const es = {
   "Installed from outside a store": "Instaladas fuera de una tienda",
   "These apps did not come from a recognized app store. Sideloading is normal for plenty of people; it is also the only way most stalkerware arrives. You should remember installing each of these.":
     "Estas apps no llegaron de una tienda reconocida. Instalar a mano es normal para mucha gente; también es como llega la mayoría del stalkerware. Deberías recordar haber instalado cada una.",
+  "This is Sweep, the app running this checkup.": "Esta es Sweep, la app que está haciendo esta revisión.",
   "Show the apps installed outside a store": "Mostrar las apps instaladas fuera de una tienda",
   "Before acting on anything above": "Antes de actuar sobre nada de lo anterior",
   "If the person who might be watching is someone you know, talk to an advocate before removing anything: removal can be noticed. National Domestic Violence Hotline (US): 1-800-799-7233. Tech safety planning: techsafety.org. Local organizations worldwide: stopstalkerware.org.":

@@ -39,6 +39,7 @@ const scan = (infested) => ({
   apps: [
     { pkg: "com.whatsapp", label: "WhatsApp", system: false, hasLauncher: true, installer: "com.android.vending", installedDate: "2025-11-02", certs: [] },
     { pkg: "com.android.systemui", label: "System UI", system: true, hasLauncher: false, installer: null, installedDate: null, certs: [] },
+    { pkg: "io.github.munzzyy.sweep", label: "Sweep", system: false, hasLauncher: true, installer: null, certs: [] },
     ...(infested ? [{ pkg: BAD_PKG, label: "Sync Service", system: false, hasLauncher: false, installer: null, installedDate: "2026-08-30", certs: [] }] : []),
   ],
 });
@@ -314,6 +315,9 @@ async function main() {
     check("the word 'safe' is never the verdict", !/you are safe/i.test(summary + cleanCards));
     await settleReveal(clean);
     check("clean: the advocate card follows the last check card", await clean.evalJs(GUIDANCE_AFTER_RESULTS));
+    const selfCard = await clean.evalJs(cardText("Installed from outside a store"));
+    check("clean: Sweep's own install is listed with a note saying it is Sweep", String(selfCard).includes("This is Sweep, the app running this checkup."), String(selfCard));
+    check("clean: Sweep's own install does not count as something to review", String(selfCard).startsWith("Installed from outside a store 0"), String(selfCard).slice(0, 60));
     const cleanCounts = await clean.evalJs(COUNTS_VS_CARDS);
     check("clean: the banner's check count matches the flagged cards", countsAgree(cleanCounts) && cleanCounts.said[0] === 0, JSON.stringify(cleanCounts));
     const shot2 = await clean.send("Page.captureScreenshot", { format: "png" });

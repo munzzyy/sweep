@@ -370,7 +370,7 @@ function renderResults(report, selfCheck) {
     roleAttention.length,
     ownerAttention,
     report.hidden.length,
-    report.sideloaded.length,
+    report.counts.sideloaded,
     globalAttention,
   ];
   const m = report.matches.length;
@@ -509,10 +509,10 @@ function renderResults(report, selfCheck) {
     }),
     card({
       title: t("Installed from outside a store"),
-      chip: String(report.sideloaded.length),
-      chipClass: report.sideloaded.length ? "chip-review" : "chip-none",
+      chip: String(report.counts.sideloaded),
+      chipClass: report.counts.sideloaded ? "chip-review" : "chip-none",
       body: t("These apps did not come from a recognized app store. Sideloading is normal for plenty of people; it is also the only way most stalkerware arrives. You should remember installing each of these."),
-      items: report.sideloaded.map(listItem),
+      items: report.sideloaded.map((a) => (a.self ? `${listItem(a)} ${t("This is Sweep, the app running this checkup.")}` : listItem(a))),
       listLabel: t("Show the apps installed outside a store"),
     }),
     card({
