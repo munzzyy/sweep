@@ -126,12 +126,40 @@ exactly that and nothing else; `tools/verify-apk.sh` runs the same check
 and prints the sha256 block for the release notes. Issues and pull
 requests are open and welcome.
 
-## Beta means beta
+## Roadmap
 
-The plan of record is review by the organizations that do this work
-(NNEDV, the Coalition Against Stalkerware) before Sweep is promoted to
-anyone in crisis. Until then it is one tool with stated limits, not an
-authority.
+Sweep is beta. What is left needs someone outside this repo: an advocacy
+organization, F-Droid's reviewers, a native Spanish speaker, or a real
+phone.
+
+- Review by the organizations that do this work (NNEDV, the Coalition
+  Against Stalkerware) before Sweep is promoted to anyone in crisis. That
+  is the plan of record, and until it happens Sweep is one tool with
+  stated limits, not an authority. Hotline numbers outside the US belong
+  in the same round, from those organizations rather than a web search;
+  today the app names the US hotline, techsafety.org and
+  stopstalkerware.org.
+- F-Droid. The submission
+  ([fdroiddata!48335](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/48335))
+  builds reproducibly and is waiting for review. Once it is in, F-Droid
+  builds Sweep from source, checks its build against the signed APK, and
+  delivers updates. Until then, the APK above and Tern are the ways to
+  get it.
+- A native speaker's review of the Spanish, in the app and in the store
+  listing. The Spanish store description is new and nobody has checked
+  it yet.
+- Pinning the accessibility pause to the real signing certificates of
+  TalkBack and Voice Access. Today their package name plus the system
+  flag lets them through, which a rooted phone can fake;
+  [docs/THREAT-MODEL.md](docs/THREAT-MODEL.md) has the details. The fix
+  needs the genuine certificate digests read off a real phone, not a
+  guess.
+- The verify block on older release pages. The notes for 0.2.0 and 0.4.0
+  through 0.6.1 went out without the sha256 and certificate lines, and
+  adding them means editing published releases. The APKs themselves are
+  all signed with the key above.
+
+## License
 
 [GPL-3.0-or-later](LICENSE). You can use, study, change and share it. If you distribute a copy or a modified version, it has to stay under the GPL and come with its source. Releases up to v0.5.0 were under MIT. Indicator data CC-BY 4.0 by Echap.
 

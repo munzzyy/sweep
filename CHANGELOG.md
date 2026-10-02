@@ -1,5 +1,35 @@
 # Changelog
 
+## Unreleased
+
+Sweep says plainly what it could not read, and a match puts the hotlines
+right under it.
+
+- When Sweep could not read something, the results say why in a plain
+  sentence in your language instead of the raw error text from
+  Android. On Android 12 and newer the always-on VPN setting is closed
+  to ordinary apps, and the results now say exactly that.
+- An always-on VPN, assistant, SMS app or dialer that is simply not set
+  counts as read. On the Android 9 emulator a scan now reads 20 of 23
+  surfaces, not 18.
+- A read that failed is never reported as checked: device admins, the
+  app list and everything built on it, and the installer on Android 9
+  and 10. An app whose installer could not be read is no longer listed
+  as installed from outside a store.
+- With a stalkerware match, the card with the advocate hotlines sits
+  directly under the match instead of at the bottom of the page.
+- The notice and results screens have real headings for screen readers.
+- Sweep no longer lists itself as something to review under "Installed
+  from outside a store". It still shows there, marked as Sweep.
+- An accessibility service that settings list as on while the
+  accessibility manager reports none is now flagged as a mismatch.
+- The privacy page, the F-Droid description and the website list
+  everything the checkup reads.
+- The Spanish store listing has its own description, a summary that
+  fits the F-Droid limit, and its accents back.
+- `tools/verify-apk.sh` fails a release not signed by the Sweep release
+  key and prints the sha256 block for the release notes.
+
 ## 0.6.1
 
 Sweep has an icon of its own.
