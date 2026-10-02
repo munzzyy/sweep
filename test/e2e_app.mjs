@@ -197,7 +197,11 @@ async function newTab({ stub = null } = {}) {
   if (stub) await c.send("Page.addScriptToEvaluateOnNewDocument", { source: stub });
   await c.send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await c.send("Page.navigate", { url: BASE + "/" });
-  await waitFor(() => c.evalJs("!!window.__sweepApi"), "app booted");
+  // Either line is only revealed after the indicator fetch settles; a click before that has no data to check against.
+  await waitFor(
+    () => c.evalJs("!!window.__sweepApi && (!document.getElementById('btn-run').hidden || !document.getElementById('web-note').hidden)"),
+    "app booted",
+  );
   return c;
 }
 
