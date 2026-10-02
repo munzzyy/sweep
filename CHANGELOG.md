@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.7.0 (2026-10-02)
 
 Sweep says plainly what it could not read, and a match puts the hotlines
 right under it.
