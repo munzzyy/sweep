@@ -4,11 +4,27 @@ answer. Sweep checks the places surveillance software actually lives:
 * Installed apps against a public, maintained stalkerware list (Echap's
   indicators, bundled, matched by package name and signing certificate so
   renamed copies still match).
-* Device admin apps, which can lock, wipe, and resist removal.
-* Enabled accessibility services, which can read the screen.
-* Apps with no launcher icon, and apps installed from outside any store.
+* Device admin apps and the powers they declare, such as locking or
+  wiping the phone.
+* Accessibility services that are turned on, and what Android says each
+  one can do, like reading the screen or seeing what you type.
+* Apps with notification access.
+* Which sensitive permissions each app holds right now: microphone,
+  camera, location, text messages, call history, contacts and more.
+* Apps that start at boot or declare background services for location,
+  the camera or the microphone.
+* Keyboards, certificate authorities a person added, VPN apps and the
+  always-on VPN setting.
+* The default text message app, dialer and assistant, device and profile
+  owners, and whether a work profile exists.
+* USB and wireless debugging, developer options, and battery optimization
+  exemptions.
+* Apps with no launcher icon, and apps installed from outside any store,
+  with when they arrived and what installed them.
 
-Every finding is explained in words. Sweep never says "you are safe": it
+Every result opens with how many of these Sweep could actually read, and
+lists what it could not read and why. Each finding is explained in
+words. Sweep never says "you are safe": it
 says "these specific checks found nothing", and means exactly that.
 Matches lead with do-not-confront guidance and advocate hotlines, because
 removing stalkerware can escalate a dangerous situation.

@@ -11,9 +11,28 @@
 <body class="doc-page">
 <main>
 <h1>Privacy</h1>
-<p>Sweep looks at sensitive things, so this page is blunt:</p>
+<p>Sweep looks at sensitive things, so this page is blunt.</p>
+<h2>What the checkup reads</h2>
+<p>All of this is read on your phone, from Android itself, when you run the checkup. None of it leaves the phone: the app has no internet permission, so Android will not let it send anything, ever.</p>
 <ul>
-<li>The checkup reads the list of installed apps, active device admins, and enabled accessibility services. That reading happens on your phone and goes nowhere: the app has no internet permission, so the operating system will not let it transmit anything, ever.</li>
+<li>The installed apps. For each one: its name, whether it is a system app, whether it has an icon, when it was installed and last updated, what it was installed from, and a fingerprint of the certificate it was signed with.</li>
+<li>Which sensitive permissions each app holds right now (microphone, camera, location, text messages, call history, contacts, calendar, phone state, notifications), and whether it asks for usage access, drawing over other apps, installing apps or access to all files.</li>
+<li>Which apps start at boot, and which declare long background services for location, the camera, the microphone, screen capture or calls.</li>
+<li>Device admin apps and the powers each one declares.</li>
+<li>Accessibility services that are turned on, and what Android says each one can do.</li>
+<li>Apps with notification access.</li>
+<li>The keyboards that are turned on, and which one is in use.</li>
+<li>Certificate authorities a person added to the phone.</li>
+<li>Apps that can run a VPN, and the always-on VPN setting.</li>
+<li>Which apps handle text messages, calls and the assistant.</li>
+<li>Whether there is a device owner, a profile owner or a work profile.</li>
+<li>Whether USB debugging, wireless debugging or developer options are on.</li>
+<li>Which apps are exempt from battery optimization.</li>
+<li>Sweep's own permission list, so the results can show you it has no internet access.</li>
+</ul>
+<p>When Android keeps one of these from ordinary apps, or a read fails, the results list it under what could not be checked, with the reason. It is reported as unknown, not as nothing found.</p>
+<h2>What it keeps</h2>
+<ul>
 <li>Results are never stored. Leave the results screen and they are gone; there is no history, no log, no file.</li>
 <li>No accounts, no analytics, no cookies. One preference is kept: your language. On Android 9 there is one more: a yes or no for whether you have seen the note about Android 9 security updates.</li>
 <li>The stalkerware list ships inside the app (from Echap's public CC-BY dataset) and is never fetched at runtime.</li>

@@ -6,8 +6,8 @@ export const es = {
   "A plain-language phone checkup.": "Una revisión del teléfono en lenguaje claro.",
   "Beta. Experts in domestic-violence tech safety have not reviewed Sweep yet, so treat it as one tool, not an authority.":
     "Beta. Expertos en seguridad tecnológica contra la violencia doméstica todavía no han revisado Sweep, así que trátalo como una herramienta más, no como una autoridad.",
-  '"Is something on my phone watching me" is a normal question with a hard answer. Sweep checks the specific places surveillance apps live: the list of installed apps against publicly identified stalkerware, device admin powers, accessibility services that can read your screen, apps with no icon, and installs that came from outside any store. Then it explains every finding in words, not scores.':
-    '"¿Hay algo en mi teléfono vigilándome?" es una pregunta normal con una respuesta difícil. Sweep revisa los lugares concretos donde vive el software de vigilancia: la lista de apps instaladas contra stalkerware identificado públicamente, los poderes de administrador del dispositivo, los servicios de accesibilidad que pueden leer tu pantalla, las apps sin icono y las instalaciones que llegaron de fuera de cualquier tienda. Y explica cada hallazgo con palabras, no con puntuaciones.',
+  '"Is something on my phone watching me" is a normal question with a hard answer. Sweep checks the specific places surveillance apps live: the list of installed apps against publicly identified stalkerware, device admin powers, accessibility services that can read your screen, which apps hold the microphone, camera, location or your messages, keyboards, VPNs, added certificates, who manages the phone, apps with no icon, and installs that came from outside any store. Then it explains every finding in words, not scores, and tells you what it could not check.':
+    '"¿Hay algo en mi teléfono vigilándome?" es una pregunta normal con una respuesta difícil. Sweep revisa los lugares concretos donde vive el software de vigilancia: la lista de apps instaladas contra stalkerware identificado públicamente, los poderes de administrador del dispositivo, los servicios de accesibilidad que pueden leer tu pantalla, qué apps tienen el micrófono, la cámara, la ubicación o tus mensajes, los teclados, las VPN, los certificados añadidos, quién administra el teléfono, las apps sin icono y las instalaciones que llegaron de fuera de cualquier tienda. Y explica cada hallazgo con palabras, no con puntuaciones, y te dice lo que no pudo comprobar.',
   "Run the checkup": "Ejecutar la revisión",
   "Checking…": "Revisando…",
   "The checkup itself runs in the Android app, because a web page cannot and should not see your installed apps. This page explains how it works.":
@@ -28,9 +28,21 @@ export const es = {
   "Accessibility services": "Servicios de accesibilidad",
   "These services can read the screen and watch input. Wonderful for accessibility, and the favorite hiding place of watchers.":
     "Estos servicios pueden leer la pantalla y observar lo que escribes. Maravillosos para la accesibilidad, y el escondite favorito de los vigilantes.",
+  "Notifications and permissions": "Notificaciones y permisos",
+  "Apps that can read your notifications, which apps hold the microphone, camera, location, text messages or call history right now, and which start at boot or keep a background service running for them.":
+    "Las apps que pueden leer tus notificaciones, qué apps tienen ahora mismo el micrófono, la cámara, la ubicación, los mensajes de texto o el historial de llamadas, y cuáles se inician al arrancar o mantienen un servicio en segundo plano para ello.",
+  "Keyboards, certificates and VPNs": "Teclados, certificados y VPN",
+  "The keyboard you type with, certificate authorities someone added to the phone, and apps that can send your traffic through a VPN, including an always-on one.":
+    "El teclado con el que escribes, las autoridades de certificación que alguien añadió al teléfono y las apps que pueden enviar tu tráfico a través de una VPN, incluida una siempre activa.",
+  "Who runs the phone": "Quién controla el teléfono",
+  "The apps that handle texts, calls and the assistant, any device owner, profile owner or work profile, USB and wireless debugging, and apps exempt from battery optimization.":
+    "Las apps que gestionan los mensajes, las llamadas y el asistente, cualquier propietario del dispositivo, propietario de perfil o perfil de trabajo, la depuración USB e inalámbrica, y las apps exentas de la optimización de batería.",
   "Hidden and sideloaded apps": "Apps ocultas e instaladas a mano",
   "Apps with no icon, and apps installed from outside any store. Plenty are legitimate; the point is that you get to look at the list.":
     "Apps sin icono, y apps instaladas fuera de cualquier tienda. Muchas son legítimas; el punto es que tú puedas mirar la lista.",
+  "What it could not check": "Lo que no pudo comprobar",
+  "Android keeps some of this from ordinary apps, and a read can fail on a given phone. Every result starts with how much Sweep could read and lists each thing it could not, with the reason, so a gap never passes for good news.":
+    "Android oculta parte de esto a las apps comunes, y una lectura puede fallar en un teléfono concreto. Cada resultado empieza con cuánto pudo leer Sweep y enumera cada cosa que no pudo, con la razón, para que un hueco nunca pase por una buena noticia.",
   "What Sweep will never tell you": "Lo que Sweep nunca te dirá",
   "That you are safe. A checkup can only report what its checks found, and sophisticated spyware works hard to fail them. Sweep says \"these specific checks found nothing\" and means exactly that, no more. If your gut says something is wrong, trust it over any app, this one included.":
     "Que estás a salvo. Una revisión solo puede informar de lo que sus comprobaciones encontraron, y el spyware sofisticado se esfuerza en esquivarlas. Sweep dice \"estas comprobaciones concretas no encontraron nada\" y quiere decir exactamente eso, nada más. Si tu instinto dice que algo va mal, confía en él por encima de cualquier app, esta incluida.",

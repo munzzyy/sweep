@@ -97,10 +97,18 @@ may already be lying to tell the truth about itself.
 
 ## The device is the boundary
 
-Sweep reads the app list, active admins, and enabled accessibility
-services, on the phone, and can transmit none of it: there is no INTERNET
-permission for the OS to honor. Results render to the screen and nowhere
-else; there is no results file, no history, no analytics. The screen is
+Sweep reads what Android shows an ordinary app, on the phone. That is the
+installed apps (what each was installed from, its signing certificate,
+the sensitive permissions it holds, and whether it starts at boot or
+declares typed background services), device admins and the powers they
+declare, accessibility services and what each can do, notification
+access, the enabled and active keyboards, certificate authorities a
+person added, VPN apps and the always-on VPN setting, the default text
+message, dialer and assistant apps, device and profile owners and any
+work profile, the debugging switches, and battery optimization
+exemptions. Whatever it could not read is listed in the results with the
+reason. It can transmit none of it: there is no INTERNET permission for
+the OS to honor. Results render to the screen and nowhere else; there is no results file, no history, no analytics. The screen is
 protected from app-switcher thumbnails, and Leave fast closes and removes
 the task in one tap. One honest residue remains: Sweep appears in the
 phone's own installed-apps list like anything else, so someone inspecting
