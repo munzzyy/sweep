@@ -649,6 +649,21 @@ test("accessibility cross-check reports when the two OS records disagree", () =>
   assert.ok(report.accessibility.some((a) => a.pkg === "com.only.in.settings"));
 });
 
+test("a service enabled in settings but missing from the manager is a mismatch", () => {
+  const scan = { accessibility: [{ pkg: "com.x.helper", service: "S" }], accessibilityDetail: [], apps: [app("com.x.helper")] };
+  const check = analyze(scan, INDICATORS).accessibilityCrossCheck;
+  assert.equal(check.consistent, false);
+  assert.deepEqual(check.onlyInSettings, ["com.x.helper"]);
+});
+
+test("negative controls: no manager read, or two empty records, is not a mismatch", () => {
+  const unread = { accessibility: [{ pkg: "com.x.helper", service: "S" }], apps: [app("com.x.helper")] };
+  assert.equal(analyze(unread, INDICATORS).accessibilityCrossCheck.consistent, true);
+  assert.equal(analyze({ accessibility: [], accessibilityDetail: [], apps: [] }, INDICATORS).accessibilityCrossCheck.consistent, true);
+  const noSettings = { accessibilityDetail: [{ pkg: "com.x.helper", service: "S", capabilities: {} }], apps: [app("com.x.helper")] };
+  assert.equal(analyze(noSettings, INDICATORS).accessibilityCrossCheck.consistent, true);
+});
+
 // ------------------------------------------- dataset pipeline validators
 
 const PYTHON = spawnSync("python3", ["-c", "import yaml"], { encoding: "utf8" });

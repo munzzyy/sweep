@@ -412,8 +412,10 @@ export function analyze(scan, indicators) {
     onlyInSettings: [...settingsPkgs].filter((p) => !detailPkgs.has(p)),
     onlyInManager: [...detailPkgs].filter((p) => !settingsPkgs.has(p)),
   };
+  // Compare only when both records were read: an empty manager list next to a settings entry is the mismatch that matters.
+  const bothRead = Array.isArray(scan.accessibility) && Array.isArray(scan.accessibilityDetail);
   accessibilityCrossCheck.consistent =
-    !detailA11y.length || (!accessibilityCrossCheck.onlyInSettings.length && !accessibilityCrossCheck.onlyInManager.length);
+    !bothRead || (!accessibilityCrossCheck.onlyInSettings.length && !accessibilityCrossCheck.onlyInManager.length);
 
   const notifications = byRecency((scan.notifications || []).map(enrich));
 
