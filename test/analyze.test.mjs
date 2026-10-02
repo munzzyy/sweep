@@ -92,6 +92,13 @@ test("analyze buckets admins, accessibility, hidden, and sideloaded", () => {
   assert.equal(report.counts.apps, 4);
 });
 
+test("an installer that could not be read is unknown, not outside a store", () => {
+  const unread = app("com.unread.source");
+  delete unread.installer;
+  const report = analyze({ apps: [unread, app("com.no.store", { installer: null })] }, INDICATORS);
+  assert.deepEqual(report.sideloaded.map((a) => a.pkg), ["com.no.store"]);
+});
+
 test("dataAge: a list fetched today is never stale", () => {
   const now = new Date("2026-09-06T12:00:00Z");
   const age = dataAge({ fetched: "2026-09-06" }, now);

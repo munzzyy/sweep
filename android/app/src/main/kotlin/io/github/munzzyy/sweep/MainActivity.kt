@@ -2,6 +2,7 @@ package io.github.munzzyy.sweep
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -39,6 +40,11 @@ class MainActivity : ComponentActivity() {
         // thumbnail of.
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         if (SystemCheck.blockIfWebViewTooOld(this)) return
+
+        // Debuggable builds only, which release APKs are not: test/e2e_device.mjs drives the real bridge through this.
+        if ((applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+            WebView.setWebContentsDebuggingEnabled(true)
+        }
 
         webView = WebView(this)
         val root = FrameLayout(this)

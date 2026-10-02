@@ -294,6 +294,9 @@ const KNOWN_STORES = new Set([
 
 const DISGUISE_PREFIXES = ["com.google.android.", "com.android.", "com.samsung.", "com.sec."];
 
+// installer null is Android recording no store; a missing installer key is a read that failed.
+const outsideStore = (a) => !a.system && a.installer !== undefined && (!a.installer || !KNOWN_STORES.has(a.installer));
+
 export function grantedPhrases(app) {
   const grants = app?.grants || {};
   return Object.keys(GRANT_PHRASES).filter((p) => grants[p] === true).map((p) => GRANT_PHRASES[p]);
@@ -414,7 +417,7 @@ export function analyze(scan, indicators) {
 
   const hidden = byRecency(apps.filter((a) => !a.system && !a.hasLauncher));
 
-  const sideloaded = byRecency(apps.filter((a) => !a.system && (!a.installer || !KNOWN_STORES.has(a.installer))));
+  const sideloaded = byRecency(apps.filter(outsideStore));
 
   const adminPkgs = new Set(admins.map((a) => a.pkg));
   const accessibilityPkgs = new Set(accessibility.map((a) => a.pkg));
@@ -579,7 +582,7 @@ export function analyze(scan, indicators) {
       return {
         ...enrich({ pkg }),
         hidden: a ? !a.system && !a.hasLauncher : null,
-        sideloadedInstall: a ? !a.system && (!a.installer || !KNOWN_STORES.has(a.installer)) : null,
+        sideloadedInstall: a ? outsideStore(a) : null,
       };
     }),
   );

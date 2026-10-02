@@ -131,11 +131,12 @@ class SweepBridge(private val activity: MainActivity) {
         }
 
         val dpm = activity.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val adminComponents = runCatching { dpm.activeAdmins ?: emptyList() }.getOrDefault(emptyList())
+        val adminRead = runCatching { dpm.activeAdmins ?: emptyList() }
+        val adminComponents = adminRead.getOrDefault(emptyList())
 
         surface("device_admins") {
             val admins = JSONArray()
-            for (admin in adminComponents) {
+            for (admin in adminRead.getOrThrow()) {
                 admins.put(
                     JSONObject()
                         .put("pkg", admin.packageName)
@@ -147,7 +148,7 @@ class SweepBridge(private val activity: MainActivity) {
 
         surface("admin_policies") {
             val policies = JSONArray()
-            for (admin in adminComponents) {
+            for (admin in adminRead.getOrThrow()) {
                 val declared = runCatching {
                     val receiver = pm.getReceiverInfo(admin, PackageManager.GET_META_DATA)
                     val resolve = ResolveInfo().also { it.activityInfo = receiver }
@@ -257,10 +258,13 @@ class SweepBridge(private val activity: MainActivity) {
         var firstGrantError: String? = null
         var firstSourceError: String? = null
 
+        var appFailures = 0
+        var firstAppError: String? = null
+
         val appObjects = LinkedHashMap<String, JSONObject>()
         val systemPkgs = mutableSetOf<String>()
 
-        surface("installed_apps") {
+        val appsRead = runCatching {
             @Suppress("DEPRECATION")
             val installed = pm.getInstalledPackages(PackageManager.GET_SIGNING_CERTIFICATES)
             // Both digests per signer: the indicator dataset publishes SHA-1
@@ -279,7 +283,7 @@ class SweepBridge(private val activity: MainActivity) {
             }
             for (info in installed) {
                 runCatching {
-                    val ai = info.applicationInfo ?: return@runCatching
+                    val ai = info.applicationInfo ?: error("no applicationInfo for ${info.packageName}")
                     val system = (ai.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
                     if (system) systemPkgs.add(info.packageName)
                     val launch = pm.getLaunchIntentForPackage(info.packageName) != null
@@ -318,25 +322,27 @@ class SweepBridge(private val activity: MainActivity) {
                         firstManifestError = firstManifestError ?: err
                     }
                     appObjects[info.packageName] = app
+                }.onFailure {
+                    appFailures++
+                    firstAppError = firstAppError ?: it.toString()
                 }
             }
         }
+        val appListError = appsRead.exceptionOrNull()
 
-        if (grantFailures == 0) {
-            ok("permission_grants")
-        } else {
-            unavailable("permission_grants", "partial", "first error: $firstGrantError", grantFailures)
+        // Every per-app surface below reads off this list; without it they saw nothing, which is not ok.
+        fun perApp(name: String, failures: Int, firstError: String?) {
+            when {
+                appListError != null -> failed(name, appListError)
+                failures > 0 -> unavailable(name, "partial", "first error: $firstError", failures)
+                else -> ok(name)
+            }
         }
-        if (manifestFailures == 0) {
-            ok("app_manifests")
-        } else {
-            unavailable("app_manifests", "partial", "first error: $firstManifestError", manifestFailures)
-        }
-        if (sourceFailures == 0) {
-            ok("install_sources")
-        } else {
-            unavailable("install_sources", "partial", "first error: $firstSourceError", sourceFailures)
-        }
+
+        perApp("installed_apps", appFailures, firstAppError)
+        perApp("permission_grants", grantFailures, firstGrantError)
+        perApp("app_manifests", manifestFailures, firstManifestError)
+        perApp("install_sources", sourceFailures, firstSourceError)
 
         val imePkgs = mutableSetOf<String>()
         surface("input_methods") {
@@ -406,6 +412,7 @@ class SweepBridge(private val activity: MainActivity) {
         secureSetting("always_on_vpn", "always_on_vpn_app", unsetIsAnswer = true) { out.put("alwaysOnVpn", it) }
 
         surface("owners") {
+            if (appListError != null) throw appListError
             var deviceOwner: String? = null
             val profileOwners = JSONArray()
             for (pkg in appObjects.keys) {
@@ -436,6 +443,7 @@ class SweepBridge(private val activity: MainActivity) {
         }
 
         surface("battery_exemptions") {
+            if (appListError != null) throw appListError
             val power = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
             val interesting = adminComponents.map { it.packageName }.toSet() +
                 accessibilityDetailPkgs + notificationPkgs + imePkgs + vpnPkgs +
@@ -476,13 +484,13 @@ class SweepBridge(private val activity: MainActivity) {
                     }
                     app.put("packageSource", label ?: JSONObject.NULL)
                 }
-            }.onFailure {
-                app.put("installer", JSONObject.NULL)
-                onError(it.toString())
-            }
+            }.onFailure { onError(it.toString()) }
         } else {
-            @Suppress("DEPRECATION")
-            app.put("installer", runCatching { pm.getInstallerPackageName(pkg) }.getOrNull() ?: JSONObject.NULL)
+            // A failed read leaves installer out, so the page can tell it apart from no installer at all.
+            runCatching {
+                @Suppress("DEPRECATION")
+                app.put("installer", pm.getInstallerPackageName(pkg) ?: JSONObject.NULL)
+            }.onFailure { onError(it.toString()) }
         }
     }
 
