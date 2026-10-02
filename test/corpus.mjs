@@ -48,9 +48,9 @@ export const okSurfaces = () => [
   { surface: "global_settings", status: "ok" },
   { surface: "vpn_services", status: "ok" },
   { surface: "always_on_vpn", status: "ok" },
-  { surface: "usage_access_grants", status: "unavailable", reason: "Android only exposes this to privileged system apps" },
-  { surface: "overlay_grants", status: "unavailable", reason: "Android only exposes this to privileged system apps" },
-  { surface: "install_unknown_grants", status: "unavailable", reason: "Android only exposes this to privileged system apps" },
+  { surface: "usage_access_grants", status: "unavailable", code: "privileged" },
+  { surface: "overlay_grants", status: "unavailable", code: "privileged" },
+  { surface: "install_unknown_grants", status: "unavailable", code: "privileged" },
 ];
 
 const a11yDetail = (pkg, service, capabilities = {}, packageScope = null) => ({
@@ -118,6 +118,31 @@ export function benignScan() {
       appRec("com.whatsapp", { grants: { "android.permission.RECORD_AUDIO": true, "android.permission.CAMERA": true } }),
     ],
   };
+}
+
+// Android 9 with no always-on VPN and no assistant set: both reads succeed
+// and come back empty, which is an answer, not a surface Sweep was blocked from.
+export function api28UnsetScan() {
+  const scan = benignScan();
+  delete scan.alwaysOnVpn;
+  scan.roles = { sms: scan.roles.sms, dialer: scan.roles.dialer };
+  return scan;
+}
+
+// Android 12 and newer refuse ordinary apps the always-on VPN key.
+export function api31Scan() {
+  const scan = benignScan();
+  scan.surfaces = scan.surfaces.map((s) =>
+    s.surface === "always_on_vpn"
+      ? {
+          surface: "always_on_vpn",
+          status: "unavailable",
+          code: "not_readable",
+          detail: "java.lang.SecurityException: Settings key: <always_on_vpn_app> is not readable. From S+, settings keys annotated with @hide are restricted to system_server and system apps only, unless they are annotated with @Readable.",
+        }
+      : s,
+  );
+  return scan;
 }
 
 // Each spoof is the benign twin with exactly the trust anchor broken.

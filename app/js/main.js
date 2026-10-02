@@ -225,7 +225,7 @@ function surfacesCard(header) {
       checked: header.surfacesChecked,
       total: header.surfacesTotal,
     }),
-    items: header.couldNotCheck.map((c) => `${t(c.name)}: ${t(c.reason)}`),
+    items: header.couldNotCheck.map((c) => `${t(c.name)}: ${t(c.reason, c.vars)}`),
     listLabel: t("Show what could not be checked ({count})", { count: header.couldNotCheck.length }),
   });
   el.classList.add("surfaces-card");

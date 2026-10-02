@@ -135,6 +135,10 @@ export const es = {
   "Android only exposes this to privileged system apps": "Android solo expone esto a apps privilegiadas del sistema",
   "this scan did not report it; the app that ran the scan is older than this check":
     "esta exploración no lo informó; la app que la ejecutó es más antigua que esta comprobación",
+  "Android does not let ordinary apps read this on this version of Android":
+    "Android no deja que las apps comunes lean esto en esta versión de Android",
+  "could not be read for {count} of the installed apps": "no se pudo leer para {count} de las apps instaladas",
+  "Android returned an error or no answer for this": "Android devolvió un error o ninguna respuesta para esto",
   "the installed app list": "la lista de apps instaladas",
   "active device admin apps": "las apps administradoras del dispositivo activas",
   "the powers each device admin declares": "los poderes que declara cada administrador del dispositivo",

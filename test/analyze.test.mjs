@@ -6,7 +6,9 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { analyze, matchKnown, matchWatchware, dataAge, selfCheckSummary, unrecognizedAccessibility, surfaceReport, SURFACES } from "../app/js/analyze.js";
-import { benignScan, spoofScan, appRec, okSurfaces } from "./corpus.mjs";
+import { benignScan, spoofScan, appRec, okSurfaces, api28UnsetScan, api31Scan } from "./corpus.mjs";
+import { es } from "../app/js/strings-es.js";
+import { setLocale, t } from "../app/js/i18n.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const INDICATORS = JSON.parse(readFileSync(path.join(ROOT, "app", "data", "indicators.json"), "utf8"));
@@ -531,12 +533,15 @@ test("a failed surface still produces results plus the honesty line", () => {
   const family = INDICATORS.apps.find((a) => a.packages.some((p) => !p.endsWith("*")));
   const bad = family.packages.find((p) => !p.endsWith("*"));
   const surfaces = okSurfaces().map((s) =>
-    s.surface === "input_methods" ? { surface: "input_methods", status: "unavailable", reason: "SecurityException: boom" } : s,
+    s.surface === "input_methods"
+      ? { surface: "input_methods", status: "unavailable", code: "not_readable", detail: "java.lang.SecurityException: boom" }
+      : s,
   );
   const report = analyze({ apps: [appRec(bad)], surfaces }, INDICATORS);
   assert.equal(report.matches.length, 1);
   const failed = report.header.couldNotCheck.find((c) => c.surface === "input_methods");
-  assert.equal(failed.reason, "SecurityException: boom");
+  assert.equal(failed.code, "not_readable");
+  assert.doesNotMatch(failed.reason, /boom/);
   assert.equal(report.header.surfacesChecked, 19);
   assert.equal(report.header.surfacesTotal, SURFACES.length);
 });
@@ -551,6 +556,47 @@ test("a fully reported scan checks everything except the privileged three", () =
   const header = surfaceReport({ surfaces: okSurfaces() });
   assert.equal(header.surfacesChecked, SURFACES.length - 3);
   assert.equal(header.couldNotCheck.length, 3);
+});
+
+test("a locked setting reads as a translated reason, never the raw exception", () => {
+  const header = surfaceReport({
+    surfaces: [{ surface: "always_on_vpn", status: "unavailable", code: "not_readable", detail: "java.lang.SecurityException: x" }],
+  });
+  const vpn = header.couldNotCheck.find((c) => c.surface === "always_on_vpn");
+  assert.ok(vpn.reason in es, vpn.reason);
+  assert.doesNotMatch(vpn.reason, /java\./);
+});
+
+test("a per-app read failure carries its count into the reason", () => {
+  const header = surfaceReport({
+    surfaces: [{ surface: "permission_grants", status: "unavailable", code: "partial", count: 3, detail: "first error: java.lang.RuntimeException: y" }],
+  });
+  const grants = header.couldNotCheck.find((c) => c.surface === "permission_grants");
+  assert.equal(grants.reason, "could not be read for {count} of the installed apps");
+  assert.deepEqual(grants.vars, { count: 3 });
+  setLocale("es");
+  try {
+    assert.equal(t(grants.reason, grants.vars), "no se pudo leer para 3 de las apps instaladas");
+  } finally {
+    setLocale("en");
+  }
+});
+
+test("a missing or unknown code falls back to the generic reason", () => {
+  for (const extra of [{}, { code: "mystery" }, { code: "partial" }, { reason: "java.lang.IllegalStateException: z" }]) {
+    const header = surfaceReport({ surfaces: [{ surface: "default_ime", status: "unavailable", ...extra }] });
+    const ime = header.couldNotCheck.find((c) => c.surface === "default_ime");
+    assert.equal(ime.reason, "Android returned an error or no answer for this", JSON.stringify(extra));
+    assert.ok(ime.reason in es);
+  }
+});
+
+test("unset VPN and assistant count as read; a locked VPN key does not", () => {
+  assert.equal(analyze(api28UnsetScan(), INDICATORS).header.surfacesChecked, 20);
+  const locked = analyze(api31Scan(), INDICATORS).header;
+  assert.equal(locked.surfacesChecked, 19);
+  const vpn = locked.couldNotCheck.find((c) => c.surface === "always_on_vpn");
+  assert.equal(vpn.reason, "Android does not let ordinary apps read this on this version of Android");
 });
 
 // ------------------------------------------------ new capability buckets

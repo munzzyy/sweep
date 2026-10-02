@@ -97,27 +97,36 @@ class SweepBridge(private val activity: MainActivity) {
             surfaces.put(JSONObject().put("surface", name).put("status", "ok"))
         }
 
-        fun unavailable(name: String, reason: String) {
-            surfaces.put(
-                JSONObject().put("surface", name).put("status", "unavailable").put("reason", reason),
-            )
+        // Only code reaches the screen; detail is raw exception text for whoever reads the JSON.
+        fun unavailable(name: String, code: String, detail: String? = null, count: Int? = null) {
+            val entry = JSONObject().put("surface", name).put("status", "unavailable").put("code", code)
+            if (detail != null) entry.put("detail", detail)
+            if (count != null) entry.put("count", count)
+            surfaces.put(entry)
+        }
+
+        fun failed(name: String, err: Throwable) {
+            unavailable(name, if (err is SecurityException) "not_readable" else "error", err.toString())
         }
 
         fun surface(name: String, block: () -> Unit) {
-            runCatching(block).fold({ ok(name) }, { unavailable(name, it.toString()) })
+            runCatching(block).fold({ ok(name) }, { failed(name, it) })
         }
 
-        fun secureSetting(name: String, key: String, store: (String) -> Unit) {
+        // With unsetIsAnswer, an empty value means nothing is set: a reading, not a failed read.
+        fun secureSetting(name: String, key: String, unsetIsAnswer: Boolean, store: (String) -> Unit) {
             runCatching { Settings.Secure.getString(activity.contentResolver, key) }.fold(
                 { value ->
-                    if (value.isNullOrBlank()) {
-                        unavailable(name, "the phone reported no value for $key")
-                    } else {
+                    if (!value.isNullOrBlank()) {
                         store(value)
                         ok(name)
+                    } else if (unsetIsAnswer) {
+                        ok(name)
+                    } else {
+                        unavailable(name, "error", "the phone reported no value for $key")
                     }
                 },
-                { unavailable(name, it.toString()) },
+                { failed(name, it) },
             )
         }
 
@@ -316,17 +325,17 @@ class SweepBridge(private val activity: MainActivity) {
         if (grantFailures == 0) {
             ok("permission_grants")
         } else {
-            unavailable("permission_grants", "could not be read for $grantFailures apps; first error: $firstGrantError")
+            unavailable("permission_grants", "partial", "first error: $firstGrantError", grantFailures)
         }
         if (manifestFailures == 0) {
             ok("app_manifests")
         } else {
-            unavailable("app_manifests", "could not be read for $manifestFailures apps; first error: $firstManifestError")
+            unavailable("app_manifests", "partial", "first error: $firstManifestError", manifestFailures)
         }
         if (sourceFailures == 0) {
             ok("install_sources")
         } else {
-            unavailable("install_sources", "could not be read for $sourceFailures apps; first error: $firstSourceError")
+            unavailable("install_sources", "partial", "first error: $firstSourceError", sourceFailures)
         }
 
         val imePkgs = mutableSetOf<String>()
@@ -344,7 +353,7 @@ class SweepBridge(private val activity: MainActivity) {
             }
             out.put("inputMethods", imes)
         }
-        secureSetting("default_ime", "default_input_method") { out.put("defaultIme", it) }
+        secureSetting("default_ime", "default_input_method", unsetIsAnswer = false) { out.put("defaultIme", it) }
 
         surface("user_certificates") {
             val store = KeyStore.getInstance("AndroidCAStore")
@@ -368,33 +377,21 @@ class SweepBridge(private val activity: MainActivity) {
         val roles = JSONObject()
         var smsRole: String? = null
         var dialerRole: String? = null
-        runCatching { Telephony.Sms.getDefaultSmsPackage(activity) }.fold(
-            { pkg ->
-                if (pkg.isNullOrBlank()) {
-                    unavailable("sms_role", "the phone reported no default SMS app")
-                } else {
-                    smsRole = pkg
-                    roles.put("sms", pkg)
-                    ok("sms_role")
-                }
-            },
-            { unavailable("sms_role", it.toString()) },
-        )
-        runCatching {
-            (activity.getSystemService(Context.TELECOM_SERVICE) as TelecomManager).defaultDialerPackage
-        }.fold(
-            { pkg ->
-                if (pkg.isNullOrBlank()) {
-                    unavailable("dialer_role", "the phone reported no default dialer")
-                } else {
-                    dialerRole = pkg
-                    roles.put("dialer", pkg)
-                    ok("dialer_role")
-                }
-            },
-            { unavailable("dialer_role", it.toString()) },
-        )
-        secureSetting("assistant_role", "assistant") { roles.put("assistant", it) }
+        surface("sms_role") {
+            val pkg = Telephony.Sms.getDefaultSmsPackage(activity)
+            if (!pkg.isNullOrBlank()) {
+                smsRole = pkg
+                roles.put("sms", pkg)
+            }
+        }
+        surface("dialer_role") {
+            val pkg = (activity.getSystemService(Context.TELECOM_SERVICE) as TelecomManager).defaultDialerPackage
+            if (!pkg.isNullOrBlank()) {
+                dialerRole = pkg
+                roles.put("dialer", pkg)
+            }
+        }
+        secureSetting("assistant_role", "assistant", unsetIsAnswer = true) { roles.put("assistant", it) }
         out.put("roles", roles)
 
         val vpnPkgs = mutableSetOf<String>()
@@ -406,7 +403,7 @@ class SweepBridge(private val activity: MainActivity) {
             }
             out.put("vpnServices", declarers)
         }
-        secureSetting("always_on_vpn", "always_on_vpn_app") { out.put("alwaysOnVpn", it) }
+        secureSetting("always_on_vpn", "always_on_vpn_app", unsetIsAnswer = true) { out.put("alwaysOnVpn", it) }
 
         surface("owners") {
             var deviceOwner: String? = null
@@ -451,9 +448,9 @@ class SweepBridge(private val activity: MainActivity) {
 
         // These three grants exist on the phone but their read APIs are gated;
         // saying so every scan is the honest floor, never a silent pass.
-        unavailable("usage_access_grants", "Android only exposes this to privileged system apps")
-        unavailable("overlay_grants", "Android only exposes this to privileged system apps")
-        unavailable("install_unknown_grants", "Android only exposes this to privileged system apps")
+        unavailable("usage_access_grants", "privileged")
+        unavailable("overlay_grants", "privileged")
+        unavailable("install_unknown_grants", "privileged")
 
         val apps = JSONArray()
         for (app in appObjects.values) apps.put(app)

@@ -116,6 +116,19 @@ export const SURFACES = [
 const PRIVILEGED_SURFACES = new Set(["usage_access_grants", "overlay_grants", "install_unknown_grants"]);
 const PRIVILEGED_REASON = msg("Android only exposes this to privileged system apps");
 const UNREPORTED_REASON = msg("this scan did not report it; the app that ran the scan is older than this check");
+const NOT_READABLE_REASON = msg("Android does not let ordinary apps read this on this version of Android");
+const PARTIAL_REASON = msg("could not be read for {count} of the installed apps");
+const ERROR_REASON = msg("Android returned an error or no answer for this");
+
+// Raw exception text stays in `detail`: English, technical, and frightening to the wrong reader.
+function reasonFor(r) {
+  if (r.code === "privileged") return { code: "privileged", reason: PRIVILEGED_REASON };
+  if (r.code === "not_readable") return { code: "not_readable", reason: NOT_READABLE_REASON };
+  if (r.code === "partial" && Number.isInteger(r.count) && r.count > 0) {
+    return { code: "partial", reason: PARTIAL_REASON, vars: { count: r.count } };
+  }
+  return { code: "error", reason: ERROR_REASON };
+}
 
 export function surfaceReport(scan) {
   const reported = new Map((scan.surfaces || []).map((s) => [s.surface, s]));
@@ -129,7 +142,7 @@ export function surfaceReport(scan) {
   let surfacesChecked = 0;
   for (const s of SURFACES) {
     if (PRIVILEGED_SURFACES.has(s.id)) {
-      couldNotCheck.push({ surface: s.id, name: s.name, reason: PRIVILEGED_REASON });
+      couldNotCheck.push({ surface: s.id, name: s.name, code: "privileged", reason: PRIVILEGED_REASON });
       continue;
     }
     const r = reported.get(s.id);
@@ -137,7 +150,11 @@ export function surfaceReport(scan) {
       surfacesChecked += 1;
       continue;
     }
-    couldNotCheck.push({ surface: s.id, name: s.name, reason: r?.reason || UNREPORTED_REASON });
+    if (!r) {
+      couldNotCheck.push({ surface: s.id, name: s.name, code: "unreported", reason: UNREPORTED_REASON });
+      continue;
+    }
+    couldNotCheck.push({ surface: s.id, name: s.name, ...reasonFor(r) });
   }
   return { surfacesChecked, surfacesTotal: SURFACES.length, couldNotCheck };
 }

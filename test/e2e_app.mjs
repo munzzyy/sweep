@@ -333,6 +333,43 @@ async function main() {
     writeFileSync(path.join(SHOTS, "03-results-deep.png"), Buffer.from(shot3.result.data, "base64"));
     deep.close();
 
+    // ------------------------------------------------------------- spanish
+    // A locked always-on VPN key and a partial per-app read, in Spanish: the
+    // could-not-check list must carry translated reasons, not exception text.
+    const esScan = deepScan();
+    esScan.surfaces = esScan.surfaces.map((s) => {
+      if (s.surface === "always_on_vpn") {
+        return { surface: s.surface, status: "unavailable", code: "not_readable", detail: "java.lang.SecurityException: Settings key: <always_on_vpn_app> is not readable." };
+      }
+      if (s.surface === "permission_grants") {
+        return { surface: s.surface, status: "unavailable", code: "partial", count: 2, detail: "first error: java.lang.RuntimeException: boom" };
+      }
+      return s;
+    });
+    const spanish = await newTab({
+      stub: `try { localStorage.setItem("sweep-locale", "es"); } catch (e) {}\n${BRIDGE_STUB_SCAN(esScan)}`,
+    });
+    check("es: the page came up in Spanish", (await spanish.evalJs("document.documentElement.lang")) === "es");
+    await spanish.evalJs("document.getElementById('btn-run').click(); 'ok'");
+    await waitFor(() => spanish.evalJs("__sweepApi.state.screen === 'notice'"), "notice ahead of the Spanish scan");
+    await spanish.evalJs("document.getElementById('btn-a11y-continue').click(); 'ok'");
+    await waitFor(() => spanish.evalJs("__sweepApi.state.screen === 'results'"), "Spanish results");
+    const esList = await spanish.evalJs("document.querySelector('.surfaces-card ul').textContent");
+    check("es: no exception text in the could-not-check list", !esList.includes("java."), esList);
+    for (const english of [
+      "Android only exposes this to privileged system apps",
+      "Android does not let ordinary apps read this on this version of Android",
+      "could not be read for",
+      "Android returned an error or no answer for this",
+    ]) {
+      check(`es: no English reason "${english}"`, !esList.includes(english), esList);
+    }
+    check("es: the partial read keeps its count", esList.includes("no se pudo leer para 2 de las apps instaladas"), esList);
+    const esChip = await spanish.evalJs("document.querySelector('.surfaces-card .check-chip').textContent");
+    check("es: the surfaces chip counts the locked key as unread", esChip === "18 de 23", esChip);
+    await spanish.evalJs("localStorage.removeItem('sweep-locale'); 'ok'");
+    spanish.close();
+
     // --------------------------------------------- accessibility notice
     // Three cases, each a negative control on the other two.
     const flagged = await newTab({ stub: BRIDGE_STUB_ACCESSIBILITY("com.example.helper", "HelperService") });
