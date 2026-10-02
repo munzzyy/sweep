@@ -57,7 +57,14 @@ warn you before it installs: something like "For your security, your
 phone is not allowed to install unknown apps from this source." That
 warning exists for apps in general, not for Sweep specifically; tap
 Settings in that prompt, allow installs from your browser or file
-manager, then install the file again. [Tern](https://github.com/munzzyy/tern)
+manager, then install the file again. Play Protect may go one step
+further and call the file harmful, with an "Install anyway" button
+underneath. That is Google's guess about an app it has never seen: Sweep
+is not on Play, it asks to see every installed app (that is the checkup),
+and it carries the stalkerware package list inside it. Tap Install anyway,
+or check the file first against the signing certificate under
+[Bugs, verification, contributions](#bugs-verification-contributions).
+[Tern](https://github.com/munzzyy/tern)
 is a free app that watches a GitHub release link like this one and
 offers you updates automatically, so you do not have to come back and
 redownload by hand; it is optional. The same UI opened in a plain browser
@@ -154,6 +161,10 @@ phone.
   [docs/THREAT-MODEL.md](docs/THREAT-MODEL.md) has the details. The fix
   needs the genuine certificate digests read off a real phone, not a
   guess.
+- A Play Protect appeal, so a sideloaded Sweep stops being flagged as
+  harmful on first install. The form goes through the developer's own
+  Google account, and until it is through, the Get it section says what
+  the warning means.
 - The verify block on older release pages. The notes for 0.2.0 and 0.4.0
   through 0.6.1 went out without the sha256 and certificate lines, and
   adding them means editing published releases. The APKs themselves are
