@@ -15,8 +15,8 @@
 // installs SWEEP_WEBVIEW_APK (an AOSP WebView 87 or newer) first.
 
 import { spawn, execFileSync } from "node:child_process";
-import { existsSync } from "node:fs";
-import { homedir } from "node:os";
+import { existsSync, openSync, readFileSync, rmSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { setTimeout as sleep } from "node:timers/promises";
@@ -53,6 +53,9 @@ function check(name, cond, detail = "") {
 const adb = (...args) =>
   execFileSync(ADB, ["-s", SERIAL, ...args], { encoding: "utf8", maxBuffer: 64 << 20, stdio: ["ignore", "pipe", "pipe"] }).trim();
 
+// Thrown from inside a waitFor poll to stop waiting instead of retrying.
+class GiveUp extends Error {}
+
 async function waitFor(fn, desc, timeout) {
   const t0 = Date.now();
   let last;
@@ -61,6 +64,7 @@ async function waitFor(fn, desc, timeout) {
       last = await fn();
       if (last) return last;
     } catch (err) {
+      if (err instanceof GiveUp) throw err;
       last = String(err).split("\n")[0];
     }
     await sleep(1000);
@@ -110,10 +114,17 @@ async function main() {
 
   const emuArgs = ["-avd", AVD, "-port", String(PORT), "-no-window", "-no-snapshot", "-no-audio", "-no-boot-anim", "-gpu", "swiftshader_indirect"];
   if (process.env.SWEEP_EMU_MEMORY) emuArgs.push("-memory", process.env.SWEEP_EMU_MEMORY);
-  const emu = spawn(EMULATOR, emuArgs, { stdio: "ignore" });
+  const emuLog = path.join(tmpdir(), `sweep-${AVD}-${PORT}.log`);
+  const emu = spawn(EMULATOR, emuArgs, { stdio: ["ignore", openSync(emuLog, "w"), openSync(emuLog, "a")] });
   let forwarded = false;
   try {
-    await waitFor(() => adb("shell", "getprop", "sys.boot_completed") === "1", `${AVD} boot`, 600000);
+    await waitFor(() => {
+      if (emu.exitCode !== null) {
+        const tail = readFileSync(emuLog, "utf8").trim().split("\n").slice(-15).join("\n");
+        throw new GiveUp(`the emulator exited with ${emu.exitCode} before booting; last lines of ${emuLog}:\n${tail}`);
+      }
+      return adb("shell", "getprop", "sys.boot_completed") === "1";
+    }, `${AVD} boot`, 600000);
     const sdk = Number(adb("shell", "getprop", "ro.build.version.sdk"));
     console.log(`${AVD}: API ${sdk}`);
 
@@ -191,13 +202,14 @@ async function main() {
     try {
       execFileSync(ADB, ["-s", SERIAL, "emu", "kill"], { stdio: "ignore" });
     } catch {}
-    await Promise.race([new Promise((r) => emu.once("exit", r)), sleep(30000)]);
+    if (emu.exitCode === null) await Promise.race([new Promise((r) => emu.once("exit", r)), sleep(30000)]);
     if (emu.exitCode === null) emu.kill("SIGKILL");
   }
   if (fails.length) {
     console.log("FAILS:", fails.join("; "));
     process.exit(1);
   }
+  rmSync(emuLog, { force: true });
   console.log("E2E DEVICE PASS");
 }
 
