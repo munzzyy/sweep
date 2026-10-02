@@ -24,10 +24,10 @@ answer. Sweep checks the places surveillance software actually lives:
 
 Every result opens with how many of these Sweep could actually read, and
 lists what it could not read and why. Each finding is explained in
-words. Sweep never says "you are safe": it
-says "these specific checks found nothing", and means exactly that.
-Matches lead with do-not-confront guidance and advocate hotlines, because
-removing stalkerware can escalate a dangerous situation.
+words. Sweep never says "you are safe": it says "these specific checks
+found nothing", and means exactly that. Matches lead with
+do-not-confront guidance and advocate hotlines, because removing
+stalkerware can escalate a dangerous situation.
 
 One permission (listing installed apps, which is the checkup itself) and
 no internet permission, so what Sweep sees cannot leave your phone.

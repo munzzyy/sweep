@@ -1,0 +1,48 @@
+"¿Hay algo en mi teléfono vigilándome?" es una pregunta normal con una
+respuesta difícil. Sweep revisa los lugares donde de verdad vive el
+software de vigilancia:
+
+* Las apps instaladas, contra una lista pública y mantenida de
+  stalkerware (los indicadores de Echap, incluidos en la app, por nombre
+  de paquete y por certificado de firma, así que las copias renombradas
+  también coinciden).
+* Las apps administradoras del dispositivo y los poderes que declaran,
+  como bloquear o borrar el teléfono.
+* Los servicios de accesibilidad activados, y lo que Android dice que
+  puede hacer cada uno, como leer la pantalla o ver lo que escribes.
+* Las apps con acceso a las notificaciones.
+* Qué permisos sensibles tiene ahora mismo cada app: micrófono, cámara,
+  ubicación, mensajes de texto, historial de llamadas, contactos y más.
+* Las apps que se inician al arrancar el teléfono o declaran servicios en
+  segundo plano para la ubicación, la cámara o el micrófono.
+* Los teclados, las autoridades de certificación que alguien añadió, las
+  apps de VPN y el ajuste de VPN siempre activa.
+* Las apps predeterminadas de mensajes, llamadas y asistente, los
+  propietarios del dispositivo y de perfil, y si existe un perfil de
+  trabajo.
+* La depuración USB e inalámbrica, las opciones de desarrollador y las
+  exenciones de la optimización de batería.
+* Las apps sin icono en el lanzador y las instaladas fuera de cualquier
+  tienda, con cuándo llegaron y qué las instaló.
+
+Cada resultado empieza con cuántas de estas cosas pudo leer Sweep de
+verdad, y enumera lo que no pudo leer y por qué. Cada hallazgo se explica
+con palabras. Sweep nunca dice "estás a salvo": dice "estas
+comprobaciones concretas no encontraron nada", y quiere decir exactamente
+eso. Las coincidencias empiezan con el consejo de no confrontar a nadie y
+con líneas de ayuda, porque eliminar un stalkerware puede agravar una
+situación peligrosa.
+
+Un solo permiso (listar las apps instaladas, que es la revisión en sí) y
+ningún permiso de internet, así que lo que Sweep ve no puede salir de tu
+teléfono. Los resultados nunca se guardan. Un botón de Salir rápido está
+en cada pantalla.
+
+Funciona en Android 9 y posteriores, con Android System WebView 87 o
+posterior. Android 9 no recibe correcciones de seguridad desde enero de
+2022, así que en un teléfono tan antiguo la revisión te dice menos: un
+software espía que haya entrado por un fallo sin corregir podría no
+aparecer como app.
+
+Beta: ofrecida a organizaciones especializadas para que la revisen.
+Trata Sweep como una herramienta más, no como una autoridad.
