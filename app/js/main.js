@@ -555,11 +555,18 @@ function renderResults(report, selfCheck) {
   $("results-counts").textContent = countsText;
 }
 
+let checkupRunning = false;
+
 async function runCheckup() {
+  if (checkupRunning) return;
+  checkupRunning = true;
   const btn = $("btn-run");
   btn.disabled = true;
   const label = btn.textContent;
   btn.textContent = t("Checking…");
+  // The bridge scan below is synchronous and holds the WebView's thread, so
+  // without a painted frame first the label above never reached the screen.
+  await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
   try {
     if (!indicators) throw new Error("indicators unavailable");
     const scan = JSON.parse(native().scanJson());
@@ -588,6 +595,7 @@ async function runCheckup() {
   } finally {
     btn.disabled = false;
     btn.textContent = label;
+    checkupRunning = false;
   }
 }
 

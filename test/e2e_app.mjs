@@ -82,6 +82,19 @@ const BRIDGE_STUB = (infested, { fakeInternet = false } = {}) => `window.SweepNa
   selfCheck: () => ${JSON.stringify(SELF_CHECK(fakeInternet))},
 };`;
 
+const BRIDGE_STUB_OBSERVED = (infested) => `window.__scanObs = [];
+window.SweepNative = {
+  platform: () => "android",
+  version: () => "e2e",
+  quickExit: () => { window.__exited = true; },
+  scanJson: () => {
+    const b = document.getElementById("btn-run");
+    window.__scanObs.push({ label: b.textContent, disabled: b.disabled, framed: window.__framed === true });
+    return ${JSON.stringify(JSON.stringify(scan(infested)))};
+  },
+  selfCheck: () => ${JSON.stringify(SELF_CHECK(false))},
+};`;
+
 const BRIDGE_STUB_SCAN = (scanObj) => `window.SweepNative = {
   platform: () => "android",
   version: () => "e2e",
@@ -244,6 +257,24 @@ async function main() {
     web.close();
 
     // ------------------------------------------------------------ infested
+    // ---------------------------------------------- the button says Checking
+    // The bridge scan is synchronous. Before 0.7.1 the label was set and then
+    // the scan ran in the same task, so nothing painted and taps queued up as
+    // extra checkups (#8). The stub records what the button showed and
+    // whether a frame had been painted when the scan was asked for.
+    const obs = await newTab({ stub: BRIDGE_STUB_OBSERVED(false) });
+    await obs.evalJs("window.__framed = false; requestAnimationFrame(() => { window.__framed = true; }); 'ok'");
+    await obs.evalJs("const b = document.getElementById('btn-run'); b.click(); b.click(); b.click(); 'ok'");
+    await waitFor(() => obs.evalJs("__sweepApi.state.screen === 'results'"), "observed checkup reached results");
+    const seen = await obs.evalJs("JSON.stringify(window.__scanObs)");
+    const calls = JSON.parse(seen);
+    check("checkup: the scan ran once for three taps", calls.length === 1, seen);
+    check("checkup: the button read Checking when the scan started", calls[0] && calls[0].label === "Checking\u2026", seen);
+    check("checkup: the button was disabled when the scan started", calls[0] && calls[0].disabled === true, seen);
+    check("checkup: a frame painted before the scan held the thread", calls[0] && calls[0].framed === true, seen);
+    check("checkup: the label came back afterwards", (await obs.evalJs("document.getElementById('btn-run').textContent")) !== "Checking\u2026");
+    obs.close();
+
     const bad = await newTab({ stub: BRIDGE_STUB(true) });
     check("wrapper: run button offered", !(await bad.evalJs("document.getElementById('btn-run').hidden")));
     check("wrapper: author credit revealed", !(await bad.evalJs("document.getElementById('about-site').hidden")));
