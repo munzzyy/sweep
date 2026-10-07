@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The mark from app/icons/sweep.svg as one solid fill, scaled to sit inside the 66dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="648"
+    android:viewportHeight="648">
+    <group
+        android:translateX="1.87"
+        android:translateY="-11.55"
+        android:scaleX="6.711"
+        android:scaleY="6.711">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="M18.5,50 A29.5,29.5 0 1,0 77.5,50 A29.5,29.5 0 1,0 18.5,50 Z M21.5,50 A26.5,26.5 0 1,0 74.5,50 A26.5,26.5 0 1,0 21.5,50 Z M28.5,50 A19.5,19.5 0 1,0 67.5,50 A19.5,19.5 0 1,0 28.5,50 Z M31.5,50 A16.5,16.5 0 1,0 64.5,50 A16.5,16.5 0 1,0 31.5,50 Z M38.5,50 A9.5,9.5 0 1,0 57.5,50 A9.5,9.5 0 1,0 38.5,50 Z M41.5,50 A6.5,6.5 0 1,0 54.5,50 A6.5,6.5 0 1,0 41.5,50 Z M48,50 L48,22 L48,22 L49.46,22.04 L50.92,22.15 L52.38,22.34 L53.82,22.61 L55.24,22.95 L56.65,23.37 L58.03,23.86 L59.38,24.42 L60.7,25.05 L61.99,25.75 L63.24,26.51 L64.45,27.34 L65.61,28.23 L66.72,29.18 L67.79,30.19 L68.79,31.25 L69.75,32.36 L70.64,33.52 L71.47,34.73 L72.24,35.98 Z M58.5,33 A4.5,4.5 0 1,0 67.5,33 A4.5,4.5 0 1,0 58.5,33 Z" />
+    </group>
+</vector>
