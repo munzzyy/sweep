@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- The one permission, and it is the product: listing installed apps
          is what a checkup is. There is still no INTERNET, so what Sweep
          sees cannot leave the phone. QUERY_ALL_PACKAGES makes this app
          unsuitable for Play's policies; distribution is F-Droid/sideload,
          where the tradeoff can be explained honestly. -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <!-- The whole point of the app is to look at every installed package; lint cannot know that. -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
 
     <application
         android:label="@string/app_name"
